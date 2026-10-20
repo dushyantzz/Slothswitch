@@ -83,3 +83,14 @@ def test_mock_task_adapters():
     res_static = static_adapter.execute(req, RouteCategory.HUMAN_REVIEW)
     assert res_static.success is True
     assert "human review" in res_static.output
+
+
+def test_local_transformers_adapter_interface():
+    from slothswitch.adapters.task_models import LocalTransformersTaskModelAdapter
+
+    adapter = LocalTransformersTaskModelAdapter(
+        model_name="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+        preload=False,
+    )
+    assert adapter.name == "local-tinyllama"
+    assert adapter.health_check() is True

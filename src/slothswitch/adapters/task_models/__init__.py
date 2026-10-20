@@ -175,3 +175,112 @@ class StaticResponseAdapter(TaskModelAdapter):
             estimated_cost_usd=0.0,
         )
 
+
+class LocalTransformersTaskModelAdapter(TaskModelAdapter):
+    """Real generative task model adapter using local HuggingFace transformers.
+
+    Executes live forward inference on PyTorch, computes real token counts,
+    and measures actual latency on the host hardware.
+    """
+
+    def __init__(
+        self,
+        model_name: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+        max_new_tokens: int = 35,
+        name: str = "local-tinyllama",
+        preload: bool = False,
+    ) -> None:
+        self._model_path = model_name
+        self._max_new_tokens = max_new_tokens
+        self._name = name
+        self._tokenizer: Any = None
+        self._model: Any = None
+        self._loaded = False
+        if preload:
+            self._load()
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    def _load(self) -> None:
+        if self._loaded:
+            return
+        try:
+            import torch
+            from transformers import AutoModelForCausalLM, AutoTokenizer
+
+            self._tokenizer = AutoTokenizer.from_pretrained(self._model_path)
+            self._model = AutoModelForCausalLM.from_pretrained(
+                self._model_path,
+                torch_dtype=torch.float32,
+            )
+            self._loaded = True
+        except Exception as e:
+            raise RuntimeError(f"Failed to load local task model '{self._model_path}': {e}") from e
+
+    def execute(
+        self,
+        request: RoutingRequest,
+        route: RouteCategory,
+        context: dict[str, Any] | None = None,
+    ) -> TaskResult:
+        self._load()
+        start = time.perf_counter()
+
+        prompt = (
+            f"<|system|>\nYou are a helpful customer support assistant. Provide a concise, accurate answer.\n"
+            f"<|user|>\n{request.content}\n<|assistant|>\n"
+        )
+        try:
+            import torch
+
+            inputs = self._tokenizer(prompt, return_tensors="pt")
+            prompt_tokens = int(inputs["input_ids"].shape[1])
+
+            with torch.no_grad():
+                outputs = self._model.generate(
+                    **inputs,
+                    max_new_tokens=self._max_new_tokens,
+                    do_sample=False,
+                    pad_token_id=self._tokenizer.eos_token_id,
+                )
+
+            gen_ids = outputs[0][prompt_tokens:]
+            output_text = self._tokenizer.decode(gen_ids, skip_special_tokens=True).strip()
+            completion_tokens = len(gen_ids)
+            elapsed_ms = (time.perf_counter() - start) * 1000
+
+            return TaskResult(
+                request_id=request.request_id,
+                route_used=route,
+                output=output_text,
+                success=True,
+                model_used=self._name,
+                latency_ms=elapsed_ms,
+                latency_is_simulated=False,
+                token_usage={
+                    "prompt_tokens": prompt_tokens,
+                    "completion_tokens": completion_tokens,
+                    "total_tokens": prompt_tokens + completion_tokens,
+                },
+                estimated_cost_usd=0.0,
+                cost_is_simulated=False,
+            )
+        except Exception as e:
+            elapsed_ms = (time.perf_counter() - start) * 1000
+            return TaskResult(
+                request_id=request.request_id,
+                route_used=route,
+                output=f"Local model error: {e}",
+                success=False,
+                error=str(e),
+                model_used=self._name,
+                latency_ms=elapsed_ms,
+                latency_is_simulated=False,
+                token_usage={"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+                estimated_cost_usd=0.0,
+                cost_is_simulated=False,
+            )
+
+

@@ -7,6 +7,8 @@ routes based on configured rules — model output is never trusted blindly.
 
 from __future__ import annotations
 
+from typing import Any
+
 from slothswitch.schemas import RouteCategory, RouteDecision, RoutingRequest
 
 

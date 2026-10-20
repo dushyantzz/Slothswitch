@@ -43,6 +43,22 @@ def load_dataset(path: str) -> list[dict[str, Any]]:
     return dataset
 
 
+def partition_dataset(dataset: list[dict]) -> dict[str, list[dict]]:
+    """Partition dataset into train, val, and test splits."""
+    splits: dict[str, list[dict]] = {"train": [], "val": [], "test": []}
+    for item in dataset:
+        sp = item.get("split", "train")
+        if sp in ("dev", "train", "training"):
+            splits["train"].append(item)
+        elif sp in ("val", "validation"):
+            splits["val"].append(item)
+        elif sp == "test":
+            splits["test"].append(item)
+        else:
+            splits["train"].append(item)
+    return splits
+
+
 def split_dataset(
     dataset: list[dict],
     test_ratio: float = 0.2,
@@ -50,13 +66,14 @@ def split_dataset(
 ) -> tuple[list[dict], list[dict]]:
     """Split dataset into dev/validation and held-out test sets.
 
-    If items contain an explicit 'split' key ('dev' vs 'test'), uses that partitioning.
+    If items contain an explicit 'split' key ('train'/'val' vs 'test'), uses that partitioning.
     Otherwise uses deterministic shuffling with the provided seed to prevent leakage.
     """
     has_explicit = any("split" in item for item in dataset)
     if has_explicit:
-        dev_items = [item for item in dataset if item.get("split") == "dev"]
-        test_items = [item for item in dataset if item.get("split") == "test"]
+        parts = partition_dataset(dataset)
+        dev_items = parts["train"] + parts["val"]
+        test_items = parts["test"]
         if dev_items and test_items:
             return dev_items, test_items
 
@@ -98,6 +115,7 @@ class EvaluationResult:
         self.quality_scores: list[float] = []
         self.fallback_count: int = 0
         self.cost_is_simulated: bool = True
+        self.task_latency_is_simulated: bool = False
 
     def add(
         self,
@@ -114,6 +132,7 @@ class EvaluationResult:
         completion_tokens: int = 0,
         quality_score: float | None = None,
         cost_is_simulated: bool = True,
+        task_latency_is_simulated: bool = False,
     ) -> None:
         """Record a single prediction against acceptable gold labels and its execution metrics."""
         self.total += 1
@@ -145,6 +164,7 @@ class EvaluationResult:
         self.total_prompt_tokens += prompt_tokens
         self.total_completion_tokens += completion_tokens
         self.cost_is_simulated = self.cost_is_simulated and cost_is_simulated
+        self.task_latency_is_simulated = self.task_latency_is_simulated or task_latency_is_simulated
 
         # Task quality score (default to 1.0 if route is acceptable, else 0.4 if unknown)
         if quality_score is not None:
@@ -224,6 +244,7 @@ class EvaluationResult:
             ) if self.total_e2e_latencies_ms else 0.0,
             "total_cost_usd": round(sum(self.costs_usd), 6),
             "cost_is_simulated": self.cost_is_simulated,
+            "task_latency_is_simulated": self.task_latency_is_simulated,
             "model_calls": dict(self.model_calls),
             "token_usage": {
                 "prompt_tokens": self.total_prompt_tokens,

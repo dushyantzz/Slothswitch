@@ -26,7 +26,6 @@ def main():
 
     errors = []
     underprovisioned = []  # Sent to an inadequate/cheap processing path
-    overprovisioned = []   # Sent to an unnecessarily expensive path
 
     for item in val_items:
         req = RoutingRequest(request_id=item["request_id"], content=item["content"])
@@ -54,12 +53,13 @@ def main():
             errors.append(error_entry)
 
             # Check if underprovisioned: acceptable required LARGE_LLM, but system picked SMALL_LLM, FAST_PATH, or CLARIFY
-            if "LARGE_LLM" in acceptable and chosen in ("SMALL_LLM", "FAST_PATH", "CLARIFY"):
-                underprovisioned.append(error_entry)
-            elif "CLARIFY" in acceptable and chosen in ("SMALL_LLM", "FAST_PATH"):
+            if (
+                ("LARGE_LLM" in acceptable and chosen in ("SMALL_LLM", "FAST_PATH", "CLARIFY"))
+                or ("CLARIFY" in acceptable and chosen in ("SMALL_LLM", "FAST_PATH"))
+            ):
                 underprovisioned.append(error_entry)
 
-    print(f"\n--- Validation Error Summary ---")
+    print("\n--- Validation Error Summary ---")
     print(f"Total Errors: {len(errors)} / {len(val_items)} ({len(errors)/len(val_items)*100:.1f}%)")
     print(f"Underprovisioned (Inadequate processing path): {len(underprovisioned)}")
     print(f"Other Errors: {len(errors) - len(underprovisioned)}")

@@ -11,6 +11,7 @@ import yaml  # type: ignore[import-untyped]
 from slothswitch.adapters import DecisionAdapter, TaskModelAdapter
 from slothswitch.adapters.decision import MockDecisionAdapter
 from slothswitch.adapters.task_models import (
+    LocalTransformersTaskModelAdapter,
     MockLargeLLMAdapter,
     MockSmallLLMAdapter,
     StaticResponseAdapter,
@@ -26,6 +27,8 @@ logger = logging.getLogger(__name__)
 def create_router(
     config_path: str = "config/routing.yaml",
     baseline_mode: bool = False,
+    decision_adapter_override: str | None = None,
+    real_task_model: bool = False,
 ) -> SlothSwitchRouter:
     """Build a SlothSwitchRouter from a YAML configuration file.
 
@@ -36,11 +39,15 @@ def create_router(
     telemetry_cfg = config.get("telemetry", {})
 
     # --- Decision adapter ---
-    adapter_name = routing_cfg.get("decision_model", {}).get("adapter", "mock")
+    adapter_name = decision_adapter_override or routing_cfg.get("decision_model", {}).get("adapter", "mock")
     decision_adapter = _build_decision_adapter(adapter_name, routing_cfg.get("decision_model", {}))
 
     # --- Task model adapters ---
-    task_adapters = _build_task_adapters(routing_cfg.get("task_models", {}), routing_cfg.get("routes", {}))
+    task_adapters = _build_task_adapters(
+        routing_cfg.get("task_models", {}),
+        routing_cfg.get("routes", {}),
+        real_task_model=real_task_model,
+    )
 
     # --- Policy ---
     enabled_routes = {
@@ -107,6 +114,7 @@ def _build_decision_adapter(name: str, config: dict[str, Any]) -> DecisionAdapte
 def _build_task_adapters(
     task_config: dict[str, Any],
     routes_config: dict[str, Any],
+    real_task_model: bool = False,
 ) -> dict[RouteCategory, TaskModelAdapter]:
     """Build task model adapters for each route that needs one."""
     adapters: dict[RouteCategory, TaskModelAdapter] = {}
@@ -117,15 +125,21 @@ def _build_task_adapters(
         RouteCategory.LARGE_LLM: task_config.get("large_llm", {}),
     }
 
+    real_adapter_instance = None
+    if real_task_model:
+        real_adapter_instance = LocalTransformersTaskModelAdapter()
+
     for route, cfg in generation_routes.items():
         adapter_type = cfg.get("adapter", "mock")
-        if adapter_type == "mock":
+        if real_task_model or adapter_type in ("local_hf", "transformers", "tinyllama"):
+            adapters[route] = real_adapter_instance or LocalTransformersTaskModelAdapter()
+        elif adapter_type == "mock":
             if route == RouteCategory.SMALL_LLM:
                 adapters[route] = MockSmallLLMAdapter()
             else:
                 adapters[route] = MockLargeLLMAdapter()
         else:
-            logger.warning("Non-mock task adapter '%s' not yet implemented; using mock", adapter_type)
+            logger.warning("Unrecognized task adapter '%s'; using mock", adapter_type)
             adapters[route] = MockLargeLLMAdapter() if route == RouteCategory.LARGE_LLM else MockSmallLLMAdapter()
 
     # Deterministic routes (FAST_PATH, CLARIFY, FALLBACK, HUMAN_REVIEW) use static zero-cost handlers

@@ -36,6 +36,9 @@ def main() -> None:
     eval_parser.add_argument("--baseline", action="store_true", help="Evaluate fixed-model baseline mode only")
     eval_parser.add_argument("--compare", action="store_true", default=False, help="Run comparative benchmark: SlothSwitch vs Fixed Baseline")
     eval_parser.add_argument("--test-only", action="store_true", help="Evaluate only on held-out test split")
+    eval_parser.add_argument("--split", choices=["all", "train", "val", "test"], default=None, help="Dataset split to evaluate")
+    eval_parser.add_argument("--adapter", choices=["mock", "laya"], default=None, help="Decision adapter override (mock or laya)")
+    eval_parser.add_argument("--real-task-model", action="store_true", help="Execute real local TinyLlama causal LM for task models")
     eval_parser.add_argument("--split-ratio", type=float, default=0.2, help="Held-out test split ratio")
     eval_parser.add_argument("--seed", type=int, default=42, help="Random seed for splitting")
 
@@ -108,20 +111,38 @@ def _cmd_route(args: argparse.Namespace) -> None:
 
 
 def _cmd_eval(args: argparse.Namespace) -> None:
-    """Evaluate routing accuracy, separated latencies, and quality-cost trade-off."""
-    from slothswitch.evaluation import EvaluationResult, load_dataset, split_dataset
+    from slothswitch.evaluation import (
+        EvaluationResult,
+        load_dataset,
+        partition_dataset,
+        split_dataset,
+    )
 
     dataset = load_dataset(args.dataset)
-    if args.test_only:
-        _, test_set = split_dataset(dataset, test_ratio=args.split_ratio, seed=args.seed)
-        eval_items = test_set
-        split_desc = f"Held-out test split ({len(eval_items)} examples)"
+    target_split = args.split or ("test" if args.test_only else "all")
+    if target_split == "test":
+        parts = partition_dataset(dataset)
+        eval_items = parts["test"] if parts["test"] else split_dataset(dataset, test_ratio=args.split_ratio, seed=args.seed)[1]
+        split_desc = f"Held-out test split ({len(eval_items)} untouched examples)"
+    elif target_split == "val":
+        parts = partition_dataset(dataset)
+        eval_items = parts["val"]
+        split_desc = f"Validation split ({len(eval_items)} threshold-tuning examples)"
+    elif target_split == "train":
+        parts = partition_dataset(dataset)
+        eval_items = parts["train"]
+        split_desc = f"Training split ({len(eval_items)} policy formulation examples)"
     else:
         eval_items = dataset
         split_desc = f"Full benchmark ({len(eval_items)} examples)"
 
     def _run_strategy(baseline_mode: bool) -> EvaluationResult:
-        router = create_router(config_path=args.config, baseline_mode=baseline_mode)
+        router = create_router(
+            config_path=args.config,
+            baseline_mode=baseline_mode,
+            decision_adapter_override=args.adapter,
+            real_task_model=getattr(args, "real_task_model", False),
+        )
         res = EvaluationResult()
         for item in eval_items:
             # Audit guarantee: zero leakage from metadata or expected answers
@@ -164,17 +185,21 @@ def _cmd_eval(args: argparse.Namespace) -> None:
                 completion_tokens=c_tokens,
                 quality_score=quality_score,
                 cost_is_simulated=tr.cost_is_simulated if tr else True,
+                task_latency_is_simulated=tr.latency_is_simulated if tr else False,
             )
         return res
 
     # Task 1 Audit Check
+    dec_mode_desc = "Laya Neural ModernBERT" if args.adapter == "laya" else "Policy Router"
+    task_mode_desc = "Local TinyLlama-1.1B Live Inference" if getattr(args, "real_task_model", False) else "Mock Task Adapters with Standard Pricing Tiers"
     print(f"\n{'='*70}")
     print("  SlothSwitch Benchmark Evaluation & Audit")
-    print(f"  Dataset:      {args.dataset}")
-    print(f"  Partition:    {split_desc}")
-    print("  Parity Audit: Identical queries, labels, and scoring across all strategies")
-    print("  Leakage Audit: ZERO metadata leakage; router inspects text content only")
-    print("  Environment:  [SIMULATION: Mock Task Adapters with Standard Pricing Tiers]")
+    print(f"  Dataset:        {args.dataset}")
+    print(f"  Partition:      {split_desc}")
+    print("  Parity Audit:   Identical queries, labels, and scoring across all strategies")
+    print("  Leakage Audit:  ZERO metadata leakage; router inspects text content only")
+    print(f"  Decision Model: [{dec_mode_desc}]")
+    print(f"  Task Models:    [{task_mode_desc}]")
     print(f"{'='*70}\n")
 
     if args.baseline and not args.compare:
@@ -237,20 +262,23 @@ def _print_strategy_summary(title: str, res: EvaluationResult) -> None:
     print(f"Mean Final Task Quality:   {s['mean_task_quality'] * 100:.1f}%")
     print(f"Fallback / Abstain Rate:   {s['fallback_rate'] * 100:.1f}%")
 
-    print("\nLatency Breakdown (Task 3):")
-    print(f"  Router Overhead (Validation/Policy): {s['avg_router_overhead_ms']:.3f} ms")
-    print(f"  Decision Model Inference:            {s['avg_decision_model_latency_ms']:.3f} ms")
-    print(f"  Task Model Execution:                {s['avg_task_model_latency_ms']:.3f} ms")
-    print(f"  Total End-to-End Latency:            {s['avg_total_e2e_latency_ms']:.3f} ms")
+    task_sim_str = "Simulated Mock Delay" if s.get("task_latency_is_simulated", True) else "Live Forward Pass"
+    cost_sim_str = "Simulated Standard Tiers" if s.get("cost_is_simulated", True) else "Local Live Compute ($0.00 API)"
 
-    print("\nModel Invocations & Token Accounting (Task 3):")
+    print("\nLatency Breakdown (Separated Measurements):")
+    print(f"  Router Overhead (Validation/Policy): {s['avg_router_overhead_ms']:.3f} ms [Measured Live]")
+    print(f"  Decision Model Inference:            {s['avg_decision_model_latency_ms']:.3f} ms [Measured Live]")
+    print(f"  Task Model Execution:                {s['avg_task_model_latency_ms']:.3f} ms [{task_sim_str}]")
+    print(f"  Total End-to-End Latency:            {s['avg_total_e2e_latency_ms']:.3f} ms [Measured Live]")
+
+    print("\nModel Invocations & Token Accounting:")
     calls = s.get("model_calls", {})
     for model, count in sorted(calls.items()):
         print(f"  {model:<30}: {count} calls ({count / s['total_examples'] * 100:.1f}%)")
     tokens = s.get("token_usage", {})
     print(f"  Tokens Ingested (Prompt):     {tokens.get('prompt_tokens', 0):,}")
     print(f"  Tokens Generated (Output):    {tokens.get('completion_tokens', 0):,}")
-    print(f"  Total Expenditure:            ${s['total_cost_usd']:.5f} USD {'(Simulated)' if s['cost_is_simulated'] else '(Live)'}")
+    print(f"  Total Expenditure:            ${s['total_cost_usd']:.5f} USD [{cost_sim_str}]")
 
     print("\nPer-Route Metrics:")
     prec = s.get("per_route_precision", {})
