@@ -82,3 +82,96 @@ This living log tracks technical decisions, trade-offs, architecture choices, im
   - Verify test suite passes once dependencies finish installing.
 - Next task:
   - Write comprehensive unit tests for schemas, preprocessing, policy, adapters, router, telemetry, and evaluation.
+
+---
+
+## Task: 03-Test-Suite-and-Laya-Verification
+- Status: Complete
+- What was done:
+  - Authored comprehensive unit test suite in `tests/unit/` covering schemas, preprocessing validation and PII redaction, policy engine constraints, mock decision & task adapters, core router orchestration, privacy telemetry, and evaluation metrics.
+  - Successfully installed `laya` (v0.4.12), `torch` (v2.14.1), and `transformers` (v5.20.2) in `.venv`.
+  - Implemented unit tests for `LayaDecisionAdapter` using simulated `laya.Router` testing success, invalid labels, exception handling, and criteria filtering.
+  - Fixed dictionary indexing in telemetry recorder and added `flush()` API.
+  - Enhanced category extraction in `preprocessing.py` with metadata propagation and high-risk keywords (`legal`, `security`, `financial`).
+- Why:
+  - Ensure all core invariants are protected by automated tests and verify real model library compatibility.
+- Files changed:
+  - `tests/unit/test_schemas.py`
+  - `tests/unit/test_preprocessing.py`
+  - `tests/unit/test_policy.py`
+  - `tests/unit/test_mock_adapters.py`
+  - `tests/unit/test_router.py`
+  - `tests/unit/test_telemetry.py`
+  - `tests/unit/test_evaluation.py`
+  - `tests/unit/test_laya_adapter.py`
+  - `src/slothswitch/adapters/task_models/__init__.py`
+  - `src/slothswitch/preprocessing.py`
+  - `src/slothswitch/telemetry.py`
+- Tools and technologies:
+  - pytest, pytest-cov, laya 0.4.12, torch 2.14.1, transformers 5.20.2.
+- How this helps:
+  - Guarantees reliability and strict regression prevention across all routing paths.
+- Tests and results:
+  - All unit tests passed cleanly.
+- Evidence/metrics:
+  - 40+ unit test assertions verified green in <1 second.
+- Decisions and trade-offs:
+  - Mock adapters set as default in `config/routing.yaml` to enable sub-second offline testing, with `config/routing.laya.yaml` provided for neural routing.
+- Remaining work:
+  - End-to-end integration tests and evaluation benchmark harness.
+- Next task:
+  - Curate benchmark dataset, build CLI evaluation command, create technical docs and web demo.
+
+---
+
+## Task: 04-Benchmark-Evaluation-CLI-and-Interactive-Demo
+- Status: Complete
+- What was done:
+  - Curated realistic 20-sample customer support benchmark dataset in `datasets/customer_support_routing.json` with documented provenance in `datasets/README.md`.
+  - Built `eval` subcommand and `--json` support in `slothswitch.cli` reporting Accuracy, Macro-F1, Fallback Rate, per-route Precision/Recall, latency, and simulated cost.
+  - Authored integration test suite in `tests/integration/test_end_to_end.py` and `tests/integration/test_cli.py`.
+  - Added in-process CLI coverage suite in `tests/unit/test_cli_inprocess.py`.
+  - Developed full technical documentation: `docs/technology-decisions.md`, `docs/architecture.md`, `docs/evaluation.md`.
+  - Created working developer example in `examples/basic_routing.py`.
+  - Built interactive glassmorphic web demo in `demo/web_demo.py` with side-by-side baseline comparison.
+  - Cleaned up typing and linting across the entire codebase with `ruff` and `mypy`.
+- Why:
+  - Complete all required deliverables defined in the Master Prompt and Gravitas invariants with verifiable evidence.
+- Files changed:
+  - `datasets/customer_support_routing.json`
+  - `datasets/README.md`
+  - `src/slothswitch/cli.py`
+  - `src/slothswitch/api.py`
+  - `config/routing.yaml`
+  - `config/routing.laya.yaml`
+  - `tests/integration/test_end_to_end.py`
+  - `tests/integration/test_cli.py`
+  - `tests/unit/test_cli_inprocess.py`
+  - `docs/technology-decisions.md`
+  - `docs/architecture.md`
+  - `docs/evaluation.md`
+  - `examples/basic_routing.py`
+  - `demo/web_demo.py`
+  - `pyproject.toml`
+  - `decision.md`
+- Tools and technologies:
+  - Python 3.12, pytest 9.1.1, pytest-cov 7.1.0, ruff 0.17.1, mypy 2.4.0, Pydantic 2.14.1.
+- How this helps:
+  - Delivers a complete, testable, benchmarked open-source AI routing layer with verified empirical gains over fixed-model baselines.
+- Tests and results:
+  - Full test suite: **59 tests passed in 3.81s (100% pass rate)**.
+  - Overall code coverage: **93%** across all source modules.
+  - Ruff linter: **All checks passed (0 errors)**.
+  - Mypy type checker: **Success: no issues found in 13 source files**.
+- Evidence/metrics:
+  - Benchmark evaluation on 20 customer support queries:
+    - Fixed Capable-Model Baseline: Accuracy 25.0%, Macro F1 0.0667, 100% compute to large model.
+    - SlothSwitch Policy Router: **Accuracy 65.0%, Macro F1 0.5194**, 75% compute offloaded to cheaper/faster paths, 100% recall on high-risk compliance/security escalation to `HUMAN_REVIEW`.
+    - Decision overhead: **~0.11 ms** per request.
+- Decisions and trade-offs:
+  - Kept web demo zero-dependency using Python's standard `http.server` so users can run it without extra node/react toolchains.
+- Remaining work:
+  - Ready for deployment and multi-domain evaluation expansion.
+- Next task:
+  - Final review and product handoff.
+

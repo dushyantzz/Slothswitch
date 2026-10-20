@@ -1,7 +1,7 @@
 """Basic routing example demonstrating how to use SlothSwitch in Python."""
 
 from slothswitch.api import create_router
-from slothswitch.schemas import RouteCategory, RoutingRequest
+from slothswitch.schemas import RoutingRequest
 
 
 def main() -> None:

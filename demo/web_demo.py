@@ -10,7 +10,6 @@ import json
 import logging
 import uuid
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from pathlib import Path
 from typing import Any
 
 from slothswitch.api import create_router
@@ -408,10 +407,10 @@ def run_demo(port: int = PORT) -> None:
     """Run the interactive web demo server."""
     DemoRequestHandler.setup_routers()
     server = HTTPServer(("127.0.0.1", port), DemoRequestHandler)
-    print(f"\n=======================================================")
-    print(f"  SlothSwitch Web Demo Server Running!")
+    print("\n=======================================================")
+    print("  SlothSwitch Web Demo Server Running!")
     print(f"  Open in your browser: http://localhost:{port}")
-    print(f"=======================================================\n")
+    print("=======================================================\n")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

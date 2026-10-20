@@ -1,7 +1,8 @@
 """Unit tests for LayaDecisionAdapter using a simulated Laya Router."""
 
-import pytest
 from unittest.mock import MagicMock
+
+import pytest
 
 from slothswitch.adapters.decision.laya_adapter import LayaDecisionAdapter
 from slothswitch.preprocessing import RoutingFeatures

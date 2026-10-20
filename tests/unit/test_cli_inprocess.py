@@ -1,6 +1,7 @@
 """Unit tests for the SlothSwitch CLI executed in-process for coverage."""
 
 import sys
+
 import pytest
 
 from slothswitch.cli import main
