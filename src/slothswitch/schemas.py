@@ -8,10 +8,9 @@ from __future__ import annotations
 
 import time
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
-
 
 # ---------------------------------------------------------------------------
 # Route categories
@@ -42,11 +41,11 @@ class RoutingRequest(BaseModel):
     timestamp: float = Field(default_factory=time.time)
 
     # Optional explicit constraints from the caller
-    allowed_routes: Optional[list[RouteCategory]] = Field(
+    allowed_routes: list[RouteCategory] | None = Field(
         default=None,
         description="If set, only these routes may be selected",
     )
-    max_cost_tier: Optional[int] = Field(
+    max_cost_tier: int | None = Field(
         default=None,
         description="If set, routes above this cost tier are excluded",
     )
@@ -61,7 +60,7 @@ class RouteDecision(BaseModel):
 
     request_id: str
     chosen_route: RouteCategory
-    confidence: Optional[float] = Field(
+    confidence: float | None = Field(
         default=None,
         ge=0.0,
         le=1.0,
@@ -75,15 +74,15 @@ class RouteDecision(BaseModel):
         default=True,
         description="Whether the route passed the policy acceptance gate",
     )
-    fallback_reason: Optional[str] = Field(
+    fallback_reason: str | None = Field(
         default=None,
         description="If a fallback was triggered, why",
     )
-    decision_model: Optional[str] = Field(
+    decision_model: str | None = Field(
         default=None,
         description="Identifier of the decision model/checkpoint used",
     )
-    latency_ms: Optional[float] = Field(
+    latency_ms: float | None = Field(
         default=None,
         description="Time taken for the routing decision in milliseconds",
     )
@@ -100,14 +99,14 @@ class TaskResult(BaseModel):
     route_used: RouteCategory
     output: str = Field(default="", description="The generated response or structured result")
     success: bool = Field(default=True)
-    error: Optional[str] = Field(default=None)
-    model_used: Optional[str] = Field(default=None, description="Model identifier used for task")
-    latency_ms: Optional[float] = Field(default=None)
-    token_usage: Optional[dict[str, int]] = Field(
+    error: str | None = Field(default=None)
+    model_used: str | None = Field(default=None, description="Model identifier used for task")
+    latency_ms: float | None = Field(default=None)
+    token_usage: dict[str, int] | None = Field(
         default=None,
         description="Token counts (prompt_tokens, completion_tokens, total_tokens)",
     )
-    estimated_cost_usd: Optional[float] = Field(
+    estimated_cost_usd: float | None = Field(
         default=None,
         description="Estimated cost; labeled simulated unless from provider billing API",
     )
@@ -122,6 +121,6 @@ class RoutingRecord(BaseModel):
 
     request_id: str
     route_decision: RouteDecision
-    task_result: Optional[TaskResult] = None
+    task_result: TaskResult | None = None
     timestamp: float = Field(default_factory=time.time)
-    config_version: Optional[str] = None
+    config_version: str | None = None

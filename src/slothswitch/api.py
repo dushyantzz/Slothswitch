@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-import yaml
+import yaml  # type: ignore[import-untyped]
 
 from slothswitch.adapters import DecisionAdapter, TaskModelAdapter
 from slothswitch.adapters.decision import MockDecisionAdapter

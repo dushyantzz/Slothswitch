@@ -1,0 +1,67 @@
+# SlothSwitch Routing Configuration — Laya Neural Model
+# Uses convaiinnovations/laya for local decision routing
+
+routing:
+  domain: "customer_support"
+
+  routes:
+    FAST_PATH:
+      description: "Deterministic function or structured decision; no generative LLM needed"
+      cost_tier: 0
+      enabled: true
+    SMALL_LLM:
+      description: "Bounded generation or processing handled by a smaller model"
+      cost_tier: 1
+      enabled: true
+    LARGE_LLM:
+      description: "Tasks requiring capabilities only available in a stronger model"
+      cost_tier: 2
+      enabled: true
+    CLARIFY:
+      description: "Missing information prevents a reliable route or completion"
+      cost_tier: 0
+      enabled: true
+    FALLBACK:
+      description: "Route decision is invalid, unsupported, or fails validation"
+      cost_tier: 2
+      enabled: true
+    HUMAN_REVIEW:
+      description: "Request is outside validated scope or requires human judgment"
+      cost_tier: 0
+      enabled: true
+
+  decision_model:
+    adapter: "laya"
+    checkpoint: "convaiinnovations/laya"
+    acceptance_threshold: 0.7
+    fallback_on_low_confidence: true
+
+  task_models:
+    small_llm:
+      adapter: "mock"
+      model: "mock-small"
+    large_llm:
+      adapter: "mock"
+      model: "mock-large"
+
+  policy:
+    max_request_length: 10000
+    supported_content_types: ["text/plain"]
+    max_retries: 2
+    timeout_seconds: 30
+    high_risk_categories: ["security", "legal", "financial"]
+    cache_enabled: false
+
+  baseline:
+    model: "large_llm"
+    adapter: "mock"
+
+telemetry:
+  enabled: true
+  log_raw_prompts: false
+  metrics_output: "logs/metrics.jsonl"
+
+evaluation:
+  dataset_path: "datasets/customer_support_routing.json"
+  test_split_ratio: 0.2
+  random_seed: 42

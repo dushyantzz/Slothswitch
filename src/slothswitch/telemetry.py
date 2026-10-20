@@ -8,9 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 from pathlib import Path
-from typing import Optional
 
 from slothswitch.schemas import RoutingRecord
 
@@ -27,7 +25,7 @@ class TelemetryRecorder:
 
     def __init__(
         self,
-        output_path: Optional[str] = None,
+        output_path: str | None = None,
         enabled: bool = True,
         log_raw_prompts: bool = False,
     ) -> None:
@@ -83,14 +81,20 @@ class TelemetryRecorder:
         """Return all in-memory records (for testing and evaluation)."""
         return list(self._records)
 
+    def flush(self) -> None:
+        """Flush telemetry buffer if applicable."""
+        # Entries are appended directly on record(); flush is a clean no-op or sync hook.
+
+
     def summary(self) -> dict:
         """Return aggregate summary statistics."""
         if not self._records:
             return {"total_requests": 0}
 
         total = len(self._records)
-        routes = {}
+        routes: dict[str, int] = {}
         accepted = 0
+
         fallbacks = 0
         total_latency = 0.0
 

@@ -34,8 +34,9 @@ routing:
 
   # Decision model configuration
   decision_model:
-    adapter: "laya"  # or "mock" for testing without Laya installed
+    adapter: "mock"  # "mock" for immediate deterministic local execution; "laya" for local neural Router
     checkpoint: "convaiinnovations/laya"
+
     # Confidence thresholds — must be validated on held-out data before use
     acceptance_threshold: 0.7  # placeholder; not yet validated
     fallback_on_low_confidence: true

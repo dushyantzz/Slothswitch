@@ -14,7 +14,6 @@ from typing import Any
 
 from slothswitch.schemas import RoutingRequest
 
-
 # ---------------------------------------------------------------------------
 # Redaction patterns
 # ---------------------------------------------------------------------------
@@ -120,6 +119,12 @@ def extract_features(
         has_code_block="```" in content or "    " in content,
     )
 
+    # Check metadata for category hints
+    if "category" in request.metadata and isinstance(request.metadata["category"], str):
+        features.category_hints.append(request.metadata["category"])
+    elif "categories" in request.metadata and isinstance(request.metadata["categories"], list):
+        features.category_hints.extend(request.metadata["categories"])
+
     # Simple category hints from keywords
     lower = content.lower()
     keyword_categories = {
@@ -127,10 +132,14 @@ def extract_features(
         "technical": ["error", "bug", "crash", "not working", "broken", "exception", "traceback"],
         "account": ["password", "login", "account", "profile", "sign in", "sign up"],
         "general": ["hello", "hi", "help", "question", "how do i"],
+        "legal": ["legal", "lawsuit", "gdpr", "compliance", "dpa", "contract", "counsel"],
+        "security": ["security", "vulnerability", "cve", "breach", "hack", "exploit", "secops"],
+        "financial": ["dispute", "chargeback", "fraud", "sla breach", "financial claim"],
     }
     for category, keywords in keyword_categories.items():
-        if any(kw in lower for kw in keywords):
+        if any(kw in lower for kw in keywords) and category not in features.category_hints:
             features.category_hints.append(category)
+
 
     if include_redacted_summary:
         redacted = redact_sensitive(content)

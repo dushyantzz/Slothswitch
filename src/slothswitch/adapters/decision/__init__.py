@@ -70,7 +70,7 @@ class MockDecisionAdapter(DecisionAdapter):
         if route not in available_routes:
             route = RouteCategory.FALLBACK
             confidence = 0.50
-            reasoning = f"Preferred route not available; falling back"
+            reasoning = "Preferred route not available; falling back"
 
         return RouteDecision(
             request_id=request.request_id,

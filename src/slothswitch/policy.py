@@ -7,8 +7,6 @@ routes based on configured rules — model output is never trusted blindly.
 
 from __future__ import annotations
 
-from typing import Any, Optional
-
 from slothswitch.schemas import RouteCategory, RouteDecision, RoutingRequest
 
 
@@ -24,11 +22,11 @@ class RoutingPolicy:
 
     def __init__(
         self,
-        enabled_routes: Optional[set[RouteCategory]] = None,
-        high_risk_categories: Optional[list[str]] = None,
+        enabled_routes: set[RouteCategory] | None = None,
+        high_risk_categories: list[str] | None = None,
         acceptance_threshold: float = 0.7,
-        max_cost_tier: Optional[int] = None,
-        route_cost_tiers: Optional[dict[RouteCategory, int]] = None,
+        max_cost_tier: int | None = None,
+        route_cost_tiers: dict[RouteCategory, int] | None = None,
     ) -> None:
         self.enabled_routes = enabled_routes or set(RouteCategory)
         self.high_risk_categories = high_risk_categories or []
@@ -47,7 +45,7 @@ class RoutingPolicy:
         self,
         decision: RouteDecision,
         request: RoutingRequest,
-        category_hints: Optional[list[str]] = None,
+        category_hints: list[str] | None = None,
     ) -> RouteDecision:
         """Validate a proposed route decision against policy rules.
 
@@ -95,16 +93,20 @@ class RoutingPolicy:
         # 4. High-risk override
         if category_hints:
             for cat in category_hints:
-                if cat in self.high_risk_categories:
-                    if decision.chosen_route not in (
+                if (
+                    cat in self.high_risk_categories
+                    and decision.chosen_route
+                    not in (
                         RouteCategory.LARGE_LLM,
                         RouteCategory.HUMAN_REVIEW,
                         RouteCategory.FALLBACK,
-                    ):
-                        return self._escalate(
-                            decision,
-                            f"High-risk category '{cat}' requires escalation",
-                        )
+                    )
+                ):
+                    return self._escalate(
+                        decision,
+                        f"High-risk category '{cat}' requires escalation",
+                    )
+
 
         # 5. Confidence threshold
         if (

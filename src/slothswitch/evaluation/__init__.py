@@ -11,11 +11,9 @@ from __future__ import annotations
 
 import json
 import logging
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
-from typing import Any, Optional
-
-from slothswitch.schemas import RouteCategory
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

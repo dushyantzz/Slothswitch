@@ -109,3 +109,69 @@ class MockTaskModelAdapter(TaskModelAdapter):
             "human review due to its sensitive nature. A qualified agent will "
             "review and respond within our SLA."
         )
+
+
+class MockSmallLLMAdapter(MockTaskModelAdapter):
+    """Mock adapter simulating a smaller, cost-effective LLM."""
+
+    def __init__(self, latency_ms: float = 20.0) -> None:
+        super().__init__(model_name="mock-small", latency_ms=latency_ms)
+
+    def execute(
+        self,
+        request: RoutingRequest,
+        route: RouteCategory,
+        context: dict[str, Any] | None = None,
+    ) -> TaskResult:
+        res = super().execute(request, route, context)
+        res.estimated_cost_usd = 0.0001
+        res.token_usage = {"prompt_tokens": 30, "completion_tokens": 20, "total_tokens": 50}
+        return res
+
+
+class MockLargeLLMAdapter(MockTaskModelAdapter):
+    """Mock adapter simulating a capable, high-capacity LLM."""
+
+    def __init__(self, latency_ms: float = 80.0) -> None:
+        super().__init__(model_name="mock-large", latency_ms=latency_ms)
+
+    def execute(
+        self,
+        request: RoutingRequest,
+        route: RouteCategory,
+        context: dict[str, Any] | None = None,
+    ) -> TaskResult:
+        res = super().execute(request, route, context)
+        res.estimated_cost_usd = 0.003
+        res.token_usage = {"prompt_tokens": 120, "completion_tokens": 80, "total_tokens": 200}
+        return res
+
+
+class StaticResponseAdapter(TaskModelAdapter):
+    """Returns a fixed static message for deterministic routes or fallbacks."""
+
+    def __init__(self, message: str, name: str = "static-handler") -> None:
+        self._message = message
+        self._name = name
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    def execute(
+        self,
+        request: RoutingRequest,
+        route: RouteCategory,
+        context: dict[str, Any] | None = None,
+    ) -> TaskResult:
+        return TaskResult(
+            request_id=request.request_id,
+            route_used=route,
+            output=self._message,
+            success=True,
+            model_used=self._name,
+            latency_ms=1.0,
+            token_usage={"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+            estimated_cost_usd=0.0,
+        )
+

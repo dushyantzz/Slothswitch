@@ -15,12 +15,10 @@ from __future__ import annotations
 
 import logging
 import time
-from typing import Any, Optional
 
 from slothswitch.adapters import DecisionAdapter, TaskModelAdapter
 from slothswitch.policy import RoutingPolicy
 from slothswitch.preprocessing import (
-    RoutingFeatures,
     ValidationError,
     extract_features,
     validate_request,
@@ -45,9 +43,9 @@ class SlothSwitchRouter:
         decision_adapter: DecisionAdapter,
         task_adapters: dict[RouteCategory, TaskModelAdapter],
         policy: RoutingPolicy,
-        telemetry: Optional[TelemetryRecorder] = None,
+        telemetry: TelemetryRecorder | None = None,
         max_request_length: int = 10_000,
-        supported_content_types: Optional[list[str]] = None,
+        supported_content_types: list[str] | None = None,
         include_redacted_summary: bool = True,
         baseline_mode: bool = False,
         baseline_route: RouteCategory = RouteCategory.LARGE_LLM,
@@ -132,7 +130,7 @@ class SlothSwitchRouter:
         )
 
         # Step 6: Dispatch to task model
-        task_result: Optional[TaskResult] = None
+        task_result: TaskResult | None = None
         adapter = self.task_adapters.get(decision.chosen_route)
         if adapter is not None:
             try:
