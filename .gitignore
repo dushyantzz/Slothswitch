@@ -53,3 +53,5 @@ htmlcov/
 
 # Generated artifacts
 *.generated.*
+.SlothSwitch_Coding_Agent_Master_Prompt.md/
+
