@@ -10,7 +10,11 @@ import yaml  # type: ignore[import-untyped]
 
 from slothswitch.adapters import DecisionAdapter, TaskModelAdapter
 from slothswitch.adapters.decision import MockDecisionAdapter
-from slothswitch.adapters.task_models import MockTaskModelAdapter
+from slothswitch.adapters.task_models import (
+    MockLargeLLMAdapter,
+    MockSmallLLMAdapter,
+    StaticResponseAdapter,
+)
 from slothswitch.policy import RoutingPolicy
 from slothswitch.router import SlothSwitchRouter
 from slothswitch.schemas import RouteCategory
@@ -107,7 +111,7 @@ def _build_task_adapters(
     """Build task model adapters for each route that needs one."""
     adapters: dict[RouteCategory, TaskModelAdapter] = {}
 
-    # Routes that need a task adapter
+    # Generation routes with tier-specific cost & token simulation
     generation_routes = {
         RouteCategory.SMALL_LLM: task_config.get("small_llm", {}),
         RouteCategory.LARGE_LLM: task_config.get("large_llm", {}),
@@ -115,15 +119,24 @@ def _build_task_adapters(
 
     for route, cfg in generation_routes.items():
         adapter_type = cfg.get("adapter", "mock")
-        model_name = cfg.get("model", f"mock-{route.value.lower()}")
         if adapter_type == "mock":
-            adapters[route] = MockTaskModelAdapter(model_name=model_name)
+            if route == RouteCategory.SMALL_LLM:
+                adapters[route] = MockSmallLLMAdapter()
+            else:
+                adapters[route] = MockLargeLLMAdapter()
         else:
             logger.warning("Non-mock task adapter '%s' not yet implemented; using mock", adapter_type)
-            adapters[route] = MockTaskModelAdapter(model_name=f"mock-{model_name}")
+            adapters[route] = MockLargeLLMAdapter() if route == RouteCategory.LARGE_LLM else MockSmallLLMAdapter()
 
-    # FAST_PATH, CLARIFY, FALLBACK, HUMAN_REVIEW use a shared mock for now
-    for route in [RouteCategory.FAST_PATH, RouteCategory.CLARIFY, RouteCategory.FALLBACK, RouteCategory.HUMAN_REVIEW]:
-        adapters[route] = MockTaskModelAdapter(model_name=f"handler-{route.value.lower()}")
+    # Deterministic routes (FAST_PATH, CLARIFY, FALLBACK, HUMAN_REVIEW) use static zero-cost handlers
+    static_messages = {
+        RouteCategory.FAST_PATH: "Deterministic response executed without LLM compute.",
+        RouteCategory.CLARIFY: "Clarification required: please provide additional details.",
+        RouteCategory.FALLBACK: "Standard fallback handler executed.",
+        RouteCategory.HUMAN_REVIEW: "Flagged and routed to support specialist for human review.",
+    }
+    for route, msg in static_messages.items():
+        adapters[route] = StaticResponseAdapter(message=msg, name=f"handler-{route.value.lower()}")
 
     return adapters
+

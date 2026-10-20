@@ -50,8 +50,16 @@ def split_dataset(
 ) -> tuple[list[dict], list[dict]]:
     """Split dataset into dev/validation and held-out test sets.
 
-    Uses deterministic shuffling to avoid leakage.
+    If items contain an explicit 'split' key ('dev' vs 'test'), uses that partitioning.
+    Otherwise uses deterministic shuffling with the provided seed to prevent leakage.
     """
+    has_explicit = any("split" in item for item in dataset)
+    if has_explicit:
+        dev_items = [item for item in dataset if item.get("split") == "dev"]
+        test_items = [item for item in dataset if item.get("split") == "test"]
+        if dev_items and test_items:
+            return dev_items, test_items
+
     import random
 
     rng = random.Random(seed)
@@ -62,12 +70,13 @@ def split_dataset(
     return shuffled[:split_idx], shuffled[split_idx:]
 
 
+
 # ---------------------------------------------------------------------------
 # Evaluation metrics
 # ---------------------------------------------------------------------------
 
 class EvaluationResult:
-    """Container for evaluation metrics."""
+    """Container for evaluation metrics, separated latencies, and quality-cost accounting."""
 
     def __init__(self) -> None:
         self.total: int = 0
@@ -78,8 +87,17 @@ class EvaluationResult:
         self.per_route_fp: Counter = Counter()
         self.per_route_fn: Counter = Counter()
         self.latencies_ms: list[float] = []
+        self.router_overhead_ms: list[float] = []
+        self.decision_latencies_ms: list[float] = []
+        self.task_latencies_ms: list[float] = []
+        self.total_e2e_latencies_ms: list[float] = []
         self.costs_usd: list[float] = []
+        self.model_calls: Counter = Counter()
+        self.total_prompt_tokens: int = 0
+        self.total_completion_tokens: int = 0
+        self.quality_scores: list[float] = []
         self.fallback_count: int = 0
+        self.cost_is_simulated: bool = True
 
     def add(
         self,
@@ -87,8 +105,17 @@ class EvaluationResult:
         acceptable: list[str],
         latency_ms: float = 0.0,
         cost_usd: float = 0.0,
+        router_overhead_ms: float = 0.0,
+        decision_latency_ms: float = 0.0,
+        task_latency_ms: float = 0.0,
+        total_e2e_ms: float = 0.0,
+        model_name: str | None = None,
+        prompt_tokens: int = 0,
+        completion_tokens: int = 0,
+        quality_score: float | None = None,
+        cost_is_simulated: bool = True,
     ) -> None:
-        """Record a single prediction against acceptable gold labels."""
+        """Record a single prediction against acceptable gold labels and its execution metrics."""
         self.total += 1
         self.predictions.append(predicted)
         self.gold_labels.append(acceptable)
@@ -107,6 +134,23 @@ class EvaluationResult:
 
         self.latencies_ms.append(latency_ms)
         self.costs_usd.append(cost_usd)
+        self.router_overhead_ms.append(router_overhead_ms)
+        self.decision_latencies_ms.append(decision_latency_ms)
+        self.task_latencies_ms.append(task_latency_ms)
+        self.total_e2e_latencies_ms.append(total_e2e_ms or latency_ms)
+
+        if model_name:
+            self.model_calls[model_name] += 1
+
+        self.total_prompt_tokens += prompt_tokens
+        self.total_completion_tokens += completion_tokens
+        self.cost_is_simulated = self.cost_is_simulated and cost_is_simulated
+
+        # Task quality score (default to 1.0 if route is acceptable, else 0.4 if unknown)
+        if quality_score is not None:
+            self.quality_scores.append(quality_score)
+        else:
+            self.quality_scores.append(1.0 if is_correct else 0.4)
 
     @property
     def accuracy(self) -> float:
@@ -115,6 +159,10 @@ class EvaluationResult:
     @property
     def fallback_rate(self) -> float:
         return self.fallback_count / self.total if self.total else 0.0
+
+    @property
+    def mean_task_quality(self) -> float:
+        return sum(self.quality_scores) / len(self.quality_scores) if self.quality_scores else 0.0
 
     def per_route_precision(self) -> dict[str, float]:
         """Precision per route."""
@@ -155,11 +203,32 @@ class EvaluationResult:
             "total_examples": self.total,
             "accuracy": round(self.accuracy, 4),
             "macro_f1": round(self.macro_f1(), 4),
+            "mean_task_quality": round(self.mean_task_quality, 4),
             "fallback_rate": round(self.fallback_rate, 4),
             "per_route_precision": {k: round(v, 4) for k, v in self.per_route_precision().items()},
             "per_route_recall": {k: round(v, 4) for k, v in self.per_route_recall().items()},
-            "avg_latency_ms": round(
-                sum(self.latencies_ms) / len(self.latencies_ms), 2
+            "avg_routing_latency_ms": round(
+                sum(self.latencies_ms) / len(self.latencies_ms), 3
             ) if self.latencies_ms else 0.0,
-            "total_estimated_cost_usd": round(sum(self.costs_usd), 4),
+            "avg_router_overhead_ms": round(
+                sum(self.router_overhead_ms) / len(self.router_overhead_ms), 3
+            ) if self.router_overhead_ms else 0.0,
+            "avg_decision_model_latency_ms": round(
+                sum(self.decision_latencies_ms) / len(self.decision_latencies_ms), 3
+            ) if self.decision_latencies_ms else 0.0,
+            "avg_task_model_latency_ms": round(
+                sum(self.task_latencies_ms) / len(self.task_latencies_ms), 3
+            ) if self.task_latencies_ms else 0.0,
+            "avg_total_e2e_latency_ms": round(
+                sum(self.total_e2e_latencies_ms) / len(self.total_e2e_latencies_ms), 3
+            ) if self.total_e2e_latencies_ms else 0.0,
+            "total_cost_usd": round(sum(self.costs_usd), 6),
+            "cost_is_simulated": self.cost_is_simulated,
+            "model_calls": dict(self.model_calls),
+            "token_usage": {
+                "prompt_tokens": self.total_prompt_tokens,
+                "completion_tokens": self.total_completion_tokens,
+                "total_tokens": self.total_prompt_tokens + self.total_completion_tokens,
+            },
         }
+

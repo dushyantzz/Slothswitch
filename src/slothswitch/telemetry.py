@@ -50,7 +50,10 @@ class TelemetryRecorder:
             "accepted": routing_record.route_decision.accepted,
             "fallback_reason": routing_record.route_decision.fallback_reason,
             "decision_model": routing_record.route_decision.decision_model,
-            "decision_latency_ms": routing_record.route_decision.latency_ms,
+            "routing_latency_ms": routing_record.route_decision.latency_ms,
+            "decision_latency_ms": routing_record.route_decision.decision_latency_ms,
+            "router_overhead_ms": routing_record.route_decision.router_overhead_ms,
+            "total_e2e_latency_ms": routing_record.total_e2e_latency_ms,
         }
 
         if routing_record.task_result:
@@ -62,7 +65,9 @@ class TelemetryRecorder:
                 "task_latency_ms": tr.latency_ms,
                 "token_usage": tr.token_usage,
                 "estimated_cost_usd": tr.estimated_cost_usd,
+                "cost_is_simulated": tr.cost_is_simulated,
             })
+
 
         if routing_record.config_version:
             entry["config_version"] = routing_record.config_version

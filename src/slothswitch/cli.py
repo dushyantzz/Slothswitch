@@ -9,6 +9,7 @@ import sys
 import uuid
 
 from slothswitch.api import create_router
+from slothswitch.evaluation import EvaluationResult
 from slothswitch.schemas import RoutingRequest
 
 
@@ -32,10 +33,12 @@ def main() -> None:
     eval_parser = subparsers.add_parser("eval", help="Evaluate routing performance on a benchmark dataset")
     eval_parser.add_argument("--dataset", default="datasets/customer_support_routing.json", help="Path to evaluation dataset")
     eval_parser.add_argument("--config", default="config/routing.yaml", help="Config file path")
-    eval_parser.add_argument("--baseline", action="store_true", help="Evaluate fixed-model baseline mode")
+    eval_parser.add_argument("--baseline", action="store_true", help="Evaluate fixed-model baseline mode only")
+    eval_parser.add_argument("--compare", action="store_true", default=False, help="Run comparative benchmark: SlothSwitch vs Fixed Baseline")
     eval_parser.add_argument("--test-only", action="store_true", help="Evaluate only on held-out test split")
     eval_parser.add_argument("--split-ratio", type=float, default=0.2, help="Held-out test split ratio")
     eval_parser.add_argument("--seed", type=int, default=42, help="Random seed for splitting")
+
 
     # --- demo command ---
     demo_parser = subparsers.add_parser("demo", help="Run demo with sample requests")
@@ -105,7 +108,7 @@ def _cmd_route(args: argparse.Namespace) -> None:
 
 
 def _cmd_eval(args: argparse.Namespace) -> None:
-    """Evaluate routing accuracy and cost against a benchmark dataset."""
+    """Evaluate routing accuracy, separated latencies, and quality-cost trade-off."""
     from slothswitch.evaluation import EvaluationResult, load_dataset, split_dataset
 
     dataset = load_dataset(args.dataset)
@@ -115,55 +118,149 @@ def _cmd_eval(args: argparse.Namespace) -> None:
         split_desc = f"Held-out test split ({len(eval_items)} examples)"
     else:
         eval_items = dataset
-        split_desc = f"Full dataset ({len(eval_items)} examples)"
+        split_desc = f"Full benchmark ({len(eval_items)} examples)"
 
-    mode = "BASELINE (capable-model)" if args.baseline else "SLOTHSWITCH (policy-routed)"
-    router = create_router(config_path=args.config, baseline_mode=args.baseline)
-    eval_result = EvaluationResult()
+    def _run_strategy(baseline_mode: bool) -> EvaluationResult:
+        router = create_router(config_path=args.config, baseline_mode=baseline_mode)
+        res = EvaluationResult()
+        for item in eval_items:
+            # Audit guarantee: zero leakage from metadata or expected answers
+            req = RoutingRequest(
+                request_id=item["request_id"],
+                content=item["content"],
+            )
+            record = router.process(req)
+            dec = record.route_decision
+            tr = record.task_result
 
-    print(f"\n{'='*65}")
-    print("  SlothSwitch Benchmark Evaluation")
-    print(f"  Mode:     {mode}")
-    print(f"  Dataset:  {args.dataset} [{split_desc}]")
-    print(f"{'='*65}\n")
+            cost = (tr.estimated_cost_usd or 0.0) if tr else 0.0
+            router_overhead = dec.router_overhead_ms or 0.0
+            decision_latency = dec.decision_latency_ms or 0.0
+            task_latency = (tr.latency_ms or 0.0) if tr else 0.0
+            total_e2e = record.total_e2e_latency_ms or (dec.latency_ms or 0.0)
+            model_name = tr.model_used if tr else "unknown"
+            p_tokens = (tr.token_usage or {}).get("prompt_tokens", 0) if tr else 0
+            c_tokens = (tr.token_usage or {}).get("completion_tokens", 0) if tr else 0
 
-    for item in eval_items:
-        req = RoutingRequest(
-            request_id=item["request_id"],
-            content=item["content"],
+            # Compute task quality score from dataset rubric if available
+            chosen_val = dec.chosen_route.value
+            expected_map = item.get("expected_quality", {})
+            if chosen_val in expected_map:
+                quality_score = float(expected_map[chosen_val])
+            else:
+                quality_score = 1.0 if chosen_val in item["acceptable_routes"] else 0.35
+
+            res.add(
+                predicted=chosen_val,
+                acceptable=item["acceptable_routes"],
+                latency_ms=dec.latency_ms or 0.0,
+                cost_usd=cost,
+                router_overhead_ms=router_overhead,
+                decision_latency_ms=decision_latency,
+                task_latency_ms=task_latency,
+                total_e2e_ms=total_e2e,
+                model_name=model_name,
+                prompt_tokens=p_tokens,
+                completion_tokens=c_tokens,
+                quality_score=quality_score,
+                cost_is_simulated=tr.cost_is_simulated if tr else True,
+            )
+        return res
+
+    # Task 1 Audit Check
+    print(f"\n{'='*70}")
+    print("  SlothSwitch Benchmark Evaluation & Audit")
+    print(f"  Dataset:      {args.dataset}")
+    print(f"  Partition:    {split_desc}")
+    print("  Parity Audit: Identical queries, labels, and scoring across all strategies")
+    print("  Leakage Audit: ZERO metadata leakage; router inspects text content only")
+    print("  Environment:  [SIMULATION: Mock Task Adapters with Standard Pricing Tiers]")
+    print(f"{'='*70}\n")
+
+    if args.baseline and not args.compare:
+        # Run baseline only
+        base_res = _run_strategy(baseline_mode=True)
+        _print_strategy_summary("Fixed Baseline (Capable Large LLM)", base_res)
+    elif not args.compare and not args.baseline:
+        # Run SlothSwitch only
+        sloth_res = _run_strategy(baseline_mode=False)
+        _print_strategy_summary("SlothSwitch Policy Router", sloth_res)
+    else:
+        # Run comparative analysis (Task 4: Quality-Cost Trade-Off)
+        print("Running comparative benchmark on identical examples...")
+        sloth_res = _run_strategy(baseline_mode=False)
+        base_res = _run_strategy(baseline_mode=True)
+
+        _print_strategy_summary("SlothSwitch Policy Router", sloth_res)
+        _print_strategy_summary("Fixed Baseline (Capable Large LLM)", base_res)
+
+        # Comparative Trade-off Table
+        sloth_s = sloth_res.summary()
+        base_s = base_res.summary()
+
+        q_retention = (
+            (sloth_s["mean_task_quality"] / base_s["mean_task_quality"] * 100)
+            if base_s["mean_task_quality"] > 0 else 100.0
         )
-        record = router.process(req)
-        cost = (record.task_result.estimated_cost_usd or 0.0) if record.task_result else 0.0
-        latency = record.route_decision.latency_ms or 0.0
-
-        eval_result.add(
-            predicted=record.route_decision.chosen_route.value,
-            acceptable=item["acceptable_routes"],
-            latency_ms=latency,
-            cost_usd=cost,
+        cost_savings = (
+            (1.0 - (sloth_s["total_cost_usd"] / base_s["total_cost_usd"])) * 100
+            if base_s["total_cost_usd"] > 0 else 0.0
         )
 
-    summary = eval_result.summary()
-    print("--- Aggregate Results ---")
-    print(f"Total Requests:     {summary['total_examples']}")
-    print(f"Routing Accuracy:   {summary['accuracy'] * 100:.1f}%")
-    print(f"Macro F1 Score:     {summary['macro_f1']:.4f}")
-    print(f"Fallback Rate:      {summary['fallback_rate'] * 100:.1f}%")
+        print(f"\n{'='*70}")
+        print("  Task 4: Quality vs. Cost Trade-Off Analysis")
+        print(f"{'='*70}")
+        print(f"{'Metric':<30} {'SlothSwitch':<20} {'Fixed Baseline':<20}")
+        print(f"{'-'*30} {'-'*20} {'-'*20}")
+        print(f"{'Routing Accuracy':<30} {sloth_s['accuracy'] * 100:.1f}%{'':<15} {base_s['accuracy'] * 100:.1f}%")
+        print(f"{'Macro F1 Score':<30} {sloth_s['macro_f1']:<20.4f} {base_s['macro_f1']:<20.4f}")
+        print(f"{'Mean Task Quality Score':<30} {sloth_s['mean_task_quality'] * 100:.1f}%{'':<15} {base_s['mean_task_quality'] * 100:.1f}%")
+        print(f"{'Total Incurred Cost':<30} ${sloth_s['total_cost_usd']:<19.5f} ${base_s['total_cost_usd']:<19.5f}")
+        cost_per_1k_sloth = (sloth_s["total_cost_usd"] / sloth_s["total_examples"]) * 1000
+        cost_per_1k_base = (base_s["total_cost_usd"] / base_s["total_examples"]) * 1000
+        print(f"{'Estimated Cost / 1k Reqs':<30} ${cost_per_1k_sloth:<19.3f} ${cost_per_1k_base:<19.3f}")
+        print(f"{'Avg End-to-End Latency':<30} {sloth_s['avg_total_e2e_latency_ms']:<17.2f} ms {base_s['avg_total_e2e_latency_ms']:<17.2f} ms")
+        print(f"{'-'*30} {'-'*20} {'-'*20}")
+        print(f"Quality Retention:  {q_retention:.1f}% of baseline quality preserved")
+        print(f"Cost Reduction:     {cost_savings:.1f}% inference expenditure saved")
+        print(f"{'='*70}\n")
 
-    avg_latency = sum(eval_result.latencies_ms) / len(eval_result.latencies_ms) if eval_result.latencies_ms else 0.0
-    total_cost = sum(eval_result.costs_usd)
-    print(f"Avg Latency:        {avg_latency:.2f} ms")
-    print(f"Total Sim. Cost:    ${total_cost:.5f} USD")
 
-    print("\n--- Per-Route Metrics ---")
-    prec = summary.get("per_route_precision", {})
-    rec = summary.get("per_route_recall", {})
+def _print_strategy_summary(title: str, res: EvaluationResult) -> None:
+    """Print detailed metrics for a strategy including separated latencies and model calls."""
+    s = res.summary()
+    tag = " [BASELINE]" if "Baseline" in title else ""
+    print(f"\n--- Strategy: {title}{tag} ---")
+    print(f"Total Requests Evaluated:  {s['total_examples']}")
+    print(f"Routing Accuracy:          {s['accuracy'] * 100:.1f}%")
+    print(f"Macro F1 Score:            {s['macro_f1']:.4f}")
+    print(f"Mean Final Task Quality:   {s['mean_task_quality'] * 100:.1f}%")
+    print(f"Fallback / Abstain Rate:   {s['fallback_rate'] * 100:.1f}%")
+
+    print("\nLatency Breakdown (Task 3):")
+    print(f"  Router Overhead (Validation/Policy): {s['avg_router_overhead_ms']:.3f} ms")
+    print(f"  Decision Model Inference:            {s['avg_decision_model_latency_ms']:.3f} ms")
+    print(f"  Task Model Execution:                {s['avg_task_model_latency_ms']:.3f} ms")
+    print(f"  Total End-to-End Latency:            {s['avg_total_e2e_latency_ms']:.3f} ms")
+
+    print("\nModel Invocations & Token Accounting (Task 3):")
+    calls = s.get("model_calls", {})
+    for model, count in sorted(calls.items()):
+        print(f"  {model:<30}: {count} calls ({count / s['total_examples'] * 100:.1f}%)")
+    tokens = s.get("token_usage", {})
+    print(f"  Tokens Ingested (Prompt):     {tokens.get('prompt_tokens', 0):,}")
+    print(f"  Tokens Generated (Output):    {tokens.get('completion_tokens', 0):,}")
+    print(f"  Total Expenditure:            ${s['total_cost_usd']:.5f} USD {'(Simulated)' if s['cost_is_simulated'] else '(Live)'}")
+
+    print("\nPer-Route Metrics:")
+    prec = s.get("per_route_precision", {})
+    rec = s.get("per_route_recall", {})
     all_routes = sorted(set(list(prec.keys()) + list(rec.keys())))
-    print(f"{'Route':<15} {'Precision':<12} {'Recall':<12}")
-    print(f"{'-'*15} {'-'*12} {'-'*12}")
+    print(f"  {'Route':<15} {'Precision':<12} {'Recall':<12}")
+    print(f"  {'-'*15} {'-'*12} {'-'*12}")
     for r in all_routes:
-        print(f"{r:<15} {prec.get(r, 0.0):<12.3f} {rec.get(r, 0.0):<12.3f}")
-    print(f"{'='*65}\n")
+        print(f"  {r:<15} {prec.get(r, 0.0):<12.3f} {rec.get(r, 0.0):<12.3f}")
+
 
 
 def _cmd_demo(args: argparse.Namespace) -> None:

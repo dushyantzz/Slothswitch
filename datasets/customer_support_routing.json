@@ -1,142 +1,4137 @@
 [
   {
     "request_id": "cs-001",
-    "content": "What are your customer support operating hours?",
-    "acceptable_routes": ["FAST_PATH"],
-    "category": "general",
-    "notes": "Static FAQ lookup sufficient"
+    "content": "Please categorize ticket #1001: Customer cannot log in after password change.",
+    "task_type": "simple_classification",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-002",
-    "content": "Where can I find my invoice history for the current billing cycle?",
-    "acceptable_routes": ["FAST_PATH", "SMALL_LLM"],
-    "category": "billing",
-    "notes": "Direct link or short canned guidance is acceptable"
+    "content": "What department should handle: Request for volume discount on 50 licenses?",
+    "task_type": "simple_classification",
+    "category": "sales",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-003",
-    "content": "How do I update my notification preferences in the dashboard?",
-    "acceptable_routes": ["SMALL_LLM", "FAST_PATH"],
-    "category": "account",
-    "notes": "Standard UI guidance steps"
+    "content": "Route ticket: Scheduled maintenance outage notification inquiry.",
+    "task_type": "simple_classification",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-004",
-    "content": "Can you recommend which subscription tier is best for a team of 15 designers who need shared asset libraries and single sign-on?",
-    "acceptable_routes": ["SMALL_LLM", "LARGE_LLM"],
-    "category": "sales",
-    "notes": "Product matching based on team size and features"
+    "content": "Classify priority: Production database unreachable, 500 users impacted.",
+    "task_type": "simple_classification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-005",
-    "content": "I am getting intermittent 504 Gateway Timeout errors when executing batch export operations via the v2 REST API during peak hours. Below is the traceback from our worker and the curl command:\n```python\nrequests.exceptions.HTTPError: 504 Server Error: Gateway Time-out for url: https://api.example.com/v2/exports/batch\n```\nHow can we configure idempotency keys and optimize worker timeout thresholds?",
-    "acceptable_routes": ["LARGE_LLM"],
-    "category": "technical",
-    "notes": "Complex debugging with code snippet and API architecture details"
+    "content": "Is this query related to billing or technical: Why is my credit card showing pending charge?",
+    "task_type": "simple_classification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-006",
-    "content": "We noticed unauthorized access attempts from IP 198.51.100.42 trying to exploit CVE-2024-1189 in our tenant. Please escalate immediately to the SecOps incident response team.",
-    "acceptable_routes": ["HUMAN_REVIEW", "LARGE_LLM"],
-    "category": "security",
-    "notes": "Security incident requiring human review or capable reasoning"
+    "content": "Assign category: Inquiring about SOC2 Type 2 compliance certification.",
+    "task_type": "simple_classification",
+    "category": "legal",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-007",
-    "content": "Broken",
-    "acceptable_routes": ["CLARIFY"],
-    "category": "unclear",
-    "notes": "Single word without context requires clarification"
+    "content": "Categorize: User wants to export contact list to CSV.",
+    "task_type": "simple_classification",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-008",
-    "content": "Can you clarify which email address the license activation key was sent to? The ticket has no attached order number.",
-    "acceptable_routes": ["CLARIFY"],
-    "category": "account",
-    "notes": "Explicit request for clarification / missing key information"
+    "content": "Determine intent: Customer asking for cancelation fee structure.",
+    "task_type": "simple_classification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-009",
-    "content": "Our legal team requires an audited SOC2 Type II compliance certificate and a signed Data Processing Addendum (DPA) under EU GDPR Article 28 before we can proceed with contract renewal.",
-    "acceptable_routes": ["HUMAN_REVIEW"],
-    "category": "legal",
-    "notes": "High-risk legal/compliance demand requiring specialist authorization"
+    "content": "Tag ticket #1009: Slow response time on API v1 endpoints during European hours.",
+    "task_type": "simple_classification",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-010",
-    "content": "I was billed twice on April 1st for invoice #INV-9821. Please refund the duplicate transaction.",
-    "acceptable_routes": ["FAST_PATH", "HUMAN_REVIEW", "SMALL_LLM"],
-    "category": "billing",
-    "notes": "Simple duplicate charge query"
+    "content": "Classify sentiment and urgency: We love your software but need faster webhooks.",
+    "task_type": "simple_classification",
+    "category": "sales",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-011",
-    "content": "We are designing a microservices architecture using Apache Kafka and PostgreSQL with CDC (Change Data Capture) via Debezium. When a consumer node crashes during rebalancing, we see duplicated events in the read-model projection. Can you provide a transactional outbox implementation pattern with code examples in Go?",
-    "acceptable_routes": ["LARGE_LLM"],
-    "category": "technical",
-    "notes": "Multi-system distributed architecture design requiring deep reasoning"
+    "content": "Please categorize ticket #1021: Customer cannot log in after password change.",
+    "task_type": "simple_classification",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-012",
-    "content": "How do I reset my account password if I lost access to my registered two-factor authenticator app?",
-    "acceptable_routes": ["SMALL_LLM", "HUMAN_REVIEW"],
-    "category": "account",
-    "notes": "2FA recovery protocol guidance"
+    "content": "What department should handle: Request for volume discount on 50 licenses?",
+    "task_type": "simple_classification",
+    "category": "sales",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-013",
-    "content": "It says error.",
-    "acceptable_routes": ["CLARIFY"],
-    "category": "unclear",
-    "notes": "Insufficient context, needs error details"
+    "content": "Route ticket: Scheduled maintenance outage notification inquiry.",
+    "task_type": "simple_classification",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-014",
-    "content": "What is the URL for the status page?",
-    "acceptable_routes": ["FAST_PATH"],
-    "category": "general",
-    "notes": "Direct static lookup"
+    "content": "Classify priority: Production database unreachable, 500 users impacted.",
+    "task_type": "simple_classification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-015",
-    "content": "Our enterprise contract explicitly states 99.99% uptime. The 4-hour outage yesterday breached the SLA. We are filing a formal financial claim for service credits and our legal counsel is copied.",
-    "acceptable_routes": ["HUMAN_REVIEW"],
-    "category": "legal",
-    "notes": "Formal dispute requiring human legal/management review"
+    "content": "Is this query related to billing or technical: Why is my credit card showing pending charge?",
+    "task_type": "simple_classification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-016",
-    "content": "Can you explain the difference between the Basic and Pro plans regarding monthly API rate limits?",
-    "acceptable_routes": ["FAST_PATH", "SMALL_LLM"],
-    "category": "billing",
-    "notes": "Documented tier comparison"
+    "content": "Assign category: Inquiring about SOC2 Type 2 compliance certification.",
+    "task_type": "simple_classification",
+    "category": "legal",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-017",
-    "content": "Help me write a Python script using your SDK to paginate through 50,000 user records, filter for inactive accounts, and export them into an S3 bucket with gzip compression.",
-    "acceptable_routes": ["LARGE_LLM", "SMALL_LLM"],
-    "category": "technical",
-    "notes": "Code generation for SDK pagination and cloud export"
+    "content": "Categorize: User wants to export contact list to CSV.",
+    "task_type": "simple_classification",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-018",
-    "content": "Does your platform support WebAuthn / FIDO2 security keys for login?",
-    "acceptable_routes": ["FAST_PATH", "SMALL_LLM"],
-    "category": "general",
-    "notes": "Feature availability confirmation"
+    "content": "Determine intent: Customer asking for cancelation fee structure.",
+    "task_type": "simple_classification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-019",
-    "content": "asdkjalskdj qowiejqwoiej 123098 !@#$",
-    "acceptable_routes": ["FALLBACK", "CLARIFY"],
-    "category": "malformed",
-    "notes": "Gibberish content that should trigger fallback or clarification"
+    "content": "Tag ticket #1029: Slow response time on API v1 endpoints during European hours.",
+    "task_type": "simple_classification",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
   },
   {
     "request_id": "cs-020",
-    "content": "I want to delete all personal data associated with my account under GDPR Right to Erasure.",
-    "acceptable_routes": ["HUMAN_REVIEW"],
+    "content": "Classify sentiment and urgency: We love your software but need faster webhooks.",
+    "task_type": "simple_classification",
+    "category": "sales",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-021",
+    "content": "Please categorize ticket #1041: Customer cannot log in after password change.",
+    "task_type": "simple_classification",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-022",
+    "content": "What department should handle: Request for volume discount on 50 licenses?",
+    "task_type": "simple_classification",
+    "category": "sales",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-023",
+    "content": "Route ticket: Scheduled maintenance outage notification inquiry.",
+    "task_type": "simple_classification",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-024",
+    "content": "Classify priority: Production database unreachable, 500 users impacted.",
+    "task_type": "simple_classification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-025",
+    "content": "Is this query related to billing or technical: Why is my credit card showing pending charge?",
+    "task_type": "simple_classification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-026",
+    "content": "Assign category: Inquiring about SOC2 Type 2 compliance certification.",
+    "task_type": "simple_classification",
     "category": "legal",
-    "notes": "GDPR erasure request requiring compliance audit"
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-027",
+    "content": "Categorize: User wants to export contact list to CSV.",
+    "task_type": "simple_classification",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-028",
+    "content": "Determine intent: Customer asking for cancelation fee structure.",
+    "task_type": "simple_classification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-029",
+    "content": "Tag ticket #1049: Slow response time on API v1 endpoints during European hours.",
+    "task_type": "simple_classification",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-030",
+    "content": "Classify sentiment and urgency: We love your software but need faster webhooks.",
+    "task_type": "simple_classification",
+    "category": "sales",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.98,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Deterministic classification or lightweight model is completely sufficient"
+  },
+  {
+    "request_id": "cs-031",
+    "content": "Extract the invoice ID and amount from: Paid $420.00 for order INV-89214 on May 12th.",
+    "task_type": "information_extraction",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-032",
+    "content": "Extract tracking details: Package shipped via FedEx with tracking number 789123456789.",
+    "task_type": "information_extraction",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-033",
+    "content": "Parse error code: Service worker crashed with code ERR_CONNECTION_REFUSED at 14:02 UTC.",
+    "task_type": "information_extraction",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-034",
+    "content": "Identify user email: Contact primary administrator at ops-admin@enterprise.org regarding renewal.",
+    "task_type": "information_extraction",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-035",
+    "content": "Extract server IP and port: Inbound traffic spike observed from 198.51.100.88:8443.",
+    "task_type": "information_extraction",
+    "category": "security",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-036",
+    "content": "Extract organization name and domain: Signed contract for Acme Corp (acmecorp.com).",
+    "task_type": "information_extraction",
+    "category": "sales",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-037",
+    "content": "Find ticket reference: Re: [Ticket #44921] Update regarding API gateway throttles.",
+    "task_type": "information_extraction",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-038",
+    "content": "Extract subscription tier: Currently on Enterprise Plan with 200 seats.",
+    "task_type": "information_extraction",
+    "category": "sales",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-039",
+    "content": "Parse timestamp and region: Outage began at 2026-04-10T08:30:00Z in us-east-1.",
+    "task_type": "information_extraction",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-040",
+    "content": "Extract refund request details: Refund requested for transaction TX-991204 totaling $150.",
+    "task_type": "information_extraction",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-041",
+    "content": "Extract the invoice ID and amount from: Paid $420.00 for order INV-89214 on May 12th.",
+    "task_type": "information_extraction",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-042",
+    "content": "Extract tracking details: Package shipped via FedEx with tracking number 789123456789.",
+    "task_type": "information_extraction",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-043",
+    "content": "Parse error code: Service worker crashed with code ERR_CONNECTION_REFUSED at 14:02 UTC.",
+    "task_type": "information_extraction",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-044",
+    "content": "Identify user email: Contact primary administrator at ops-admin@enterprise.org regarding renewal.",
+    "task_type": "information_extraction",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-045",
+    "content": "Extract server IP and port: Inbound traffic spike observed from 198.51.100.88:8443.",
+    "task_type": "information_extraction",
+    "category": "security",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-046",
+    "content": "Extract organization name and domain: Signed contract for Acme Corp (acmecorp.com).",
+    "task_type": "information_extraction",
+    "category": "sales",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-047",
+    "content": "Find ticket reference: Re: [Ticket #44921] Update regarding API gateway throttles.",
+    "task_type": "information_extraction",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-048",
+    "content": "Extract subscription tier: Currently on Enterprise Plan with 200 seats.",
+    "task_type": "information_extraction",
+    "category": "sales",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-049",
+    "content": "Parse timestamp and region: Outage began at 2026-04-10T08:30:00Z in us-east-1.",
+    "task_type": "information_extraction",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-050",
+    "content": "Extract refund request details: Refund requested for transaction TX-991204 totaling $150.",
+    "task_type": "information_extraction",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-051",
+    "content": "Extract the invoice ID and amount from: Paid $420.00 for order INV-89214 on May 12th.",
+    "task_type": "information_extraction",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-052",
+    "content": "Extract tracking details: Package shipped via FedEx with tracking number 789123456789.",
+    "task_type": "information_extraction",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-053",
+    "content": "Parse error code: Service worker crashed with code ERR_CONNECTION_REFUSED at 14:02 UTC.",
+    "task_type": "information_extraction",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-054",
+    "content": "Identify user email: Contact primary administrator at ops-admin@enterprise.org regarding renewal.",
+    "task_type": "information_extraction",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-055",
+    "content": "Extract server IP and port: Inbound traffic spike observed from 198.51.100.88:8443.",
+    "task_type": "information_extraction",
+    "category": "security",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-056",
+    "content": "Extract organization name and domain: Signed contract for Acme Corp (acmecorp.com).",
+    "task_type": "information_extraction",
+    "category": "sales",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-057",
+    "content": "Find ticket reference: Re: [Ticket #44921] Update regarding API gateway throttles.",
+    "task_type": "information_extraction",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-058",
+    "content": "Extract subscription tier: Currently on Enterprise Plan with 200 seats.",
+    "task_type": "information_extraction",
+    "category": "sales",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-059",
+    "content": "Parse timestamp and region: Outage began at 2026-04-10T08:30:00Z in us-east-1.",
+    "task_type": "information_extraction",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-060",
+    "content": "Extract refund request details: Refund requested for transaction TX-991204 totaling $150.",
+    "task_type": "information_extraction",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "FAST_PATH",
+      "SMALL_LLM"
+    ],
+    "expected_quality": {
+      "FAST_PATH": 1.0,
+      "SMALL_LLM": 0.96,
+      "LARGE_LLM": 1.0,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Entity extraction with bounded deterministic pattern matching"
+  },
+  {
+    "request_id": "cs-061",
+    "content": "How do I update my billing credit card in the customer portal?",
+    "task_type": "straightforward_generation",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-062",
+    "content": "Can you provide instructions on resetting a forgotten password?",
+    "task_type": "straightforward_generation",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-063",
+    "content": "What are your standard technical support business hours for Tier 1 users?",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-064",
+    "content": "Explain how to invite a new team member to our workspace organization.",
+    "task_type": "straightforward_generation",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-065",
+    "content": "Where can I download receipts for past subscription cycles?",
+    "task_type": "straightforward_generation",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-066",
+    "content": "What is the difference between the Starter and Professional pricing plans?",
+    "task_type": "straightforward_generation",
+    "category": "sales",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-067",
+    "content": "How do I generate an API token for our continuous integration pipeline?",
+    "task_type": "straightforward_generation",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-068",
+    "content": "Does your service support dark mode on mobile browser viewports?",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-069",
+    "content": "How do I configure Slack notifications for webhook alert triggers?",
+    "task_type": "straightforward_generation",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-070",
+    "content": "Provide a polite response acknowledging ticket receipt and explaining our 4-hour SLA.",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-071",
+    "content": "How do I update my billing credit card in the customer portal?",
+    "task_type": "straightforward_generation",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-072",
+    "content": "Can you provide instructions on resetting a forgotten password?",
+    "task_type": "straightforward_generation",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-073",
+    "content": "What are your standard technical support business hours for Tier 1 users?",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-074",
+    "content": "Explain how to invite a new team member to our workspace organization.",
+    "task_type": "straightforward_generation",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-075",
+    "content": "Where can I download receipts for past subscription cycles?",
+    "task_type": "straightforward_generation",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-076",
+    "content": "What is the difference between the Starter and Professional pricing plans?",
+    "task_type": "straightforward_generation",
+    "category": "sales",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-077",
+    "content": "How do I generate an API token for our continuous integration pipeline?",
+    "task_type": "straightforward_generation",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-078",
+    "content": "Does your service support dark mode on mobile browser viewports?",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-079",
+    "content": "How do I configure Slack notifications for webhook alert triggers?",
+    "task_type": "straightforward_generation",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-080",
+    "content": "Provide a polite response acknowledging ticket receipt and explaining our 4-hour SLA.",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-081",
+    "content": "How do I update my billing credit card in the customer portal?",
+    "task_type": "straightforward_generation",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-082",
+    "content": "Can you provide instructions on resetting a forgotten password?",
+    "task_type": "straightforward_generation",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-083",
+    "content": "What are your standard technical support business hours for Tier 1 users?",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-084",
+    "content": "Explain how to invite a new team member to our workspace organization.",
+    "task_type": "straightforward_generation",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-085",
+    "content": "Where can I download receipts for past subscription cycles?",
+    "task_type": "straightforward_generation",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-086",
+    "content": "What is the difference between the Starter and Professional pricing plans?",
+    "task_type": "straightforward_generation",
+    "category": "sales",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-087",
+    "content": "How do I generate an API token for our continuous integration pipeline?",
+    "task_type": "straightforward_generation",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-088",
+    "content": "Does your service support dark mode on mobile browser viewports?",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-089",
+    "content": "How do I configure Slack notifications for webhook alert triggers?",
+    "task_type": "straightforward_generation",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-090",
+    "content": "Provide a polite response acknowledging ticket receipt and explaining our 4-hour SLA.",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-091",
+    "content": "How do I update my billing credit card in the customer portal?",
+    "task_type": "straightforward_generation",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-092",
+    "content": "Can you provide instructions on resetting a forgotten password?",
+    "task_type": "straightforward_generation",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-093",
+    "content": "What are your standard technical support business hours for Tier 1 users?",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-094",
+    "content": "Explain how to invite a new team member to our workspace organization.",
+    "task_type": "straightforward_generation",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-095",
+    "content": "Where can I download receipts for past subscription cycles?",
+    "task_type": "straightforward_generation",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-096",
+    "content": "What is the difference between the Starter and Professional pricing plans?",
+    "task_type": "straightforward_generation",
+    "category": "sales",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-097",
+    "content": "How do I generate an API token for our continuous integration pipeline?",
+    "task_type": "straightforward_generation",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-098",
+    "content": "Does your service support dark mode on mobile browser viewports?",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-099",
+    "content": "How do I configure Slack notifications for webhook alert triggers?",
+    "task_type": "straightforward_generation",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-100",
+    "content": "Provide a polite response acknowledging ticket receipt and explaining our 4-hour SLA.",
+    "task_type": "straightforward_generation",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "SMALL_LLM",
+      "FAST_PATH",
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "SMALL_LLM": 0.95,
+      "LARGE_LLM": 0.98,
+      "FAST_PATH": 0.8,
+      "CLARIFY": 0.3,
+      "FALLBACK": 0.2,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Routine generation easily handled by cost-effective small models"
+  },
+  {
+    "request_id": "cs-101",
+    "content": "We are experiencing a distributed deadlock in our Kafka consumer group during partition rebalancing when consuming from 64 partitions with transactional outbox. Here is our Go worker stack trace:\n```go\nfatal error: all goroutines are asleep - deadlock!\ngoroutine 42 [semacquire]:\nsync.runtime_SemacquireMutex(0xc0001240)\ngithub.com/segmentio/kafka-go.(*Reader).CommitMessages(...)\n```\nHow should we restructure our consumer commit loop to prevent rebalance timeouts?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-102",
+    "content": "Analyze our PostgreSQL query execution plan. The join between orders (40M rows) and shipments (55M rows) is performing a full sequential scan despite index on (order_id, created_at). EXPLAIN ANALYZE:\n```sql\nNested Loop (cost=0.56..892401.32 rows=15 width=128)\n-> Seq Scan on shipments (cost=0.00..654321.00 rows=15)\n```\nWhy is PostgreSQL ignoring our composite b-tree index?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-103",
+    "content": "Can you help us design an idempotent event-driven architecture using AWS EventBridge, DynamoDB single-table design, and Lambda with DLQ retry mechanisms?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-104",
+    "content": "We have a memory leak in our Python FastAPI microservice under sustained 5,000 RPS load. Guppy heapy shows `asyncio.Task` instances growing unbounded. Traceback snippet:\n```python\nTask was destroyed but it is pending!\ntask: <Task pending name='Task-4912' coro=<stream_events() running at worker.py:84>>\n```\nHow do we properly manage generator lifecycle in FastAPI streaming responses?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-105",
+    "content": "We are migrating a monolithic monolithic Rails application to gRPC microservices in Kubernetes. What is the recommended strategy for distributed tracing with OpenTelemetry and Envoy mesh without introducing cascading latency spikes?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-106",
+    "content": "Can you write a multi-threaded Rust implementation of a lock-free circular ring buffer with cache-line padding to prevent false sharing between producer and consumer cores?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-107",
+    "content": "Our Kubernetes ingress controller is throwing intermittent 502 Bad Gateway errors under HTTP/2 multiplexing. Envoy logs show upstream connection termination with `stream_error: PROTOCOL_ERROR`. What proxy buffer settings must be tuned?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-108",
+    "content": "Explain how to implement zero-downtime database schema migration for partitioning a 200GB Postgres table using pg_partman without locking reads during backfill.",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-109",
+    "content": "We are experiencing a distributed deadlock in our Kafka consumer group during partition rebalancing when consuming from 64 partitions with transactional outbox. Here is our Go worker stack trace:\n```go\nfatal error: all goroutines are asleep - deadlock!\ngoroutine 42 [semacquire]:\nsync.runtime_SemacquireMutex(0xc0001240)\ngithub.com/segmentio/kafka-go.(*Reader).CommitMessages(...)\n```\nHow should we restructure our consumer commit loop to prevent rebalance timeouts?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-110",
+    "content": "Analyze our PostgreSQL query execution plan. The join between orders (40M rows) and shipments (55M rows) is performing a full sequential scan despite index on (order_id, created_at). EXPLAIN ANALYZE:\n```sql\nNested Loop (cost=0.56..892401.32 rows=15 width=128)\n-> Seq Scan on shipments (cost=0.00..654321.00 rows=15)\n```\nWhy is PostgreSQL ignoring our composite b-tree index?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-111",
+    "content": "Can you help us design an idempotent event-driven architecture using AWS EventBridge, DynamoDB single-table design, and Lambda with DLQ retry mechanisms?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-112",
+    "content": "We have a memory leak in our Python FastAPI microservice under sustained 5,000 RPS load. Guppy heapy shows `asyncio.Task` instances growing unbounded. Traceback snippet:\n```python\nTask was destroyed but it is pending!\ntask: <Task pending name='Task-4912' coro=<stream_events() running at worker.py:84>>\n```\nHow do we properly manage generator lifecycle in FastAPI streaming responses?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-113",
+    "content": "We are migrating a monolithic monolithic Rails application to gRPC microservices in Kubernetes. What is the recommended strategy for distributed tracing with OpenTelemetry and Envoy mesh without introducing cascading latency spikes?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-114",
+    "content": "Can you write a multi-threaded Rust implementation of a lock-free circular ring buffer with cache-line padding to prevent false sharing between producer and consumer cores?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-115",
+    "content": "Our Kubernetes ingress controller is throwing intermittent 502 Bad Gateway errors under HTTP/2 multiplexing. Envoy logs show upstream connection termination with `stream_error: PROTOCOL_ERROR`. What proxy buffer settings must be tuned?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-116",
+    "content": "Explain how to implement zero-downtime database schema migration for partitioning a 200GB Postgres table using pg_partman without locking reads during backfill.",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-117",
+    "content": "We are experiencing a distributed deadlock in our Kafka consumer group during partition rebalancing when consuming from 64 partitions with transactional outbox. Here is our Go worker stack trace:\n```go\nfatal error: all goroutines are asleep - deadlock!\ngoroutine 42 [semacquire]:\nsync.runtime_SemacquireMutex(0xc0001240)\ngithub.com/segmentio/kafka-go.(*Reader).CommitMessages(...)\n```\nHow should we restructure our consumer commit loop to prevent rebalance timeouts?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-118",
+    "content": "Analyze our PostgreSQL query execution plan. The join between orders (40M rows) and shipments (55M rows) is performing a full sequential scan despite index on (order_id, created_at). EXPLAIN ANALYZE:\n```sql\nNested Loop (cost=0.56..892401.32 rows=15 width=128)\n-> Seq Scan on shipments (cost=0.00..654321.00 rows=15)\n```\nWhy is PostgreSQL ignoring our composite b-tree index?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-119",
+    "content": "Can you help us design an idempotent event-driven architecture using AWS EventBridge, DynamoDB single-table design, and Lambda with DLQ retry mechanisms?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-120",
+    "content": "We have a memory leak in our Python FastAPI microservice under sustained 5,000 RPS load. Guppy heapy shows `asyncio.Task` instances growing unbounded. Traceback snippet:\n```python\nTask was destroyed but it is pending!\ntask: <Task pending name='Task-4912' coro=<stream_events() running at worker.py:84>>\n```\nHow do we properly manage generator lifecycle in FastAPI streaming responses?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-121",
+    "content": "We are migrating a monolithic monolithic Rails application to gRPC microservices in Kubernetes. What is the recommended strategy for distributed tracing with OpenTelemetry and Envoy mesh without introducing cascading latency spikes?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-122",
+    "content": "Can you write a multi-threaded Rust implementation of a lock-free circular ring buffer with cache-line padding to prevent false sharing between producer and consumer cores?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-123",
+    "content": "Our Kubernetes ingress controller is throwing intermittent 502 Bad Gateway errors under HTTP/2 multiplexing. Envoy logs show upstream connection termination with `stream_error: PROTOCOL_ERROR`. What proxy buffer settings must be tuned?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-124",
+    "content": "Explain how to implement zero-downtime database schema migration for partitioning a 200GB Postgres table using pg_partman without locking reads during backfill.",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-125",
+    "content": "We are experiencing a distributed deadlock in our Kafka consumer group during partition rebalancing when consuming from 64 partitions with transactional outbox. Here is our Go worker stack trace:\n```go\nfatal error: all goroutines are asleep - deadlock!\ngoroutine 42 [semacquire]:\nsync.runtime_SemacquireMutex(0xc0001240)\ngithub.com/segmentio/kafka-go.(*Reader).CommitMessages(...)\n```\nHow should we restructure our consumer commit loop to prevent rebalance timeouts?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-126",
+    "content": "Analyze our PostgreSQL query execution plan. The join between orders (40M rows) and shipments (55M rows) is performing a full sequential scan despite index on (order_id, created_at). EXPLAIN ANALYZE:\n```sql\nNested Loop (cost=0.56..892401.32 rows=15 width=128)\n-> Seq Scan on shipments (cost=0.00..654321.00 rows=15)\n```\nWhy is PostgreSQL ignoring our composite b-tree index?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-127",
+    "content": "Can you help us design an idempotent event-driven architecture using AWS EventBridge, DynamoDB single-table design, and Lambda with DLQ retry mechanisms?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-128",
+    "content": "We have a memory leak in our Python FastAPI microservice under sustained 5,000 RPS load. Guppy heapy shows `asyncio.Task` instances growing unbounded. Traceback snippet:\n```python\nTask was destroyed but it is pending!\ntask: <Task pending name='Task-4912' coro=<stream_events() running at worker.py:84>>\n```\nHow do we properly manage generator lifecycle in FastAPI streaming responses?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-129",
+    "content": "We are migrating a monolithic monolithic Rails application to gRPC microservices in Kubernetes. What is the recommended strategy for distributed tracing with OpenTelemetry and Envoy mesh without introducing cascading latency spikes?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-130",
+    "content": "Can you write a multi-threaded Rust implementation of a lock-free circular ring buffer with cache-line padding to prevent false sharing between producer and consumer cores?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-131",
+    "content": "Our Kubernetes ingress controller is throwing intermittent 502 Bad Gateway errors under HTTP/2 multiplexing. Envoy logs show upstream connection termination with `stream_error: PROTOCOL_ERROR`. What proxy buffer settings must be tuned?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-132",
+    "content": "Explain how to implement zero-downtime database schema migration for partitioning a 200GB Postgres table using pg_partman without locking reads during backfill.",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-133",
+    "content": "We are experiencing a distributed deadlock in our Kafka consumer group during partition rebalancing when consuming from 64 partitions with transactional outbox. Here is our Go worker stack trace:\n```go\nfatal error: all goroutines are asleep - deadlock!\ngoroutine 42 [semacquire]:\nsync.runtime_SemacquireMutex(0xc0001240)\ngithub.com/segmentio/kafka-go.(*Reader).CommitMessages(...)\n```\nHow should we restructure our consumer commit loop to prevent rebalance timeouts?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-134",
+    "content": "Analyze our PostgreSQL query execution plan. The join between orders (40M rows) and shipments (55M rows) is performing a full sequential scan despite index on (order_id, created_at). EXPLAIN ANALYZE:\n```sql\nNested Loop (cost=0.56..892401.32 rows=15 width=128)\n-> Seq Scan on shipments (cost=0.00..654321.00 rows=15)\n```\nWhy is PostgreSQL ignoring our composite b-tree index?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-135",
+    "content": "Can you help us design an idempotent event-driven architecture using AWS EventBridge, DynamoDB single-table design, and Lambda with DLQ retry mechanisms?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-136",
+    "content": "We have a memory leak in our Python FastAPI microservice under sustained 5,000 RPS load. Guppy heapy shows `asyncio.Task` instances growing unbounded. Traceback snippet:\n```python\nTask was destroyed but it is pending!\ntask: <Task pending name='Task-4912' coro=<stream_events() running at worker.py:84>>\n```\nHow do we properly manage generator lifecycle in FastAPI streaming responses?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-137",
+    "content": "We are migrating a monolithic monolithic Rails application to gRPC microservices in Kubernetes. What is the recommended strategy for distributed tracing with OpenTelemetry and Envoy mesh without introducing cascading latency spikes?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-138",
+    "content": "Can you write a multi-threaded Rust implementation of a lock-free circular ring buffer with cache-line padding to prevent false sharing between producer and consumer cores?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-139",
+    "content": "Our Kubernetes ingress controller is throwing intermittent 502 Bad Gateway errors under HTTP/2 multiplexing. Envoy logs show upstream connection termination with `stream_error: PROTOCOL_ERROR`. What proxy buffer settings must be tuned?",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-140",
+    "content": "Explain how to implement zero-downtime database schema migration for partitioning a 200GB Postgres table using pg_partman without locking reads during backfill.",
+    "task_type": "complex_reasoning",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "LARGE_LLM"
+    ],
+    "expected_quality": {
+      "LARGE_LLM": 0.95,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.05,
+      "CLARIFY": 0.2,
+      "FALLBACK": 0.1,
+      "HUMAN_REVIEW": 0.2
+    },
+    "notes": "Requires deep multi-step technical reasoning; small model hallucination risk is high"
+  },
+  {
+    "request_id": "cs-141",
+    "content": "Broken",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-142",
+    "content": "It doesn't work",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-143",
+    "content": "Error on page",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-144",
+    "content": "Why is it doing this?",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-145",
+    "content": "Help please",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-146",
+    "content": "Failed",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-147",
+    "content": "Not working today",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-148",
+    "content": "Problem with my account",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-149",
+    "content": "System issue",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-150",
+    "content": "Something went wrong",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-151",
+    "content": "Broken",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-152",
+    "content": "It doesn't work",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-153",
+    "content": "Error on page",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-154",
+    "content": "Why is it doing this?",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-155",
+    "content": "Help please",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-156",
+    "content": "Failed",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-157",
+    "content": "Not working today",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-158",
+    "content": "Problem with my account",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-159",
+    "content": "System issue",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-160",
+    "content": "Something went wrong",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-161",
+    "content": "Broken",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-162",
+    "content": "It doesn't work",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-163",
+    "content": "Error on page",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-164",
+    "content": "Why is it doing this?",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-165",
+    "content": "Help please",
+    "task_type": "ambiguous_requests",
+    "category": "general",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.4,
+      "SMALL_LLM": 0.3,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.5,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Vague and insufficient information requires clarifying question rather than guessing"
+  },
+  {
+    "request_id": "cs-166",
+    "content": "Please cancel my subscription immediately.",
+    "task_type": "requests_requiring_clarification",
+    "category": "billing",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-167",
+    "content": "Can you reissue the invoice from yesterday?",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-168",
+    "content": "Add 5 more seats to our plan.",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-169",
+    "content": "Our custom webhook is not receiving payloads.",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-170",
+    "content": "I was charged twice on my card, please refund.",
+    "task_type": "requests_requiring_clarification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-171",
+    "content": "The automated test suite failed on branch release-v2.",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-172",
+    "content": "Please reset my two-factor authentication device.",
+    "task_type": "requests_requiring_clarification",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-173",
+    "content": "Can you extend our trial by two weeks?",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-174",
+    "content": "Please cancel my subscription immediately.",
+    "task_type": "requests_requiring_clarification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-175",
+    "content": "Can you reissue the invoice from yesterday?",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-176",
+    "content": "Add 5 more seats to our plan.",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-177",
+    "content": "Our custom webhook is not receiving payloads.",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-178",
+    "content": "I was charged twice on my card, please refund.",
+    "task_type": "requests_requiring_clarification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-179",
+    "content": "The automated test suite failed on branch release-v2.",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-180",
+    "content": "Please reset my two-factor authentication device.",
+    "task_type": "requests_requiring_clarification",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-181",
+    "content": "Can you extend our trial by two weeks?",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-182",
+    "content": "Please cancel my subscription immediately.",
+    "task_type": "requests_requiring_clarification",
+    "category": "billing",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-183",
+    "content": "Can you reissue the invoice from yesterday?",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-184",
+    "content": "Add 5 more seats to our plan.",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-185",
+    "content": "Our custom webhook is not receiving payloads.",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-186",
+    "content": "I was charged twice on my card, please refund.",
+    "task_type": "requests_requiring_clarification",
+    "category": "billing",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-187",
+    "content": "The automated test suite failed on branch release-v2.",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-188",
+    "content": "Please reset my two-factor authentication device.",
+    "task_type": "requests_requiring_clarification",
+    "category": "account",
+    "split": "dev",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-189",
+    "content": "Can you extend our trial by two weeks?",
+    "task_type": "requests_requiring_clarification",
+    "category": "technical",
+    "split": "test",
+    "acceptable_routes": [
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "CLARIFY": 1.0,
+      "LARGE_LLM": 0.45,
+      "SMALL_LLM": 0.35,
+      "FAST_PATH": 0.1,
+      "FALLBACK": 0.3,
+      "HUMAN_REVIEW": 0.3
+    },
+    "notes": "Key parameters missing; system must prompt for missing fields before executing"
+  },
+  {
+    "request_id": "cs-190",
+    "content": "We discovered a remote code execution vulnerability (CVE-2024-3819) in your public API upload parser. Attached is our proof-of-concept. Please route to SecOps immediately.",
+    "task_type": "high_risk_escalation",
+    "category": "security",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-191",
+    "content": "Formal demand under EU GDPR Article 17: Delete all personally identifiable records for user account UUID 8912-3312 across all production and backup stores.",
+    "task_type": "high_risk_escalation",
+    "category": "legal",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-192",
+    "content": "Your 8-hour outage on April 14 breached section 4.2 of our Enterprise SLA. We are claiming $45,000 in contractual liquidated damages. Our legal counsel is CC'd.",
+    "task_type": "high_risk_escalation",
+    "category": "legal",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-193",
+    "content": "We have initiated a formal credit card chargeback dispute with our bank for $12,500 due to unauthorized billing.",
+    "task_type": "high_risk_escalation",
+    "category": "financial",
+    "split": "test",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-194",
+    "content": "Security incident report: Unauthorized API key extraction detected from compromised worker node. Immediate key revocation and audit log retention required.",
+    "task_type": "high_risk_escalation",
+    "category": "security",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-195",
+    "content": "Cease and desist notice: Your platform is infringing upon registered trademark serial #88491024. Immediate removal required.",
+    "task_type": "high_risk_escalation",
+    "category": "legal",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-196",
+    "content": "We discovered a remote code execution vulnerability (CVE-2024-3819) in your public API upload parser. Attached is our proof-of-concept. Please route to SecOps immediately.",
+    "task_type": "high_risk_escalation",
+    "category": "security",
+    "split": "test",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-197",
+    "content": "Formal demand under EU GDPR Article 17: Delete all personally identifiable records for user account UUID 8912-3312 across all production and backup stores.",
+    "task_type": "high_risk_escalation",
+    "category": "legal",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-198",
+    "content": "Your 8-hour outage on April 14 breached section 4.2 of our Enterprise SLA. We are claiming $45,000 in contractual liquidated damages. Our legal counsel is CC'd.",
+    "task_type": "high_risk_escalation",
+    "category": "legal",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-199",
+    "content": "We have initiated a formal credit card chargeback dispute with our bank for $12,500 due to unauthorized billing.",
+    "task_type": "high_risk_escalation",
+    "category": "financial",
+    "split": "test",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-200",
+    "content": "Security incident report: Unauthorized API key extraction detected from compromised worker node. Immediate key revocation and audit log retention required.",
+    "task_type": "high_risk_escalation",
+    "category": "security",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-201",
+    "content": "Cease and desist notice: Your platform is infringing upon registered trademark serial #88491024. Immediate removal required.",
+    "task_type": "high_risk_escalation",
+    "category": "legal",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-202",
+    "content": "We discovered a remote code execution vulnerability (CVE-2024-3819) in your public API upload parser. Attached is our proof-of-concept. Please route to SecOps immediately.",
+    "task_type": "high_risk_escalation",
+    "category": "security",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-203",
+    "content": "Formal demand under EU GDPR Article 17: Delete all personally identifiable records for user account UUID 8912-3312 across all production and backup stores.",
+    "task_type": "high_risk_escalation",
+    "category": "legal",
+    "split": "test",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-204",
+    "content": "Your 8-hour outage on April 14 breached section 4.2 of our Enterprise SLA. We are claiming $45,000 in contractual liquidated damages. Our legal counsel is CC'd.",
+    "task_type": "high_risk_escalation",
+    "category": "legal",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-205",
+    "content": "We have initiated a formal credit card chargeback dispute with our bank for $12,500 due to unauthorized billing.",
+    "task_type": "high_risk_escalation",
+    "category": "financial",
+    "split": "dev",
+    "acceptable_routes": [
+      "HUMAN_REVIEW"
+    ],
+    "expected_quality": {
+      "HUMAN_REVIEW": 1.0,
+      "LARGE_LLM": 0.75,
+      "SMALL_LLM": 0.2,
+      "FAST_PATH": 0.0,
+      "FALLBACK": 0.4,
+      "CLARIFY": 0.1
+    },
+    "notes": "High-consequence compliance, financial, or security matter requiring human oversight"
+  },
+  {
+    "request_id": "cs-206",
+    "content": "0xDEADBEEF \u0000\u0001\u0002 \u007f\u0080\u0090 \ufffd\ufffd\ufffd",
+    "task_type": "malformed_unroutable",
+    "category": "malformed",
+    "split": "test",
+    "acceptable_routes": [
+      "FALLBACK",
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "FALLBACK": 1.0,
+      "CLARIFY": 0.6,
+      "LARGE_LLM": 0.1,
+      "SMALL_LLM": 0.1,
+      "FAST_PATH": 0.0,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Malformed non-linguistic input should trigger fallback handler"
+  },
+  {
+    "request_id": "cs-207",
+    "content": "asdjklqwerty 981273918273981273 !@#$%^&*()_+",
+    "task_type": "malformed_unroutable",
+    "category": "malformed",
+    "split": "dev",
+    "acceptable_routes": [
+      "FALLBACK",
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "FALLBACK": 1.0,
+      "CLARIFY": 0.6,
+      "LARGE_LLM": 0.1,
+      "SMALL_LLM": 0.1,
+      "FAST_PATH": 0.0,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Malformed non-linguistic input should trigger fallback handler"
+  },
+  {
+    "request_id": "cs-208",
+    "content": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+    "task_type": "malformed_unroutable",
+    "category": "malformed",
+    "split": "dev",
+    "acceptable_routes": [
+      "FALLBACK",
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "FALLBACK": 1.0,
+      "CLARIFY": 0.6,
+      "LARGE_LLM": 0.1,
+      "SMALL_LLM": 0.1,
+      "FAST_PATH": 0.0,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Malformed non-linguistic input should trigger fallback handler"
+  },
+  {
+    "request_id": "cs-209",
+    "content": ">>> <<<< >>> ??? ???? !!!! *** &&&& %%%%",
+    "task_type": "malformed_unroutable",
+    "category": "malformed",
+    "split": "test",
+    "acceptable_routes": [
+      "FALLBACK",
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "FALLBACK": 1.0,
+      "CLARIFY": 0.6,
+      "LARGE_LLM": 0.1,
+      "SMALL_LLM": 0.1,
+      "FAST_PATH": 0.0,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Malformed non-linguistic input should trigger fallback handler"
+  },
+  {
+    "request_id": "cs-210",
+    "content": "qwpeoriuaskldfjzxcvm,n192837401928374",
+    "task_type": "malformed_unroutable",
+    "category": "malformed",
+    "split": "dev",
+    "acceptable_routes": [
+      "FALLBACK",
+      "CLARIFY"
+    ],
+    "expected_quality": {
+      "FALLBACK": 1.0,
+      "CLARIFY": 0.6,
+      "LARGE_LLM": 0.1,
+      "SMALL_LLM": 0.1,
+      "FAST_PATH": 0.0,
+      "HUMAN_REVIEW": 0.1
+    },
+    "notes": "Malformed non-linguistic input should trigger fallback handler"
   }
 ]

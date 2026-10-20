@@ -84,7 +84,15 @@ class RouteDecision(BaseModel):
     )
     latency_ms: float | None = Field(
         default=None,
-        description="Time taken for the routing decision in milliseconds",
+        description="Total time taken for the routing phase in milliseconds",
+    )
+    decision_latency_ms: float | None = Field(
+        default=None,
+        description="Time spent specifically in decision model inference in milliseconds",
+    )
+    router_overhead_ms: float | None = Field(
+        default=None,
+        description="Time spent in router validation, feature extraction, and policy gate in milliseconds",
     )
 
 
@@ -101,14 +109,21 @@ class TaskResult(BaseModel):
     success: bool = Field(default=True)
     error: str | None = Field(default=None)
     model_used: str | None = Field(default=None, description="Model identifier used for task")
-    latency_ms: float | None = Field(default=None)
+    latency_ms: float | None = Field(
+        default=None,
+        description="Time spent in task model inference/execution in milliseconds",
+    )
     token_usage: dict[str, int] | None = Field(
         default=None,
         description="Token counts (prompt_tokens, completion_tokens, total_tokens)",
     )
     estimated_cost_usd: float | None = Field(
         default=None,
-        description="Estimated cost; labeled simulated unless from provider billing API",
+        description="Estimated cost in USD",
+    )
+    cost_is_simulated: bool = Field(
+        default=True,
+        description="True if cost is simulated from pricing tiers, False if actual billing API",
     )
 
 
@@ -124,3 +139,8 @@ class RoutingRecord(BaseModel):
     task_result: TaskResult | None = None
     timestamp: float = Field(default_factory=time.time)
     config_version: str | None = None
+    total_e2e_latency_ms: float | None = Field(
+        default=None,
+        description="Total end-to-end latency from request receipt to response completion",
+    )
+

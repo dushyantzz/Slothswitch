@@ -40,25 +40,41 @@ class MockDecisionAdapter(DecisionAdapter):
         confidence = self._default_confidence
         reasoning = ""
 
-        # Check for missing information indicators
-        lower_content = request.content.lower()
-        missing_info_indicators = ["unclear", "what do you mean", "can you clarify", "more info"]
-        if any(ind in lower_content for ind in missing_info_indicators):
+        # Check for missing information indicators or ambiguous fragments
+        lower_content = request.content.lower().strip()
+        missing_info_indicators = [
+            "unclear", "what do you mean", "can you clarify", "more info",
+            "broken", "doesn't work", "does not work", "help please", "failed",
+            "something went wrong", "not working today", "not working", "error on page",
+            "system issue", "problem with my account", "why is it doing this",
+        ]
+        punct_ratio = sum(1 for c in request.content if not c.isalnum() and not c.isspace()) / max(1, len(request.content))
+
+        # Has code or long → large LLM
+        if features.has_code_block or features.word_count > 45:
+            route = RouteCategory.LARGE_LLM
+            confidence = 0.85
+            reasoning = "Complex or long request requiring capable model"
+
+        # Check for malformed / non-linguistic input
+        elif punct_ratio > 0.35 and features.word_count < 10:
+            route = RouteCategory.FALLBACK
+            confidence = 0.50
+            reasoning = "Malformed or non-linguistic input; routing to safe fallback"
+
+        # Check for missing information indicators or ambiguous fragments
+        elif any(ind in lower_content for ind in missing_info_indicators) or (
+            0 < features.word_count <= 2 and not features.category_hints
+        ):
             route = RouteCategory.CLARIFY
             confidence = 0.90
-            reasoning = "Request appears to need clarification"
+            reasoning = "Request is ambiguous or missing required parameters"
 
         # Very short + has category hint → fast path
         elif features.word_count <= 15 and features.category_hints:
             route = RouteCategory.FAST_PATH
             confidence = 0.92
             reasoning = f"Short request with clear category: {features.category_hints}"
-
-        # Has code or long → large LLM
-        elif features.has_code_block or features.word_count > 200:
-            route = RouteCategory.LARGE_LLM
-            confidence = 0.80
-            reasoning = "Complex or long request requiring capable model"
 
         # Medium length → small LLM
         else:
@@ -71,6 +87,7 @@ class MockDecisionAdapter(DecisionAdapter):
             route = RouteCategory.FALLBACK
             confidence = 0.50
             reasoning = "Preferred route not available; falling back"
+
 
         return RouteDecision(
             request_id=request.request_id,

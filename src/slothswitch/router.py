@@ -99,14 +99,17 @@ class SlothSwitchRouter:
         ]
 
         # Step 4: Decision
+        decision_start = time.perf_counter()
         if self.baseline_mode:
             # Baseline: always use the configured baseline route
+            decision_model_ms = (time.perf_counter() - decision_start) * 1000
             decision = RouteDecision(
                 request_id=request.request_id,
                 chosen_route=self.baseline_route,
                 confidence=1.0,
                 reasoning="Baseline mode — all requests use the same route",
                 decision_model="baseline",
+                decision_latency_ms=decision_model_ms,
             )
         else:
             # Ask the decision model
@@ -114,7 +117,11 @@ class SlothSwitchRouter:
                 decision = self.decision_adapter.predict_route(
                     request, features, available_routes
                 )
+                decision_model_ms = (time.perf_counter() - decision_start) * 1000
+                if decision.decision_latency_ms is None:
+                    decision.decision_latency_ms = decision_model_ms
             except Exception as e:
+                decision_model_ms = (time.perf_counter() - decision_start) * 1000
                 logger.error("Decision adapter failed: %s", e)
                 decision = RouteDecision(
                     request_id=request.request_id,
@@ -122,6 +129,7 @@ class SlothSwitchRouter:
                     confidence=0.0,
                     reasoning=f"Decision adapter error: {e}",
                     fallback_reason=f"Decision adapter error: {e}",
+                    decision_latency_ms=decision_model_ms,
                 )
 
         # Step 5: Policy validation
@@ -129,13 +137,20 @@ class SlothSwitchRouter:
             decision, request, category_hints=features.category_hints
         )
 
+        routing_phase_ms = (time.perf_counter() - pipeline_start) * 1000
+        decision.latency_ms = routing_phase_ms
+        dec_lat = decision.decision_latency_ms or 0.0
+        decision.router_overhead_ms = max(0.0, routing_phase_ms - dec_lat)
+
         # Step 6: Dispatch to task model
+        task_start = time.perf_counter()
         task_result: TaskResult | None = None
         adapter = self.task_adapters.get(decision.chosen_route)
         if adapter is not None:
             try:
                 task_result = adapter.execute(request, decision.chosen_route)
             except Exception as e:
+                task_elapsed = (time.perf_counter() - task_start) * 1000
                 logger.error("Task adapter failed for route %s: %s", decision.chosen_route, e)
                 task_result = TaskResult(
                     request_id=request.request_id,
@@ -143,21 +158,21 @@ class SlothSwitchRouter:
                     output="",
                     success=False,
                     error=str(e),
+                    latency_ms=task_elapsed,
                 )
         else:
             logger.warning("No task adapter for route %s", decision.chosen_route)
 
-        # Step 7: Add pipeline latency
-        pipeline_ms = (time.perf_counter() - pipeline_start) * 1000
-        if decision.latency_ms is None:
-            decision.latency_ms = pipeline_ms
+        total_e2e_ms = (time.perf_counter() - pipeline_start) * 1000
 
-        # Step 8: Record outcome
+        # Step 7: Record outcome
         record = RoutingRecord(
             request_id=request.request_id,
             route_decision=decision,
             task_result=task_result,
+            total_e2e_latency_ms=total_e2e_ms,
         )
         self.telemetry.record(record)
 
         return record
+
