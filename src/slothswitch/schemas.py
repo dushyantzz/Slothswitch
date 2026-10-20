@@ -121,6 +121,10 @@ class TaskResult(BaseModel):
         default=None,
         description="Estimated cost in USD",
     )
+    latency_is_simulated: bool = Field(
+        default=True,
+        description="True if latency was simulated/mocked, False if measured live",
+    )
     cost_is_simulated: bool = Field(
         default=True,
         description="True if cost is simulated from pricing tiers, False if actual billing API",

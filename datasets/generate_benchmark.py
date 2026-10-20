@@ -32,8 +32,13 @@ def generate_dataset() -> list[dict]:
         notes: str = "",
     ):
         nonlocal current_id
-        # Split assignment: deterministic 70% dev, 30% test
-        split = "test" if (current_id % 10 in (3, 6, 9)) else "dev"
+        # Split assignment: deterministic 50% train, 20% val (tuning), 30% test (untouched held-out)
+        if current_id % 10 in (3, 6, 9):
+            split = "test"
+        elif current_id % 10 in (2, 7):
+            split = "val"
+        else:
+            split = "train"
         records.append({
             "request_id": f"cs-{current_id:03d}",
             "content": content,
@@ -257,7 +262,8 @@ if __name__ == "__main__":
     items = generate_dataset()
     out_path = Path("datasets/customer_support_routing.json")
     out_path.write_text(json.dumps(items, indent=2), encoding="utf-8")
-    dev_count = sum(1 for x in items if x["split"] == "dev")
+    train_count = sum(1 for x in items if x["split"] == "train")
+    val_count = sum(1 for x in items if x["split"] == "val")
     test_count = sum(1 for x in items if x["split"] == "test")
     print(f"Generated {len(items)} evaluation samples into {out_path}")
-    print(f"Splits: {dev_count} dev (tuning/recon), {test_count} held-out test")
+    print(f"Splits: {train_count} train (policy build), {val_count} val (threshold tuning), {test_count} test (untouched held-out)")

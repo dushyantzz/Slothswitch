@@ -54,6 +54,9 @@ class RoutingFeatures:
     word_count: int = 0
     has_question_mark: bool = False
     has_code_block: bool = False
+    is_deep_technical: bool = False
+    missing_required_identifier: bool = False
+    is_malformed_noise: bool = False
     category_hints: list[str] = field(default_factory=list)
     language_hint: str = "en"
     redacted_summary: str = ""
@@ -140,6 +143,43 @@ def extract_features(
         if any(kw in lower for kw in keywords) and category not in features.category_hints:
             features.category_hints.append(category)
 
+    # Extract deep technical reasoning signals
+    deep_tech_keywords = [
+        "kubernetes", "ingress", "microservices", "dynamodb", "eventbridge",
+        "postgres", "concurrency", "lock-free", "circular buffer", "zero-downtime",
+        "pg_partman", "rails", "grpc", "traceback", "deadlock", "race condition",
+        "profiling", "memory leak", "multi-threaded", "cache-line", "distributed",
+        "502 bad gateway", "envoy", "idempotent", "schema migration", "buffer",
+        "single-table design", "mutex", "coroutine", "thread pool", "asyncio",
+    ]
+    features.is_deep_technical = (
+        any(kw in lower for kw in deep_tech_keywords)
+        or features.has_code_block
+        or "traceback (" in lower
+    )
+
+    # Missing parameters for action requests (clarification triggers)
+    has_specific_id = bool(
+        re.search(r"#\d+|\b[A-Z0-9]{6,}\b|\b[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+\b", content)
+    )
+    action_clarify_triggers = [
+        "reissue the invoice", "reissue invoice", "reset my two-factor", "reset 2fa",
+        "cancel my subscription", "cancel subscription", "webhook is not receiving",
+        "not receiving payloads", "can you clarify", "what do you mean",
+    ]
+    features.missing_required_identifier = (
+        any(act in lower for act in action_clarify_triggers) and not has_specific_id
+    )
+
+    # Malformed noise
+    punct_count = sum(1 for c in content if not c.isalnum() and not c.isspace())
+    punct_ratio = punct_count / max(1, len(content))
+    alphanumeric_words = [w for w in re.findall(r"[a-zA-Z0-9]+", lower) if len(w) > 1]
+    features.is_malformed_noise = (
+        punct_ratio > 0.35
+        or (len(alphanumeric_words) > 0 and all(len(w) > 12 and not any(v in w for v in "aeiou") for w in alphanumeric_words))
+        or (len(content) > 15 and punct_ratio > 0.25 and len(alphanumeric_words) <= 2)
+    )
 
     if include_redacted_summary:
         redacted = redact_sensitive(content)

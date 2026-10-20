@@ -134,7 +134,7 @@ class SlothSwitchRouter:
 
         # Step 5: Policy validation
         decision = self.policy.validate_and_apply(
-            decision, request, category_hints=features.category_hints
+            decision, request, category_hints=features.category_hints, features=features
         )
 
         routing_phase_ms = (time.perf_counter() - pipeline_start) * 1000

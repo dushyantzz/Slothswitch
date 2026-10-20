@@ -46,6 +46,7 @@ class RoutingPolicy:
         decision: RouteDecision,
         request: RoutingRequest,
         category_hints: list[str] | None = None,
+        features: Any = None,
     ) -> RouteDecision:
         """Validate a proposed route decision against policy rules.
 
@@ -56,8 +57,9 @@ class RoutingPolicy:
         1. Route membership — is the proposed route a valid RouteCategory?
         2. Route enabled — is the route enabled in configuration?
         3. Caller constraints — does the route satisfy allowed_routes / max_cost_tier?
-        4. High-risk override — does the request category require escalation?
-        5. Confidence threshold — is confidence high enough for acceptance?
+        4. Feature-based escalation — escalate when cheap route is inadequate.
+        5. High-risk override — does the request category require escalation?
+        6. Confidence threshold — is confidence high enough for acceptance?
         """
         # 1. Route membership (already enforced by Pydantic, but be explicit)
         if decision.chosen_route not in RouteCategory:
@@ -90,7 +92,40 @@ class RoutingPolicy:
                     f"Route {decision.chosen_route} cost tier {tier} exceeds policy max {self.max_cost_tier}",
                 )
 
-        # 4. High-risk override
+        # 4. Feature-based Escalation Gates (prevent forcing cheap route on complex or underspecified queries)
+        if features is not None:
+            # 4a. Malformed noise override → FALLBACK
+            if getattr(features, "is_malformed_noise", False) and decision.chosen_route != RouteCategory.FALLBACK:
+                return self._fallback(
+                    decision,
+                    "Malformed or non-linguistic noise detected; routed to safe fallback",
+                )
+
+            # 4b. Deep technical reasoning escalation → LARGE_LLM
+            if (
+                getattr(features, "is_deep_technical", False)
+                and decision.chosen_route in (RouteCategory.FAST_PATH, RouteCategory.SMALL_LLM)
+                and RouteCategory.LARGE_LLM in self.enabled_routes
+            ):
+                decision.chosen_route = RouteCategory.LARGE_LLM
+                decision.accepted = True
+                decision.fallback_reason = "Deep technical reasoning requirements detected; policy escalated from cheap route to preserve task quality"
+                decision.reasoning += " [Policy escalated to LARGE_LLM for complex reasoning]"
+                return decision
+
+            # 4c. Missing action parameters escalation → CLARIFY
+            if (
+                getattr(features, "missing_required_identifier", False)
+                and decision.chosen_route in (RouteCategory.FAST_PATH, RouteCategory.SMALL_LLM)
+                and RouteCategory.CLARIFY in self.enabled_routes
+            ):
+                decision.chosen_route = RouteCategory.CLARIFY
+                decision.accepted = True
+                decision.fallback_reason = "Action request missing specific identifier or details; policy escalated to CLARIFY"
+                decision.reasoning += " [Policy escalated to CLARIFY due to missing identifier]"
+                return decision
+
+        # 5. High-risk override
         if category_hints:
             for cat in category_hints:
                 if (
@@ -108,7 +143,7 @@ class RoutingPolicy:
                     )
 
 
-        # 5. Confidence threshold
+        # 6. Confidence threshold
         if (
             decision.confidence is not None
             and decision.confidence < self.acceptance_threshold

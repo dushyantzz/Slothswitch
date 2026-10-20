@@ -4,7 +4,7 @@
     "content": "Please categorize ticket #1001: Customer cannot log in after password change.",
     "task_type": "simple_classification",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -24,7 +24,7 @@
     "content": "What department should handle: Request for volume discount on 50 licenses?",
     "task_type": "simple_classification",
     "category": "sales",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -64,7 +64,7 @@
     "content": "Classify priority: Production database unreachable, 500 users impacted.",
     "task_type": "simple_classification",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -84,7 +84,7 @@
     "content": "Is this query related to billing or technical: Why is my credit card showing pending charge?",
     "task_type": "simple_classification",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -124,7 +124,7 @@
     "content": "Categorize: User wants to export contact list to CSV.",
     "task_type": "simple_classification",
     "category": "account",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -144,7 +144,7 @@
     "content": "Determine intent: Customer asking for cancelation fee structure.",
     "task_type": "simple_classification",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -184,7 +184,7 @@
     "content": "Classify sentiment and urgency: We love your software but need faster webhooks.",
     "task_type": "simple_classification",
     "category": "sales",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -204,7 +204,7 @@
     "content": "Please categorize ticket #1021: Customer cannot log in after password change.",
     "task_type": "simple_classification",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -224,7 +224,7 @@
     "content": "What department should handle: Request for volume discount on 50 licenses?",
     "task_type": "simple_classification",
     "category": "sales",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -264,7 +264,7 @@
     "content": "Classify priority: Production database unreachable, 500 users impacted.",
     "task_type": "simple_classification",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -284,7 +284,7 @@
     "content": "Is this query related to billing or technical: Why is my credit card showing pending charge?",
     "task_type": "simple_classification",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -324,7 +324,7 @@
     "content": "Categorize: User wants to export contact list to CSV.",
     "task_type": "simple_classification",
     "category": "account",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -344,7 +344,7 @@
     "content": "Determine intent: Customer asking for cancelation fee structure.",
     "task_type": "simple_classification",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -384,7 +384,7 @@
     "content": "Classify sentiment and urgency: We love your software but need faster webhooks.",
     "task_type": "simple_classification",
     "category": "sales",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -404,7 +404,7 @@
     "content": "Please categorize ticket #1041: Customer cannot log in after password change.",
     "task_type": "simple_classification",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -424,7 +424,7 @@
     "content": "What department should handle: Request for volume discount on 50 licenses?",
     "task_type": "simple_classification",
     "category": "sales",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -464,7 +464,7 @@
     "content": "Classify priority: Production database unreachable, 500 users impacted.",
     "task_type": "simple_classification",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -484,7 +484,7 @@
     "content": "Is this query related to billing or technical: Why is my credit card showing pending charge?",
     "task_type": "simple_classification",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -524,7 +524,7 @@
     "content": "Categorize: User wants to export contact list to CSV.",
     "task_type": "simple_classification",
     "category": "account",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -544,7 +544,7 @@
     "content": "Determine intent: Customer asking for cancelation fee structure.",
     "task_type": "simple_classification",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -584,7 +584,7 @@
     "content": "Classify sentiment and urgency: We love your software but need faster webhooks.",
     "task_type": "simple_classification",
     "category": "sales",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -604,7 +604,7 @@
     "content": "Extract the invoice ID and amount from: Paid $420.00 for order INV-89214 on May 12th.",
     "task_type": "information_extraction",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -624,7 +624,7 @@
     "content": "Extract tracking details: Package shipped via FedEx with tracking number 789123456789.",
     "task_type": "information_extraction",
     "category": "general",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -664,7 +664,7 @@
     "content": "Identify user email: Contact primary administrator at ops-admin@enterprise.org regarding renewal.",
     "task_type": "information_extraction",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -684,7 +684,7 @@
     "content": "Extract server IP and port: Inbound traffic spike observed from 198.51.100.88:8443.",
     "task_type": "information_extraction",
     "category": "security",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -724,7 +724,7 @@
     "content": "Find ticket reference: Re: [Ticket #44921] Update regarding API gateway throttles.",
     "task_type": "information_extraction",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -744,7 +744,7 @@
     "content": "Extract subscription tier: Currently on Enterprise Plan with 200 seats.",
     "task_type": "information_extraction",
     "category": "sales",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -784,7 +784,7 @@
     "content": "Extract refund request details: Refund requested for transaction TX-991204 totaling $150.",
     "task_type": "information_extraction",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -804,7 +804,7 @@
     "content": "Extract the invoice ID and amount from: Paid $420.00 for order INV-89214 on May 12th.",
     "task_type": "information_extraction",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -824,7 +824,7 @@
     "content": "Extract tracking details: Package shipped via FedEx with tracking number 789123456789.",
     "task_type": "information_extraction",
     "category": "general",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -864,7 +864,7 @@
     "content": "Identify user email: Contact primary administrator at ops-admin@enterprise.org regarding renewal.",
     "task_type": "information_extraction",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -884,7 +884,7 @@
     "content": "Extract server IP and port: Inbound traffic spike observed from 198.51.100.88:8443.",
     "task_type": "information_extraction",
     "category": "security",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -924,7 +924,7 @@
     "content": "Find ticket reference: Re: [Ticket #44921] Update regarding API gateway throttles.",
     "task_type": "information_extraction",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -944,7 +944,7 @@
     "content": "Extract subscription tier: Currently on Enterprise Plan with 200 seats.",
     "task_type": "information_extraction",
     "category": "sales",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -984,7 +984,7 @@
     "content": "Extract refund request details: Refund requested for transaction TX-991204 totaling $150.",
     "task_type": "information_extraction",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -1004,7 +1004,7 @@
     "content": "Extract the invoice ID and amount from: Paid $420.00 for order INV-89214 on May 12th.",
     "task_type": "information_extraction",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -1024,7 +1024,7 @@
     "content": "Extract tracking details: Package shipped via FedEx with tracking number 789123456789.",
     "task_type": "information_extraction",
     "category": "general",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -1064,7 +1064,7 @@
     "content": "Identify user email: Contact primary administrator at ops-admin@enterprise.org regarding renewal.",
     "task_type": "information_extraction",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -1084,7 +1084,7 @@
     "content": "Extract server IP and port: Inbound traffic spike observed from 198.51.100.88:8443.",
     "task_type": "information_extraction",
     "category": "security",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -1124,7 +1124,7 @@
     "content": "Find ticket reference: Re: [Ticket #44921] Update regarding API gateway throttles.",
     "task_type": "information_extraction",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -1144,7 +1144,7 @@
     "content": "Extract subscription tier: Currently on Enterprise Plan with 200 seats.",
     "task_type": "information_extraction",
     "category": "sales",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -1184,7 +1184,7 @@
     "content": "Extract refund request details: Refund requested for transaction TX-991204 totaling $150.",
     "task_type": "information_extraction",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FAST_PATH",
       "SMALL_LLM"
@@ -1204,7 +1204,7 @@
     "content": "How do I update my billing credit card in the customer portal?",
     "task_type": "straightforward_generation",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1225,7 +1225,7 @@
     "content": "Can you provide instructions on resetting a forgotten password?",
     "task_type": "straightforward_generation",
     "category": "account",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1267,7 +1267,7 @@
     "content": "Explain how to invite a new team member to our workspace organization.",
     "task_type": "straightforward_generation",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1288,7 +1288,7 @@
     "content": "Where can I download receipts for past subscription cycles?",
     "task_type": "straightforward_generation",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1330,7 +1330,7 @@
     "content": "How do I generate an API token for our continuous integration pipeline?",
     "task_type": "straightforward_generation",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1351,7 +1351,7 @@
     "content": "Does your service support dark mode on mobile browser viewports?",
     "task_type": "straightforward_generation",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1393,7 +1393,7 @@
     "content": "Provide a polite response acknowledging ticket receipt and explaining our 4-hour SLA.",
     "task_type": "straightforward_generation",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1414,7 +1414,7 @@
     "content": "How do I update my billing credit card in the customer portal?",
     "task_type": "straightforward_generation",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1435,7 +1435,7 @@
     "content": "Can you provide instructions on resetting a forgotten password?",
     "task_type": "straightforward_generation",
     "category": "account",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1477,7 +1477,7 @@
     "content": "Explain how to invite a new team member to our workspace organization.",
     "task_type": "straightforward_generation",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1498,7 +1498,7 @@
     "content": "Where can I download receipts for past subscription cycles?",
     "task_type": "straightforward_generation",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1540,7 +1540,7 @@
     "content": "How do I generate an API token for our continuous integration pipeline?",
     "task_type": "straightforward_generation",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1561,7 +1561,7 @@
     "content": "Does your service support dark mode on mobile browser viewports?",
     "task_type": "straightforward_generation",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1603,7 +1603,7 @@
     "content": "Provide a polite response acknowledging ticket receipt and explaining our 4-hour SLA.",
     "task_type": "straightforward_generation",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1624,7 +1624,7 @@
     "content": "How do I update my billing credit card in the customer portal?",
     "task_type": "straightforward_generation",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1645,7 +1645,7 @@
     "content": "Can you provide instructions on resetting a forgotten password?",
     "task_type": "straightforward_generation",
     "category": "account",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1687,7 +1687,7 @@
     "content": "Explain how to invite a new team member to our workspace organization.",
     "task_type": "straightforward_generation",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1708,7 +1708,7 @@
     "content": "Where can I download receipts for past subscription cycles?",
     "task_type": "straightforward_generation",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1750,7 +1750,7 @@
     "content": "How do I generate an API token for our continuous integration pipeline?",
     "task_type": "straightforward_generation",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1771,7 +1771,7 @@
     "content": "Does your service support dark mode on mobile browser viewports?",
     "task_type": "straightforward_generation",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1813,7 +1813,7 @@
     "content": "Provide a polite response acknowledging ticket receipt and explaining our 4-hour SLA.",
     "task_type": "straightforward_generation",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1834,7 +1834,7 @@
     "content": "How do I update my billing credit card in the customer portal?",
     "task_type": "straightforward_generation",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1855,7 +1855,7 @@
     "content": "Can you provide instructions on resetting a forgotten password?",
     "task_type": "straightforward_generation",
     "category": "account",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1897,7 +1897,7 @@
     "content": "Explain how to invite a new team member to our workspace organization.",
     "task_type": "straightforward_generation",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1918,7 +1918,7 @@
     "content": "Where can I download receipts for past subscription cycles?",
     "task_type": "straightforward_generation",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1960,7 +1960,7 @@
     "content": "How do I generate an API token for our continuous integration pipeline?",
     "task_type": "straightforward_generation",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -1981,7 +1981,7 @@
     "content": "Does your service support dark mode on mobile browser viewports?",
     "task_type": "straightforward_generation",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -2023,7 +2023,7 @@
     "content": "Provide a polite response acknowledging ticket receipt and explaining our 4-hour SLA.",
     "task_type": "straightforward_generation",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "SMALL_LLM",
       "FAST_PATH",
@@ -2044,7 +2044,7 @@
     "content": "We are experiencing a distributed deadlock in our Kafka consumer group during partition rebalancing when consuming from 64 partitions with transactional outbox. Here is our Go worker stack trace:\n```go\nfatal error: all goroutines are asleep - deadlock!\ngoroutine 42 [semacquire]:\nsync.runtime_SemacquireMutex(0xc0001240)\ngithub.com/segmentio/kafka-go.(*Reader).CommitMessages(...)\n```\nHow should we restructure our consumer commit loop to prevent rebalance timeouts?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2063,7 +2063,7 @@
     "content": "Analyze our PostgreSQL query execution plan. The join between orders (40M rows) and shipments (55M rows) is performing a full sequential scan despite index on (order_id, created_at). EXPLAIN ANALYZE:\n```sql\nNested Loop (cost=0.56..892401.32 rows=15 width=128)\n-> Seq Scan on shipments (cost=0.00..654321.00 rows=15)\n```\nWhy is PostgreSQL ignoring our composite b-tree index?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2101,7 +2101,7 @@
     "content": "We have a memory leak in our Python FastAPI microservice under sustained 5,000 RPS load. Guppy heapy shows `asyncio.Task` instances growing unbounded. Traceback snippet:\n```python\nTask was destroyed but it is pending!\ntask: <Task pending name='Task-4912' coro=<stream_events() running at worker.py:84>>\n```\nHow do we properly manage generator lifecycle in FastAPI streaming responses?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2120,7 +2120,7 @@
     "content": "We are migrating a monolithic monolithic Rails application to gRPC microservices in Kubernetes. What is the recommended strategy for distributed tracing with OpenTelemetry and Envoy mesh without introducing cascading latency spikes?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2158,7 +2158,7 @@
     "content": "Our Kubernetes ingress controller is throwing intermittent 502 Bad Gateway errors under HTTP/2 multiplexing. Envoy logs show upstream connection termination with `stream_error: PROTOCOL_ERROR`. What proxy buffer settings must be tuned?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2177,7 +2177,7 @@
     "content": "Explain how to implement zero-downtime database schema migration for partitioning a 200GB Postgres table using pg_partman without locking reads during backfill.",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2215,7 +2215,7 @@
     "content": "Analyze our PostgreSQL query execution plan. The join between orders (40M rows) and shipments (55M rows) is performing a full sequential scan despite index on (order_id, created_at). EXPLAIN ANALYZE:\n```sql\nNested Loop (cost=0.56..892401.32 rows=15 width=128)\n-> Seq Scan on shipments (cost=0.00..654321.00 rows=15)\n```\nWhy is PostgreSQL ignoring our composite b-tree index?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2234,7 +2234,7 @@
     "content": "Can you help us design an idempotent event-driven architecture using AWS EventBridge, DynamoDB single-table design, and Lambda with DLQ retry mechanisms?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2253,7 +2253,7 @@
     "content": "We have a memory leak in our Python FastAPI microservice under sustained 5,000 RPS load. Guppy heapy shows `asyncio.Task` instances growing unbounded. Traceback snippet:\n```python\nTask was destroyed but it is pending!\ntask: <Task pending name='Task-4912' coro=<stream_events() running at worker.py:84>>\n```\nHow do we properly manage generator lifecycle in FastAPI streaming responses?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2291,7 +2291,7 @@
     "content": "Can you write a multi-threaded Rust implementation of a lock-free circular ring buffer with cache-line padding to prevent false sharing between producer and consumer cores?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2310,7 +2310,7 @@
     "content": "Our Kubernetes ingress controller is throwing intermittent 502 Bad Gateway errors under HTTP/2 multiplexing. Envoy logs show upstream connection termination with `stream_error: PROTOCOL_ERROR`. What proxy buffer settings must be tuned?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2348,7 +2348,7 @@
     "content": "We are experiencing a distributed deadlock in our Kafka consumer group during partition rebalancing when consuming from 64 partitions with transactional outbox. Here is our Go worker stack trace:\n```go\nfatal error: all goroutines are asleep - deadlock!\ngoroutine 42 [semacquire]:\nsync.runtime_SemacquireMutex(0xc0001240)\ngithub.com/segmentio/kafka-go.(*Reader).CommitMessages(...)\n```\nHow should we restructure our consumer commit loop to prevent rebalance timeouts?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2367,7 +2367,7 @@
     "content": "Analyze our PostgreSQL query execution plan. The join between orders (40M rows) and shipments (55M rows) is performing a full sequential scan despite index on (order_id, created_at). EXPLAIN ANALYZE:\n```sql\nNested Loop (cost=0.56..892401.32 rows=15 width=128)\n-> Seq Scan on shipments (cost=0.00..654321.00 rows=15)\n```\nWhy is PostgreSQL ignoring our composite b-tree index?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2405,7 +2405,7 @@
     "content": "We have a memory leak in our Python FastAPI microservice under sustained 5,000 RPS load. Guppy heapy shows `asyncio.Task` instances growing unbounded. Traceback snippet:\n```python\nTask was destroyed but it is pending!\ntask: <Task pending name='Task-4912' coro=<stream_events() running at worker.py:84>>\n```\nHow do we properly manage generator lifecycle in FastAPI streaming responses?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2424,7 +2424,7 @@
     "content": "We are migrating a monolithic monolithic Rails application to gRPC microservices in Kubernetes. What is the recommended strategy for distributed tracing with OpenTelemetry and Envoy mesh without introducing cascading latency spikes?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2443,7 +2443,7 @@
     "content": "Can you write a multi-threaded Rust implementation of a lock-free circular ring buffer with cache-line padding to prevent false sharing between producer and consumer cores?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2481,7 +2481,7 @@
     "content": "Explain how to implement zero-downtime database schema migration for partitioning a 200GB Postgres table using pg_partman without locking reads during backfill.",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2500,7 +2500,7 @@
     "content": "We are experiencing a distributed deadlock in our Kafka consumer group during partition rebalancing when consuming from 64 partitions with transactional outbox. Here is our Go worker stack trace:\n```go\nfatal error: all goroutines are asleep - deadlock!\ngoroutine 42 [semacquire]:\nsync.runtime_SemacquireMutex(0xc0001240)\ngithub.com/segmentio/kafka-go.(*Reader).CommitMessages(...)\n```\nHow should we restructure our consumer commit loop to prevent rebalance timeouts?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2538,7 +2538,7 @@
     "content": "Can you help us design an idempotent event-driven architecture using AWS EventBridge, DynamoDB single-table design, and Lambda with DLQ retry mechanisms?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2557,7 +2557,7 @@
     "content": "We have a memory leak in our Python FastAPI microservice under sustained 5,000 RPS load. Guppy heapy shows `asyncio.Task` instances growing unbounded. Traceback snippet:\n```python\nTask was destroyed but it is pending!\ntask: <Task pending name='Task-4912' coro=<stream_events() running at worker.py:84>>\n```\nHow do we properly manage generator lifecycle in FastAPI streaming responses?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2595,7 +2595,7 @@
     "content": "Can you write a multi-threaded Rust implementation of a lock-free circular ring buffer with cache-line padding to prevent false sharing between producer and consumer cores?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2614,7 +2614,7 @@
     "content": "Our Kubernetes ingress controller is throwing intermittent 502 Bad Gateway errors under HTTP/2 multiplexing. Envoy logs show upstream connection termination with `stream_error: PROTOCOL_ERROR`. What proxy buffer settings must be tuned?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2633,7 +2633,7 @@
     "content": "Explain how to implement zero-downtime database schema migration for partitioning a 200GB Postgres table using pg_partman without locking reads during backfill.",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2671,7 +2671,7 @@
     "content": "Analyze our PostgreSQL query execution plan. The join between orders (40M rows) and shipments (55M rows) is performing a full sequential scan despite index on (order_id, created_at). EXPLAIN ANALYZE:\n```sql\nNested Loop (cost=0.56..892401.32 rows=15 width=128)\n-> Seq Scan on shipments (cost=0.00..654321.00 rows=15)\n```\nWhy is PostgreSQL ignoring our composite b-tree index?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2690,7 +2690,7 @@
     "content": "Can you help us design an idempotent event-driven architecture using AWS EventBridge, DynamoDB single-table design, and Lambda with DLQ retry mechanisms?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2728,7 +2728,7 @@
     "content": "We are migrating a monolithic monolithic Rails application to gRPC microservices in Kubernetes. What is the recommended strategy for distributed tracing with OpenTelemetry and Envoy mesh without introducing cascading latency spikes?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2747,7 +2747,7 @@
     "content": "Can you write a multi-threaded Rust implementation of a lock-free circular ring buffer with cache-line padding to prevent false sharing between producer and consumer cores?",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2785,7 +2785,7 @@
     "content": "Explain how to implement zero-downtime database schema migration for partitioning a 200GB Postgres table using pg_partman without locking reads during backfill.",
     "task_type": "complex_reasoning",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "LARGE_LLM"
     ],
@@ -2804,7 +2804,7 @@
     "content": "Broken",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -2823,7 +2823,7 @@
     "content": "It doesn't work",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -2861,7 +2861,7 @@
     "content": "Why is it doing this?",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -2880,7 +2880,7 @@
     "content": "Help please",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -2918,7 +2918,7 @@
     "content": "Not working today",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -2937,7 +2937,7 @@
     "content": "Problem with my account",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -2975,7 +2975,7 @@
     "content": "Something went wrong",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -2994,7 +2994,7 @@
     "content": "Broken",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3013,7 +3013,7 @@
     "content": "It doesn't work",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3051,7 +3051,7 @@
     "content": "Why is it doing this?",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3070,7 +3070,7 @@
     "content": "Help please",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3108,7 +3108,7 @@
     "content": "Not working today",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3127,7 +3127,7 @@
     "content": "Problem with my account",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3165,7 +3165,7 @@
     "content": "Something went wrong",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3184,7 +3184,7 @@
     "content": "Broken",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3203,7 +3203,7 @@
     "content": "It doesn't work",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3241,7 +3241,7 @@
     "content": "Why is it doing this?",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3260,7 +3260,7 @@
     "content": "Help please",
     "task_type": "ambiguous_requests",
     "category": "general",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3298,7 +3298,7 @@
     "content": "Can you reissue the invoice from yesterday?",
     "task_type": "requests_requiring_clarification",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3317,7 +3317,7 @@
     "content": "Add 5 more seats to our plan.",
     "task_type": "requests_requiring_clarification",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3355,7 +3355,7 @@
     "content": "I was charged twice on my card, please refund.",
     "task_type": "requests_requiring_clarification",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3374,7 +3374,7 @@
     "content": "The automated test suite failed on branch release-v2.",
     "task_type": "requests_requiring_clarification",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3393,7 +3393,7 @@
     "content": "Please reset my two-factor authentication device.",
     "task_type": "requests_requiring_clarification",
     "category": "account",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3431,7 +3431,7 @@
     "content": "Please cancel my subscription immediately.",
     "task_type": "requests_requiring_clarification",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3450,7 +3450,7 @@
     "content": "Can you reissue the invoice from yesterday?",
     "task_type": "requests_requiring_clarification",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3488,7 +3488,7 @@
     "content": "Our custom webhook is not receiving payloads.",
     "task_type": "requests_requiring_clarification",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3507,7 +3507,7 @@
     "content": "I was charged twice on my card, please refund.",
     "task_type": "requests_requiring_clarification",
     "category": "billing",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3545,7 +3545,7 @@
     "content": "Please reset my two-factor authentication device.",
     "task_type": "requests_requiring_clarification",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3564,7 +3564,7 @@
     "content": "Can you extend our trial by two weeks?",
     "task_type": "requests_requiring_clarification",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3583,7 +3583,7 @@
     "content": "Please cancel my subscription immediately.",
     "task_type": "requests_requiring_clarification",
     "category": "billing",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3621,7 +3621,7 @@
     "content": "Add 5 more seats to our plan.",
     "task_type": "requests_requiring_clarification",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3640,7 +3640,7 @@
     "content": "Our custom webhook is not receiving payloads.",
     "task_type": "requests_requiring_clarification",
     "category": "technical",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3678,7 +3678,7 @@
     "content": "The automated test suite failed on branch release-v2.",
     "task_type": "requests_requiring_clarification",
     "category": "technical",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3697,7 +3697,7 @@
     "content": "Please reset my two-factor authentication device.",
     "task_type": "requests_requiring_clarification",
     "category": "account",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "CLARIFY"
     ],
@@ -3735,7 +3735,7 @@
     "content": "We discovered a remote code execution vulnerability (CVE-2024-3819) in your public API upload parser. Attached is our proof-of-concept. Please route to SecOps immediately.",
     "task_type": "high_risk_escalation",
     "category": "security",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -3754,7 +3754,7 @@
     "content": "Formal demand under EU GDPR Article 17: Delete all personally identifiable records for user account UUID 8912-3312 across all production and backup stores.",
     "task_type": "high_risk_escalation",
     "category": "legal",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -3773,7 +3773,7 @@
     "content": "Your 8-hour outage on April 14 breached section 4.2 of our Enterprise SLA. We are claiming $45,000 in contractual liquidated damages. Our legal counsel is CC'd.",
     "task_type": "high_risk_escalation",
     "category": "legal",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -3811,7 +3811,7 @@
     "content": "Security incident report: Unauthorized API key extraction detected from compromised worker node. Immediate key revocation and audit log retention required.",
     "task_type": "high_risk_escalation",
     "category": "security",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -3830,7 +3830,7 @@
     "content": "Cease and desist notice: Your platform is infringing upon registered trademark serial #88491024. Immediate removal required.",
     "task_type": "high_risk_escalation",
     "category": "legal",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -3868,7 +3868,7 @@
     "content": "Formal demand under EU GDPR Article 17: Delete all personally identifiable records for user account UUID 8912-3312 across all production and backup stores.",
     "task_type": "high_risk_escalation",
     "category": "legal",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -3887,7 +3887,7 @@
     "content": "Your 8-hour outage on April 14 breached section 4.2 of our Enterprise SLA. We are claiming $45,000 in contractual liquidated damages. Our legal counsel is CC'd.",
     "task_type": "high_risk_escalation",
     "category": "legal",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -3925,7 +3925,7 @@
     "content": "Security incident report: Unauthorized API key extraction detected from compromised worker node. Immediate key revocation and audit log retention required.",
     "task_type": "high_risk_escalation",
     "category": "security",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -3944,7 +3944,7 @@
     "content": "Cease and desist notice: Your platform is infringing upon registered trademark serial #88491024. Immediate removal required.",
     "task_type": "high_risk_escalation",
     "category": "legal",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -3963,7 +3963,7 @@
     "content": "We discovered a remote code execution vulnerability (CVE-2024-3819) in your public API upload parser. Attached is our proof-of-concept. Please route to SecOps immediately.",
     "task_type": "high_risk_escalation",
     "category": "security",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -4001,7 +4001,7 @@
     "content": "Your 8-hour outage on April 14 breached section 4.2 of our Enterprise SLA. We are claiming $45,000 in contractual liquidated damages. Our legal counsel is CC'd.",
     "task_type": "high_risk_escalation",
     "category": "legal",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -4020,7 +4020,7 @@
     "content": "We have initiated a formal credit card chargeback dispute with our bank for $12,500 due to unauthorized billing.",
     "task_type": "high_risk_escalation",
     "category": "financial",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "HUMAN_REVIEW"
     ],
@@ -4059,7 +4059,7 @@
     "content": "asdjklqwerty 981273918273981273 !@#$%^&*()_+",
     "task_type": "malformed_unroutable",
     "category": "malformed",
-    "split": "dev",
+    "split": "val",
     "acceptable_routes": [
       "FALLBACK",
       "CLARIFY"
@@ -4079,7 +4079,7 @@
     "content": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
     "task_type": "malformed_unroutable",
     "category": "malformed",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FALLBACK",
       "CLARIFY"
@@ -4119,7 +4119,7 @@
     "content": "qwpeoriuaskldfjzxcvm,n192837401928374",
     "task_type": "malformed_unroutable",
     "category": "malformed",
-    "split": "dev",
+    "split": "train",
     "acceptable_routes": [
       "FALLBACK",
       "CLARIFY"

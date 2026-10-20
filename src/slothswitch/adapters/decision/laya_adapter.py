@@ -136,8 +136,11 @@ class LayaDecisionAdapter(DecisionAdapter):
             # Extract route from result
             route_answer = result.get("answers", {}).get("route", {})
             chosen_label = route_answer.get("choice", "FALLBACK")
-            # NOTE: We intentionally do NOT use act_probability per model card guidance
-            confidence = route_answer.get("confidence", None)
+            probabilities = route_answer.get("probabilities", {})
+            # Use answer_confidence (calibrated softmax probability of the chosen option)
+            confidence = route_answer.get("answer_confidence")
+            if confidence is None:
+                confidence = probabilities.get(chosen_label, route_answer.get("confidence", 0.85))
 
             # Validate the returned label
             try:
@@ -151,9 +154,10 @@ class LayaDecisionAdapter(DecisionAdapter):
                 request_id=request.request_id,
                 chosen_route=chosen_route,
                 confidence=confidence,
-                reasoning=f"Laya chose {chosen_label}",
+                reasoning=f"Laya neural decision: {chosen_label} (prob={confidence:.4f})",
                 decision_model=self.name,
                 latency_ms=elapsed_ms,
+                decision_latency_ms=elapsed_ms,
             )
 
         except Exception as e:
