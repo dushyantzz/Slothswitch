@@ -1,0 +1,139 @@
+"""Input preprocessing and feature extraction for routing decisions.
+
+This module handles:
+- Input validation (size, content type)
+- Privacy-aware redaction of sensitive information
+- Routing feature extraction (without retaining raw content)
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass, field
+from typing import Any
+
+from slothswitch.schemas import RoutingRequest
+
+
+# ---------------------------------------------------------------------------
+# Redaction patterns
+# ---------------------------------------------------------------------------
+
+_REDACTION_PATTERNS: list[tuple[str, str]] = [
+    # Email addresses
+    (r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", "[REDACTED_EMAIL]"),
+    # Phone numbers (simple patterns)
+    (r"\b\d{3}[-.]?\d{3}[-.]?\d{4}\b", "[REDACTED_PHONE]"),
+    # Credit card–like sequences
+    (r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b", "[REDACTED_CARD]"),
+    # API key–like strings (long hex/base64)
+    (r"\b(?:sk-|pk-|api[-_]?key[-_:]?\s*)[a-zA-Z0-9]{20,}\b", "[REDACTED_KEY]"),
+]
+
+
+def redact_sensitive(text: str) -> str:
+    """Replace common sensitive patterns with placeholders."""
+    for pattern, replacement in _REDACTION_PATTERNS:
+        text = re.sub(pattern, replacement, text)
+    return text
+
+
+# ---------------------------------------------------------------------------
+# Routing features
+# ---------------------------------------------------------------------------
+
+@dataclass
+class RoutingFeatures:
+    """Extracted features used by the decision model for routing.
+
+    These are derived from the request without retaining the full raw content,
+    unless explicitly enabled via configuration.
+    """
+
+    request_id: str
+    char_count: int = 0
+    word_count: int = 0
+    has_question_mark: bool = False
+    has_code_block: bool = False
+    category_hints: list[str] = field(default_factory=list)
+    language_hint: str = "en"
+    redacted_summary: str = ""
+    extra: dict[str, Any] = field(default_factory=dict)
+
+
+# ---------------------------------------------------------------------------
+# Validation
+# ---------------------------------------------------------------------------
+
+class ValidationError(Exception):
+    """Raised when a request fails input validation."""
+
+
+def validate_request(
+    request: RoutingRequest,
+    max_length: int = 10_000,
+    supported_content_types: list[str] | None = None,
+) -> None:
+    """Validate an incoming request against configured constraints.
+
+    Raises ValidationError if the request is invalid.
+    """
+    if supported_content_types is None:
+        supported_content_types = ["text/plain"]
+
+    if not request.content or not request.content.strip():
+        raise ValidationError("Request content is empty")
+
+    if len(request.content) > max_length:
+        raise ValidationError(
+            f"Request content length {len(request.content)} exceeds maximum {max_length}"
+        )
+
+    if request.content_type not in supported_content_types:
+        raise ValidationError(
+            f"Unsupported content type '{request.content_type}'; "
+            f"supported: {supported_content_types}"
+        )
+
+
+# ---------------------------------------------------------------------------
+# Feature extraction
+# ---------------------------------------------------------------------------
+
+def extract_features(
+    request: RoutingRequest,
+    include_redacted_summary: bool = False,
+    summary_max_length: int = 200,
+) -> RoutingFeatures:
+    """Extract routing features from a validated request.
+
+    By default the raw content is NOT retained. When `include_redacted_summary`
+    is True, a truncated/redacted summary is stored for the decision model.
+    """
+    content = request.content
+
+    features = RoutingFeatures(
+        request_id=request.request_id,
+        char_count=len(content),
+        word_count=len(content.split()),
+        has_question_mark="?" in content,
+        has_code_block="```" in content or "    " in content,
+    )
+
+    # Simple category hints from keywords
+    lower = content.lower()
+    keyword_categories = {
+        "billing": ["invoice", "charge", "refund", "payment", "billing", "subscription"],
+        "technical": ["error", "bug", "crash", "not working", "broken", "exception", "traceback"],
+        "account": ["password", "login", "account", "profile", "sign in", "sign up"],
+        "general": ["hello", "hi", "help", "question", "how do i"],
+    }
+    for category, keywords in keyword_categories.items():
+        if any(kw in lower for kw in keywords):
+            features.category_hints.append(category)
+
+    if include_redacted_summary:
+        redacted = redact_sensitive(content)
+        features.redacted_summary = redacted[:summary_max_length]
+
+    return features

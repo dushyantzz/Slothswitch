@@ -1,0 +1,170 @@
+"""Laya decision adapter — wraps the Laya Router for SlothSwitch routing decisions.
+
+This module is the ONLY place that imports `laya`. If Laya is not installed,
+the rest of the application continues to work with the mock adapter.
+
+Guidance from the Laya model card (verified 2024-10):
+- Use `Router` class with `predict(state, questions)` API
+- Use typed `choice` questions for route selection
+- Do NOT gate on `action.act_probability`
+- Validate confidence on held-out data before trusting it
+- Select appropriate checkpoint (base, multilingual, typed-decisions)
+"""
+
+from __future__ import annotations
+
+import logging
+import time
+from typing import Any
+
+from slothswitch.adapters import DecisionAdapter
+from slothswitch.preprocessing import RoutingFeatures
+from slothswitch.schemas import RouteCategory, RouteDecision, RoutingRequest
+
+logger = logging.getLogger(__name__)
+
+# Route labels and descriptions for the Laya choice question
+_ROUTE_CRITERIA: dict[str, str] = {
+    "FAST_PATH": "Simple factual lookup, status check, or rule-based task with a deterministic answer",
+    "SMALL_LLM": "Standard text generation, summarization, or routine customer support response",
+    "LARGE_LLM": "Complex reasoning, multi-step analysis, code debugging, or nuanced generation",
+    "CLARIFY": "The request is ambiguous or missing essential information needed to respond",
+    "HUMAN_REVIEW": "The request involves sensitive, risky, or out-of-scope topics requiring human judgment",
+}
+
+
+class LayaDecisionAdapter(DecisionAdapter):
+    """Adapter wrapping the Laya Router for structured route selection.
+
+    Uses Laya's typed `choice` question to select from the configured routes.
+    """
+
+    def __init__(
+        self,
+        checkpoint: str = "convaiinnovations/laya",
+        model_variant: str | None = None,
+        preload: bool = False,
+    ) -> None:
+        self._checkpoint = checkpoint
+        self._model_variant = model_variant
+        self._router: Any = None
+        self._loaded = False
+
+        if preload:
+            self._load()
+
+    @property
+    def name(self) -> str:
+        return f"laya:{self._checkpoint}"
+
+    def _load(self) -> None:
+        """Lazily load the Laya Router."""
+        if self._loaded:
+            return
+        try:
+            from laya import Router  # type: ignore[import-untyped]
+
+            kwargs: dict[str, Any] = {}
+            if self._model_variant:
+                kwargs["model"] = self._model_variant
+            self._router = Router(**kwargs)
+            self._loaded = True
+            logger.info("Laya Router loaded (checkpoint=%s)", self._checkpoint)
+        except ImportError:
+            raise ImportError(
+                "Laya is not installed. Install with: pip install laya\n"
+                "Or use the mock adapter for testing: adapter='mock'"
+            )
+        except Exception as e:
+            raise RuntimeError(f"Failed to load Laya Router: {e}") from e
+
+    def health_check(self) -> bool:
+        """Check if Laya can be loaded."""
+        try:
+            self._load()
+            return self._loaded
+        except Exception:
+            return False
+
+    def predict_route(
+        self,
+        request: RoutingRequest,
+        features: RoutingFeatures,
+        available_routes: list[RouteCategory],
+    ) -> RouteDecision:
+        """Use Laya to predict the optimal route."""
+        self._load()
+        start_time = time.perf_counter()
+
+        # Build the state for Laya — use redacted summary, not raw content
+        state = {
+            "subject": features.redacted_summary[:100] if features.redacted_summary else "",
+            "body": features.redacted_summary if features.redacted_summary else "",
+            "word_count": str(features.word_count),
+            "has_code": str(features.has_code_block),
+            "category_hints": ", ".join(features.category_hints) if features.category_hints else "none",
+        }
+
+        # Build criteria filtered to available routes
+        criteria = {
+            route.value: _ROUTE_CRITERIA.get(route.value, route.value)
+            for route in available_routes
+            if route.value in _ROUTE_CRITERIA
+        }
+
+        if not criteria:
+            return RouteDecision(
+                request_id=request.request_id,
+                chosen_route=RouteCategory.FALLBACK,
+                confidence=0.0,
+                reasoning="No valid routes available for Laya choice question",
+                decision_model=self.name,
+            )
+
+        questions = {
+            "route": {
+                "type": "choice",
+                "instructions": "Which processing path is most appropriate for this request?",
+                "criteria": criteria,
+            }
+        }
+
+        try:
+            result = self._router.predict(state, questions)
+            elapsed_ms = (time.perf_counter() - start_time) * 1000
+
+            # Extract route from result
+            route_answer = result.get("answers", {}).get("route", {})
+            chosen_label = route_answer.get("choice", "FALLBACK")
+            # NOTE: We intentionally do NOT use act_probability per model card guidance
+            confidence = route_answer.get("confidence", None)
+
+            # Validate the returned label
+            try:
+                chosen_route = RouteCategory(chosen_label)
+            except ValueError:
+                logger.warning("Laya returned invalid route label: %s", chosen_label)
+                chosen_route = RouteCategory.FALLBACK
+                confidence = 0.0
+
+            return RouteDecision(
+                request_id=request.request_id,
+                chosen_route=chosen_route,
+                confidence=confidence,
+                reasoning=f"Laya chose {chosen_label}",
+                decision_model=self.name,
+                latency_ms=elapsed_ms,
+            )
+
+        except Exception as e:
+            elapsed_ms = (time.perf_counter() - start_time) * 1000
+            logger.error("Laya prediction failed: %s", e)
+            return RouteDecision(
+                request_id=request.request_id,
+                chosen_route=RouteCategory.FALLBACK,
+                confidence=0.0,
+                reasoning=f"Laya prediction error: {e}",
+                fallback_reason=f"Decision model error: {e}",
+                decision_model=self.name,
+                latency_ms=elapsed_ms,
+            )
