@@ -7,6 +7,8 @@ without requiring Laya or any external model.
 
 from __future__ import annotations
 
+from typing import Any
+
 from slothswitch.adapters import DecisionAdapter
 from slothswitch.preprocessing import RoutingFeatures
 from slothswitch.schemas import RouteCategory, RouteDecision, RoutingRequest
@@ -95,4 +97,59 @@ class MockDecisionAdapter(DecisionAdapter):
             confidence=confidence,
             reasoning=reasoning,
             decision_model=self.name,
+        )
+
+    def predict_action(
+        self,
+        request_content: str,
+        workflow: Any,
+        request_id: str = "req-action",
+        allowed_actions: list[str] | None = None,
+    ) -> Any:
+        """Heuristically match request to a workflow action for testing."""
+        from slothswitch.schemas import ActionDecision, DecisionOutcome
+
+        candidate_actions = workflow.actions
+        if allowed_actions is not None:
+            candidate_actions = [a for a in candidate_actions if a.action_id in allowed_actions]
+
+        if not candidate_actions:
+            return ActionDecision(
+                request_id=request_id,
+                workflow_name=workflow.name,
+                action_id="none",
+                outcome=DecisionOutcome.FALLBACK,
+                confidence=0.0,
+                reasoning="No candidate actions available in workflow",
+                decision_model=self.name,
+            )
+
+        lower_req = request_content.lower()
+
+        # Check for keyword matches in action descriptions
+        selected_action = candidate_actions[0]
+        max_matches = -1
+        for action in candidate_actions:
+            keywords = action.action_id.split("_")
+            matches = sum(1 for kw in keywords if kw in lower_req)
+            if matches > max_matches:
+                max_matches = matches
+                selected_action = action
+
+        outcome = (
+            DecisionOutcome.USE_GENERATIVE_MODEL
+            if selected_action.allows_generative
+            else DecisionOutcome.EXECUTE_TOOL
+        )
+
+        return ActionDecision(
+            request_id=request_id,
+            workflow_name=workflow.name,
+            action_id=selected_action.action_id,
+            outcome=outcome,
+            confidence=self._default_confidence,
+            reasoning=f"Mock heuristic selected '{selected_action.action_id}' (matches={max_matches})",
+            requires_approval=selected_action.requires_approval,
+            decision_model=self.name,
+            decision_latency_ms=1.0,
         )

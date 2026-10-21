@@ -39,6 +39,26 @@ class DecisionAdapter(ABC):
         """
         ...
 
+    def predict_action(
+        self,
+        request_content: str,
+        workflow: Any,
+        request_id: str = "req-action",
+        allowed_actions: list[str] | None = None,
+    ) -> Any:
+        """Propose a workflow action for the given request.
+
+        Args:
+            request_content: Text of user request.
+            workflow: WorkflowDefinition containing candidate actions.
+            request_id: Unique request identifier.
+            allowed_actions: Optional list of action IDs to constrain candidate choices.
+
+        Returns:
+            An ActionDecision proposing an action within the workflow.
+        """
+        raise NotImplementedError
+
     def health_check(self) -> bool:
         """Return True if the adapter is ready to serve requests."""
         return True

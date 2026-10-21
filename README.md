@@ -2,41 +2,6 @@
 
 ### Let decision models handle the simple work. Save generative AI for the work that needs it.
 
-```{=html}
-<p align="center">
-```
-`<strong>`{=html}An open-source decision and execution layer for AI
-agents`</strong>`{=html}`<br/>`{=html} Reduce unnecessary LLM calls by
-turning supported requests into validated, direct actions.
-```{=html}
-</p>
-```
-```{=html}
-<p align="center">
-```
-`<em>`{=html}Built around Laya for decisions, deterministic tools for
-execution, and locally running Google Gemma for tasks that genuinely
-need generation.`</em>`{=html}
-```{=html}
-</p>
-```
-```{=html}
-<!-- Replace these placeholders with real repository badges once the project URLs and CI workflow are finalized. -->
-```
-```{=html}
-<!--
-[![Tests](YOUR_CI_BADGE_URL)](YOUR_CI_URL)
-[![License](YOUR_LICENSE_URL)](LICENSE)
--->
-```
-> **Project status:** Active development. This README describes the
-> intended architecture and the capabilities the project is working
-> toward. Features marked **Planned** or **In progress** must not be
-> interpreted as already implemented. Check the current code, release
-> notes, and benchmark reports for verified functionality.
-
-------------------------------------------------------------------------
-
 ## The idea in 30 seconds
 
 Many AI agents send almost every request to a generative Large Language

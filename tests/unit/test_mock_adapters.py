@@ -94,3 +94,17 @@ def test_local_transformers_adapter_interface():
     )
     assert adapter.name == "local-tinyllama"
     assert adapter.health_check() is True
+
+
+def test_mock_decision_adapter_predict_action():
+    from slothswitch.schemas import DecisionOutcome
+    from slothswitch.workflows.github_pr_management import create_github_workflow
+
+    wf = create_github_workflow()
+    adapter = MockDecisionAdapter()
+
+    # Query matching count_pull_requests
+    decision = adapter.predict_action("count the pull requests in this repo", wf)
+    assert decision.action_id == "count_pull_requests"
+    assert decision.outcome == DecisionOutcome.EXECUTE_TOOL
+    assert decision.confidence == 0.85

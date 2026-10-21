@@ -172,3 +172,100 @@ class LayaDecisionAdapter(DecisionAdapter):
                 decision_model=self.name,
                 latency_ms=elapsed_ms,
             )
+
+    def predict_action(
+        self,
+        request_content: str,
+        workflow: Any,
+        request_id: str = "req-action",
+        allowed_actions: list[str] | None = None,
+    ) -> Any:
+        """Use Laya to dynamically select an action from the workflow's action space."""
+        from slothswitch.schemas import ActionDecision, DecisionOutcome
+
+        self._load()
+        start_time = time.perf_counter()
+
+        candidate_actions = workflow.actions
+        if allowed_actions is not None:
+            candidate_actions = [a for a in candidate_actions if a.action_id in allowed_actions]
+
+        if not candidate_actions:
+            return ActionDecision(
+                request_id=request_id,
+                workflow_name=workflow.name,
+                action_id="none",
+                outcome=DecisionOutcome.FALLBACK,
+                confidence=0.0,
+                reasoning="No candidate actions available in workflow",
+                decision_model=self.name,
+            )
+
+        criteria = {action.action_id: action.description for action in candidate_actions}
+        state = {
+            "request": request_content[:300],
+            "workflow": workflow.name,
+        }
+        questions = {
+            "action": {
+                "type": "choice",
+                "instructions": f"Which action in the {workflow.name} workflow best fulfills this request?",
+                "criteria": criteria,
+            }
+        }
+
+        try:
+            result = self._router.predict(state, questions)
+            elapsed_ms = (time.perf_counter() - start_time) * 1000
+
+            ans = result.get("answers", {}).get("action", {})
+            chosen_action_id = ans.get("choice")
+            probabilities = ans.get("probabilities", {})
+            confidence = ans.get("answer_confidence")
+            if confidence is None:
+                confidence = probabilities.get(chosen_action_id, ans.get("confidence", 0.85))
+
+            chosen_action = workflow.get_action(chosen_action_id)
+            if chosen_action is None:
+                logger.warning("Laya selected unknown action_id: %s", chosen_action_id)
+                return ActionDecision(
+                    request_id=request_id,
+                    workflow_name=workflow.name,
+                    action_id=chosen_action_id or "unknown",
+                    outcome=DecisionOutcome.FALLBACK,
+                    confidence=0.0,
+                    reasoning=f"Laya proposed unknown action '{chosen_action_id}'",
+                    decision_model=self.name,
+                    decision_latency_ms=elapsed_ms,
+                )
+
+            outcome = (
+                DecisionOutcome.USE_GENERATIVE_MODEL
+                if chosen_action.allows_generative
+                else DecisionOutcome.EXECUTE_TOOL
+            )
+
+            return ActionDecision(
+                request_id=request_id,
+                workflow_name=workflow.name,
+                action_id=chosen_action.action_id,
+                outcome=outcome,
+                confidence=float(confidence),
+                reasoning=f"Laya selected action '{chosen_action.action_id}' (prob={confidence:.4f})",
+                requires_approval=chosen_action.requires_approval,
+                decision_model=self.name,
+                decision_latency_ms=elapsed_ms,
+            )
+        except Exception as e:
+            elapsed_ms = (time.perf_counter() - start_time) * 1000
+            logger.error("Laya action prediction failed: %s", e)
+            return ActionDecision(
+                request_id=request_id,
+                workflow_name=workflow.name,
+                action_id="error",
+                outcome=DecisionOutcome.FALLBACK,
+                confidence=0.0,
+                reasoning=f"Laya prediction error: {e}",
+                decision_model=self.name,
+                decision_latency_ms=elapsed_ms,
+            )

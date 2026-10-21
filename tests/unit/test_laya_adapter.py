@@ -102,3 +102,31 @@ def test_laya_adapter_no_available_routes(mock_laya_router):
     decision = adapter.predict_route(req, features, available_routes=[])
     assert decision.chosen_route == RouteCategory.FALLBACK
     assert decision.confidence == 0.0
+
+
+def test_laya_adapter_predict_workflow_action(mock_laya_router):
+    from slothswitch.schemas import DecisionOutcome
+    from slothswitch.workflows.github_pr_management import create_github_workflow
+
+    mock_laya_router.predict.return_value = {
+        "answers": {
+            "action": {
+                "choice": "count_pull_requests",
+                "answer_confidence": 0.94,
+                "probabilities": {"count_pull_requests": 0.94, "list_open_pull_requests": 0.06},
+            }
+        }
+    }
+
+    adapter = LayaDecisionAdapter()
+    wf = create_github_workflow()
+
+    decision = adapter.predict_action(
+        request_content="How many PRs are currently open in pallets/flask?",
+        workflow=wf,
+    )
+
+    assert decision.action_id == "count_pull_requests"
+    assert decision.outcome == DecisionOutcome.EXECUTE_TOOL
+    assert decision.confidence == 0.94
+    assert decision.decision_latency_ms is not None
