@@ -232,6 +232,61 @@ This living log tracks technical decisions, trade-offs, architecture choices, im
 - Decisions and trade-offs:
   - Explicitly separated simulated mock pricing and latencies from real live API measurements, preventing misleading benchmark claims.
 - Remaining work:
-  - None. All four tasks in the user-provided prompt are fully completed and verified.
+  - Architecture Refactoring following SlothSwitch_Architecture_Refactoring_Master_Prompt.md.
+- Next task:
+  - Phase 1: Repository & hardware audit, target architecture specification, and migration plan.
+
+---
+
+## Task: 06-Architecture-Refactoring-Audit-and-Migration-Plan
+- Status: Complete
+- What was done:
+  - Audited existing codebase against the target architecture in `SlothSwitch_Architecture_Refactoring_Master_Prompt.md`:
+    - Entry points: CLI (`src/slothswitch/cli.py`) and API factory (`src/slothswitch/api.py`).
+    - Core modules: Schemas (`schemas.py`), Policy (`policy.py`), Preprocessing (`preprocessing.py`), Router (`router.py`), Telemetry (`telemetry.py`), Evaluation (`evaluation/__init__.py`).
+    - Adapters: Decision models (`MockDecisionAdapter`, `LayaDecisionAdapter`), Task models (`MockSmallLLMAdapter`, `MockLargeLLMAdapter`, `StaticResponseAdapter`, `LocalTransformersTaskModelAdapter`).
+    - Verified real vs. mock usage: Real Laya ModernBERT (`convaiinnovations/laya`) runs on CPU (~500ms warm latency); real TinyLlama causal LM runs live forward pass; mock adapters provide controlled deterministic unit fixtures with simulated costs.
+  - Inspected host hardware:
+    - OS: Microsoft Windows 11 Home Single Language x64 (Build 10.0.26300).
+    - CPU: 12th Gen Intel(R) Core(TM) i5-12450H (8 cores, 12 threads).
+    - RAM: 16 GB (16,437,392 KB visible).
+    - GPU: NVIDIA GeForce GTX 1650 (4 GB VRAM) + Intel UHD Graphics.
+    - Disk: ~59.3 GB free out of 510 GB on C:.
+    - Python environment: Python 3.12.6, PyTorch 2.14.1 (CPU), Transformers 5.20.2, Laya 0.4.12, Pytest 9.1.1, Ruff 0.17.1, Mypy 2.4.0.
+  - Verified Gemma runtime requirements:
+    - Given 16 GB host RAM and CPU-primary execution, Google Gemma 2 2B (`google/gemma-2-2b-it`) and Gemma 1.1 2B are ideal candidates, requiring ~2.5–5 GB RAM for inference via PyTorch/Transformers.
+    - Configurable architecture ensures provider-neutral task model interface with zero hardcoded paths.
+  - Executed existing verification suite:
+    - Test Suite: **60 tests passed in 3.96s (100% pass rate)**.
+    - Linter: `ruff check` passed (0 errors).
+    - Static Type Checker: `mypy src` passed (0 issues in 13 source files).
+  - Designed target architecture and 8-phase migration plan:
+    - Phase 1: Audit and migration roadmap.
+    - Phase 2: Core Schemas and Workflow Registry (`WorkflowDefinition`, `ActionDefinition`, `WorkflowRegistry`).
+    - Phase 3: Safe Tool Execution Engine & Policy Boundary (`ToolAdapter`, `ToolExecutor`).
+    - Phase 4: First Workflow: GitHub Issue & PR Management (`github_pr_management` + read-only/mutating actions).
+    - Phase 5: Local Gemma Generative Adapter (`LocalGemmaTaskModelAdapter`).
+    - Phase 6: Laya Decision Adapter Refactoring for dynamic workflow action spaces.
+    - Phase 7: GitHub Workflow Benchmark Dataset & 3 Baselines (Always-Gemma, Deterministic, SlothSwitch).
+    - Phase 8: Hardening, comprehensive test suite, and documentation.
+- Why:
+  - Establish a rigorous, evidence-backed foundation and clear execution path before modifying architectural abstractions.
+- Files changed:
+  - `decision.md`
+- Tools and technologies:
+  - PowerShell, Python 3.12.6, pytest, ruff, mypy.
+- How this helps:
+  - Prevents blind rewrites, preserves existing passing tests, and guarantees compatibility with the host hardware.
+- Tests and results:
+  - 60/60 unit/integration tests passing.
+- Evidence/metrics:
+  - Hardware specifications recorded and verified against Gemma 2 2B requirements.
+- Decisions and trade-offs:
+  - Choose HuggingFace Transformers as primary local runtime for Gemma to leverage already installed `.venv` dependencies without requiring external services like Ollama.
+- Remaining work:
+  - Phase 2: Core schemas and Workflow Registry implementation.
+- Next task:
+  - Implement `src/slothswitch/workflows/base.py`, `src/slothswitch/registry.py`, and update `src/slothswitch/schemas.py`.
+
 
 

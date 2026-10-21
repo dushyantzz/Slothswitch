@@ -9,11 +9,9 @@ This script:
 
 from __future__ import annotations
 
-import json
 import time
-from pathlib import Path
 
-from slothswitch.adapters.task_models import LocalTransformersTaskModelAdapter, StaticResponseAdapter
+from slothswitch.adapters.task_models import LocalTransformersTaskModelAdapter
 from slothswitch.api import create_router
 from slothswitch.schemas import RouteCategory, RoutingRequest
 
@@ -79,7 +77,7 @@ def main():
 
     # --- Strategy B: Fixed Capable-Model Baseline ---
     print("\n" + "=" * 70)
-    print("--- Strategy B: Fixed Capable-Model Baseline (All → Real TinyLlama) ---")
+    print("--- Strategy B: Fixed Capable-Model Baseline (All -> Real TinyLlama) ---")
     base_total_ms = 0.0
     base_total_tokens = 0
 
@@ -94,7 +92,7 @@ def main():
         base_total_tokens += toks
 
         print(f"\n[Query: '{text[:50]}...']")
-        print(f"  Route:          LARGE_LLM (Fixed)")
+        print("  Route:          LARGE_LLM (Fixed)")
         print(f"  Task Execution: {tr.latency_ms:.2f} ms [REAL FORWARD PASS]")
         print(f"  Tokens Used:    {toks} total")
         print(f"  Output Preview: {tr.output[:90]}...")

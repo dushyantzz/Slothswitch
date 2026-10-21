@@ -28,6 +28,33 @@ class RouteCategory(str, Enum):
 
 
 # ---------------------------------------------------------------------------
+# Decision & Execution outcomes
+# ---------------------------------------------------------------------------
+
+class DecisionOutcome(str, Enum):
+    """High-level decision outcome from the decision engine."""
+
+    EXECUTE_TOOL = "EXECUTE_TOOL"
+    USE_GENERATIVE_MODEL = "USE_GENERATIVE_MODEL"
+    CLARIFY = "CLARIFY"
+    ABSTAIN = "ABSTAIN"
+    HUMAN_REVIEW = "HUMAN_REVIEW"
+    FALLBACK = "FALLBACK"
+
+
+class ExecutionState(str, Enum):
+    """Lifecycle state of an action execution request."""
+
+    ACCEPTED = "ACCEPTED"
+    VALIDATING = "VALIDATING"
+    WAITING_FOR_APPROVAL = "WAITING_FOR_APPROVAL"
+    EXECUTING = "EXECUTING"
+    SUCCEEDED = "SUCCEEDED"
+    FAILED = "FAILED"
+    ABSTAINED = "ABSTAINED"
+
+
+# ---------------------------------------------------------------------------
 # Incoming request
 # ---------------------------------------------------------------------------
 
@@ -147,4 +174,49 @@ class RoutingRecord(BaseModel):
         default=None,
         description="Total end-to-end latency from request receipt to response completion",
     )
+
+
+# ---------------------------------------------------------------------------
+# Workflow-oriented schemas
+# ---------------------------------------------------------------------------
+
+class ActionDecision(BaseModel):
+    """A decision proposing a specific workflow action to take."""
+
+    request_id: str
+    workflow_name: str
+    action_id: str
+    parameters: dict[str, Any] = Field(default_factory=dict)
+    outcome: DecisionOutcome = Field(default=DecisionOutcome.EXECUTE_TOOL)
+    confidence: float | None = Field(
+        default=None,
+        ge=0.0,
+        le=1.0,
+        description="Decision-model confidence score",
+    )
+    reasoning: str = Field(default="", description="Reasoning behind this action proposal")
+    requires_approval: bool = Field(default=False)
+    decision_model: str | None = None
+    decision_latency_ms: float | None = None
+
+
+class WorkflowExecutionResult(BaseModel):
+    """The result of executing a workflow action."""
+
+    request_id: str
+    workflow_name: str
+    action_id: str
+    outcome: DecisionOutcome
+    execution_state: ExecutionState
+    output: Any = Field(default=None, description="Structured output or generative text")
+    success: bool = Field(default=True)
+    error: str | None = None
+    approval_token: str | None = Field(
+        default=None,
+        description="Token provided if execution is paused in WAITING_FOR_APPROVAL",
+    )
+    latency_ms: float | None = None
+    token_usage: dict[str, int] | None = None
+    model_used: str | None = None
+    timestamp: float = Field(default_factory=time.time)
 

@@ -178,3 +178,100 @@ class RoutingPolicy:
         decision.accepted = True
         decision.fallback_reason = reason
         return decision
+
+
+# ---------------------------------------------------------------------------
+# Workflow-level policy engine
+# ---------------------------------------------------------------------------
+
+class WorkflowPolicy:
+    """Deterministic policy gatekeeper for workflow actions.
+
+    Enforces permission checks, read-only mode constraints, mutating approval gates,
+    and action deny-lists before execution is permitted.
+    """
+
+    def __init__(
+        self,
+        read_only_mode: bool = False,
+        require_approval_for_mutating: bool = True,
+        min_confidence: float = 0.65,
+        denied_actions: set[str] | None = None,
+        allowed_actions: set[str] | None = None,
+    ) -> None:
+        self.read_only_mode = read_only_mode
+        self.require_approval_for_mutating = require_approval_for_mutating
+        self.min_confidence = min_confidence
+        self.denied_actions = denied_actions or set()
+        self.allowed_actions = allowed_actions
+
+    def evaluate_action(
+        self,
+        decision: Any,
+        workflow: Any,
+        caller_permissions: list[str] | None = None,
+    ) -> Any:
+        """Validate and authorize a proposed workflow action.
+
+        Args:
+            decision: ActionDecision proposing an action.
+            workflow: WorkflowDefinition containing action specifications.
+            caller_permissions: Permissions possessed by the caller.
+
+        Returns:
+            The authorized (or modified/rejected) ActionDecision.
+        """
+        from slothswitch.schemas import DecisionOutcome
+
+        action_def = workflow.get_action(decision.action_id)
+        if action_def is None:
+            decision.outcome = DecisionOutcome.FALLBACK
+            decision.reasoning = f"Action '{decision.action_id}' is not registered in workflow '{workflow.name}'"
+            return decision
+
+        # 1. Deny-list check
+        if decision.action_id in self.denied_actions:
+            decision.outcome = DecisionOutcome.ABSTAIN
+            decision.reasoning = f"Action '{decision.action_id}' is denied by policy"
+            return decision
+
+        # 2. Allowed actions constraint
+        if self.allowed_actions is not None and decision.action_id not in self.allowed_actions:
+            decision.outcome = DecisionOutcome.ABSTAIN
+            decision.reasoning = f"Action '{decision.action_id}' is not in the permitted action set"
+            return decision
+
+        # 3. Read-only mode constraint
+        if self.read_only_mode and action_def.is_mutating:
+            decision.outcome = DecisionOutcome.ABSTAIN
+            decision.reasoning = f"Action '{decision.action_id}' is mutating and rejected in read-only mode"
+            return decision
+
+        # 4. Caller authorization (deny-by-default for actions requiring permissions)
+        if action_def.required_permissions:
+            granted = set(caller_permissions or [])
+            missing = [p for p in action_def.required_permissions if p not in granted]
+            if missing:
+                decision.outcome = DecisionOutcome.ABSTAIN
+                decision.reasoning = (
+                    f"Caller lacks required permissions {missing} for action '{decision.action_id}'"
+                )
+                return decision
+
+        # 5. Approval gate
+        if action_def.requires_approval or (action_def.is_mutating and self.require_approval_for_mutating):
+            decision.requires_approval = True
+
+        # 6. Confidence threshold gate
+        if (
+            decision.confidence is not None
+            and decision.confidence < self.min_confidence
+            and decision.outcome not in (DecisionOutcome.CLARIFY, DecisionOutcome.ABSTAIN, DecisionOutcome.HUMAN_REVIEW)
+        ):
+            decision.outcome = DecisionOutcome.CLARIFY
+            decision.reasoning = (
+                f"Confidence {decision.confidence:.3f} below minimum threshold {self.min_confidence:.3f}; clarifying"
+            )
+            return decision
+
+        return decision
