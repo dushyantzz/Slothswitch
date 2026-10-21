@@ -289,4 +289,88 @@ This living log tracks technical decisions, trade-offs, architecture choices, im
   - Implement `src/slothswitch/workflows/base.py`, `src/slothswitch/registry.py`, and update `src/slothswitch/schemas.py`.
 
 
+## Task: 07-Architecture-Refactoring-Execution-and-Verification
+- Status: Complete
+- What was done:
+  - **Phase 2: Core Schemas and Reusable Workflow Registry**:
+    - Enhanced `src/slothswitch/schemas.py` with `DecisionOutcome` (`EXECUTE_TOOL`, `USE_GENERATIVE_MODEL`, `CLARIFY`, `ABSTAIN`, `HUMAN_REVIEW`, `FALLBACK`), `ExecutionState` (`ACCEPTED`, `VALIDATING`, `WAITING_FOR_APPROVAL`, `EXECUTING`, `SUCCEEDED`, `FAILED`, `ABSTAINED`), `ActionDecision`, and `WorkflowExecutionResult`.
+    - Created `src/slothswitch/workflows/base.py` defining `ActionParameter`, `ActionDefinition` (with parameter validation, permissions, mutating flags, approval gates), and `WorkflowDefinition`.
+    - Created `src/slothswitch/registry.py` (`WorkflowRegistry`) enforcing unique action IDs, dynamic registration, query methods, and thread-safe singleton access.
+    - Created non-GitHub example `src/slothswitch/workflows/system_ops.py` (`get_system_health`, `get_disk_usage`, approval-gated `clean_temp_cache`, and generative `summarize_system_status`) proving engine reusability.
+  - **Phase 3: Safe Tool Execution Engine & Policy Gate**:
+    - Created `src/slothswitch/adapters/tools/base.py` (`ToolAdapter`).
+    - Created `src/slothswitch/executor.py` (`ToolExecutor`) implementing the 9-step safe execution protocol (action confirmation, parameter schema validation, caller authorization, policy checks, approval token generation & resume, timeouts, adapter execution, output validation, telemetry).
+    - Created `WorkflowPolicy` in `src/slothswitch/policy.py` to deterministically gate actions, deny lists, read-only mode, and confidence thresholds.
+    - Created `src/slothswitch/adapters/tools/system_ops_tool.py`.
+  - **Phase 4: GitHub Issue & PR Management Workflow**:
+    - Created `src/slothswitch/adapters/tools/github.py` (`GitHubToolAdapter`) interfacing with GitHub REST API v3:
+      - 8 Read-only actions: `list_open_pull_requests`, `count_pull_requests`, `get_pull_request_details`, `list_open_issues`, `count_issues`, `get_issue_details`, `get_pull_request_checks`, `list_repository_labels`.
+      - 3 Approval-gated mutating actions: `add_issue_label`, `add_pull_request_label`, `create_issue_comment`.
+      - Supports zero-credential public repo queries and `GITHUB_TOKEN` authentication without logging secrets.
+    - Created `src/slothswitch/workflows/github_pr_management.py` (`create_github_workflow`).
+    - Verified live GitHub API integration against public repository `octocat/Hello-World`.
+  - **Phase 5: Local Gemma Generative Adapter**:
+    - Created `src/slothswitch/adapters/generative/base.py` (`GenerativeTaskAdapter`).
+    - Created `src/slothswitch/adapters/generative/gemma_local.py` (`LocalGemmaAdapter`, `MockGenerativeAdapter`):
+      - HuggingFace Transformers CPU/GPU execution without cloud API keys.
+      - Input bounding and prompt injection sandboxing via `<<<UNTRUSTED_CONTENT>>>` delimiter isolation.
+      - Specialized tasks: `summarize_pull_requests`, `summarize_issue_concerns`, `generate_repository_activity_report`.
+  - **Phase 6: Laya Decision Adapter Refactoring**:
+    - Enhanced `DecisionAdapter` with `predict_action`.
+    - Implemented dynamic workflow action space projection in `LayaDecisionAdapter` and `MockDecisionAdapter`, turning workflow actions into Laya `choice` questions and criteria.
+  - **Phase 7: GitHub Workflow Benchmark Dataset & 3 Baselines**:
+    - Created `datasets/generate_github_benchmark.py` and generated `datasets/github_workflow_benchmark.json` (111 samples; 50.5% train, 19.8% val, 29.7% untouched held-out test).
+    - Created `src/slothswitch/evaluation/workflow_benchmark.py` (`WorkflowBenchmarkRunner`) and `scripts/run_github_benchmark.py` comparing:
+      - Baseline A (Always-Gemma): 15.2% accuracy, 33/33 Gemma calls, 0 tool executions, 2310 tokens.
+      - Baseline B (Deterministic Rules): 69.7% accuracy, 5/33 Gemma calls, 18 tool executions.
+      - Baseline C (SlothSwitch): **81.8% accuracy**, 5/33 Gemma calls, 28 direct tool executions, **84.85% elimination of unnecessary generative calls**, 350 tokens (84.8% reduction).
+  - **Phase 8: Tests, Hardening & Documentation**:
+    - Expanded test suite from 60 to **84 tests (100% pass rate in 14.95s)**.
+    - `ruff check`: 100% clean (0 errors).
+    - `mypy src`: 100% clean (0 issues across 27 source files).
+    - Created `docs/local_gemma_setup.md` and updated `docs/architecture.md`.
+- Why:
+  - Fulfills the complete architectural refactoring requirements from `SlothSwitch_Architecture_Refactoring_Master_Prompt.md` while rigorously adhering to Gravitas principles: empirical verification, no silent mocks in benchmark mode, clean separation of concerns, and zero regressions.
+- Files changed:
+  - `src/slothswitch/schemas.py`
+  - `src/slothswitch/workflows/__init__.py`
+  - `src/slothswitch/workflows/base.py`
+  - `src/slothswitch/workflows/system_ops.py`
+  - `src/slothswitch/workflows/github_pr_management.py`
+  - `src/slothswitch/registry.py`
+  - `src/slothswitch/policy.py`
+  - `src/slothswitch/executor.py`
+  - `src/slothswitch/adapters/__init__.py`
+  - `src/slothswitch/adapters/decision/__init__.py`
+  - `src/slothswitch/adapters/decision/laya_adapter.py`
+  - `src/slothswitch/adapters/tools/__init__.py`
+  - `src/slothswitch/adapters/tools/base.py`
+  - `src/slothswitch/adapters/tools/system_ops_tool.py`
+  - `src/slothswitch/adapters/tools/github.py`
+  - `src/slothswitch/adapters/generative/__init__.py`
+  - `src/slothswitch/adapters/generative/base.py`
+  - `src/slothswitch/adapters/generative/gemma_local.py`
+  - `src/slothswitch/evaluation/__init__.py`
+  - `src/slothswitch/evaluation/workflow_benchmark.py`
+  - `datasets/generate_github_benchmark.py`
+  - `datasets/github_workflow_benchmark.json`
+  - `scripts/run_github_benchmark.py`
+  - `docs/local_gemma_setup.md`
+  - `docs/architecture.md`
+  - `decision.md`
+  - `tests/unit/test_registry.py`
+  - `tests/unit/test_executor.py`
+  - `tests/unit/test_github_workflow.py`
+  - `tests/unit/test_generative_adapter.py`
+  - `tests/unit/test_workflow_benchmark.py`
+  - `tests/unit/test_mock_adapters.py`
+  - `tests/unit/test_laya_adapter.py`
+- Evidence/metrics:
+  - Pytest: 84 passed in 14.95s.
+  - Ruff: 0 lint errors.
+  - Mypy: 0 type issues in 27 files.
+  - Real GitHub API integration verified live against `octocat/Hello-World`.
+  - Benchmark held-out test split (33 items): SlothSwitch achieved 81.8% accuracy and eliminated 84.85% of generative model calls compared to Always-Gemma.
+
+
 

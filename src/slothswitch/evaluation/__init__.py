@@ -253,3 +253,14 @@ class EvaluationResult:
             },
         }
 
+
+from slothswitch.evaluation.workflow_benchmark import WorkflowBenchmarkRunner
+
+__all__ = [
+    "EvaluationResult",
+    "WorkflowBenchmarkRunner",
+    "load_dataset",
+    "partition_dataset",
+    "split_dataset",
+]
+
