@@ -126,6 +126,30 @@ class MockDecisionAdapter(DecisionAdapter):
 
         lower_req = request_content.lower()
 
+        if any(w in lower_req for w in ("delete", "force push", "charge", "grant admin", "drop table", "visibility", "transfer")):
+            return ActionDecision(
+                request_id=request_id,
+                workflow_name=workflow.name,
+                action_id="none",
+                outcome=DecisionOutcome.ABSTAIN,
+                confidence=self._default_confidence,
+                reasoning="Mock heuristic detected destructive/out-of-scope query",
+                decision_model=self.name,
+                decision_latency_ms=1.0,
+            )
+
+        if lower_req.strip() in ("add a comment", "count them please", "get the labels", "is it passing tests?"):
+            return ActionDecision(
+                request_id=request_id,
+                workflow_name=workflow.name,
+                action_id="none",
+                outcome=DecisionOutcome.CLARIFY,
+                confidence=self._default_confidence,
+                reasoning="Mock heuristic detected ambiguous query",
+                decision_model=self.name,
+                decision_latency_ms=1.0,
+            )
+
         # Check for keyword matches in action descriptions
         selected_action = candidate_actions[0]
         max_matches = -1

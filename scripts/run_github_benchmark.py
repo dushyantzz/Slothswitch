@@ -116,20 +116,25 @@ def main() -> None:
     print("=" * 70)
     for b in [res_a, res_b, res_c]:
         print(f"\n[{b['baseline']}] (Real Inference: {b['is_real_inference']})")
-        print(f"  Strict Action Accuracy:    {b['action_accuracy'] * 100:.1f}%")
-        print(f"  Outcome Category Accuracy: {b['outcome_accuracy'] * 100:.1f}%")
-        print(f"  End-to-End Task Success:   {b['end_to_end_task_success_rate'] * 100:.1f}%")
+        print(f"  Strict Action Accuracy:    {b['action_accuracy'] * 100:.1f}% ({b['action_accuracy_numerator']} / {b['action_accuracy_denominator']})")
+        print(f"  Outcome Category Accuracy: {b['outcome_accuracy'] * 100:.1f}% ({b['outcome_accuracy_numerator']} / {b['outcome_accuracy_denominator']})")
+        print(f"  End-to-End Task Success:   {b['end_to_end_task_success_rate'] * 100:.1f}% ({b['task_success_numerator']} / {b['task_success_denominator']})")
         print(f"  Generative Model Calls:    {b['gemma_calls']} / {b['total_samples']}")
         print(f"  Direct Tools Selected:     {b['direct_tools_selected']}")
         print(f"  Direct Tools Attempted:    {b['direct_tools_attempted']}")
         print(f"  Direct Tools Succeeded:    {b['direct_tools_succeeded']}")
-        print(f"  Avoided Generative Calls:  {b['avoided_gemma_calls']} ({b['avoided_gemma_pct']}%)")
+        print(f"  Avoided Generative Calls:  {b['avoided_gemma_calls']} / {b['total_samples']} ({b['avoided_gemma_pct']}%)")
         print(f"  Total Generative Tokens:   {b['total_generative_tokens']}")
         print(f"  Median Total Latency:      {b['median_total_latency_ms']} ms")
         print(f"  P95 Total Latency:         {b['p95_total_latency_ms']} ms")
+        if "median_direct_path_latency_ms" in b:
+            print(f"  Direct Path Latency:       Median: {b['median_direct_path_latency_ms']} ms | P95: {b['p95_direct_path_latency_ms']} ms")
+        if "median_generative_path_latency_ms" in b:
+            print(f"  Generative Path Latency:   Median: {b['median_generative_path_latency_ms']} ms | P95: {b['p95_generative_path_latency_ms']} ms")
         if "median_decision_latency_ms" in b:
-            print(f"  Median Decision Latency:   {b['median_decision_latency_ms']} ms")
-            print(f"  Median Policy Latency:     {b['median_policy_latency_ms']} ms")
+            print(f"  Decision Overhead:         Median: {b['median_decision_latency_ms']} ms")
+        if "median_policy_latency_ms" in b:
+            print(f"  Policy Gate Overhead:      Median: {b['median_policy_latency_ms']} ms")
 
     print("\n" + "=" * 70)
     print(f"Audit report saved to: {out_json}")

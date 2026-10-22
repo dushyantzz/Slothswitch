@@ -210,6 +210,7 @@ class WorkflowPolicy:
         decision: Any,
         workflow: Any,
         caller_permissions: list[str] | None = None,
+        params: dict[str, Any] | None = None,
     ) -> Any:
         """Validate and authorize a proposed workflow action.
 
@@ -217,11 +218,16 @@ class WorkflowPolicy:
             decision: ActionDecision proposing an action.
             workflow: WorkflowDefinition containing action specifications.
             caller_permissions: Permissions possessed by the caller.
+            params: Optional parameters passed with the request for validation.
 
         Returns:
             The authorized (or modified/rejected) ActionDecision.
         """
         from slothswitch.schemas import DecisionOutcome
+
+        # Fast return if already abstained or clarified by decision adapter
+        if decision.outcome in (DecisionOutcome.ABSTAIN, DecisionOutcome.CLARIFY):
+            return decision
 
         action_def = workflow.get_action(decision.action_id)
         if action_def is None:
@@ -258,11 +264,25 @@ class WorkflowPolicy:
                 )
                 return decision
 
-        # 5. Approval gate
+        # 5. Approval gate for mutating or high-risk actions
         if action_def.requires_approval or (action_def.is_mutating and self.require_approval_for_mutating):
             decision.requires_approval = True
+            decision.outcome = DecisionOutcome.HUMAN_REVIEW
+            decision.reasoning += " [Requires human review: mutating or approval-gated action]"
 
-        # 6. Confidence threshold gate
+        # 6. Parameter completeness check
+        if params is not None and action_def.parameters_schema:
+            required_params = action_def.parameters_schema.get("required", [])
+            missing_params = [p for p in required_params if p not in params or params[p] is None]
+            if missing_params:
+                decision.outcome = DecisionOutcome.CLARIFY
+                decision.action_id = "none"
+                decision.reasoning = (
+                    f"Missing required parameter(s) {missing_params} for action '{action_def.action_id}'; escalating to CLARIFY"
+                )
+                return decision
+
+        # 7. Confidence threshold gate
         if (
             decision.confidence is not None
             and decision.confidence < self.min_confidence

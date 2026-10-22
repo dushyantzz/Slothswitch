@@ -641,13 +641,13 @@
   },
   {
     "request_id": "gh-041",
-    "content": "Show details and description for pull request #101 in pallets/flask",
+    "content": "Show details and description for pull request #5918 in pallets/flask",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "pallets/flask",
-      "pull_number": 101
+      "pull_number": 5918
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -657,13 +657,13 @@
   },
   {
     "request_id": "gh-042",
-    "content": "What is the CI status and test checks for PR #101 in pallets/flask?",
+    "content": "What is the CI status and test checks for PR #5918 in pallets/flask?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "pallets/flask",
-      "pull_number": 101
+      "pull_number": 5918
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -673,13 +673,13 @@
   },
   {
     "request_id": "gh-043",
-    "content": "Get details for issue #101 in repository pallets/flask",
+    "content": "Get details for issue #5918 in repository pallets/flask",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "pallets/flask",
-      "issue_number": 101
+      "issue_number": 5918
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -689,13 +689,13 @@
   },
   {
     "request_id": "gh-044",
-    "content": "Show details and description for pull request #245 in pallets/flask",
+    "content": "Show details and description for pull request #5665 in pallets/flask",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "pallets/flask",
-      "pull_number": 245
+      "pull_number": 5665
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -705,13 +705,13 @@
   },
   {
     "request_id": "gh-045",
-    "content": "What is the CI status and test checks for PR #245 in pallets/flask?",
+    "content": "What is the CI status and test checks for PR #5665 in pallets/flask?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "pallets/flask",
-      "pull_number": 245
+      "pull_number": 5665
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -721,13 +721,13 @@
   },
   {
     "request_id": "gh-046",
-    "content": "Get details for issue #245 in repository pallets/flask",
+    "content": "Get details for issue #5665 in repository pallets/flask",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "pallets/flask",
-      "issue_number": 245
+      "issue_number": 5665
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -737,13 +737,13 @@
   },
   {
     "request_id": "gh-047",
-    "content": "Show details and description for pull request #101 in psf/requests",
+    "content": "Show details and description for pull request #7619 in psf/requests",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "psf/requests",
-      "pull_number": 101
+      "pull_number": 7619
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -753,13 +753,13 @@
   },
   {
     "request_id": "gh-048",
-    "content": "What is the CI status and test checks for PR #101 in psf/requests?",
+    "content": "What is the CI status and test checks for PR #7619 in psf/requests?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "psf/requests",
-      "pull_number": 101
+      "pull_number": 7619
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -769,13 +769,13 @@
   },
   {
     "request_id": "gh-049",
-    "content": "Get details for issue #101 in repository psf/requests",
+    "content": "Get details for issue #7619 in repository psf/requests",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "psf/requests",
-      "issue_number": 101
+      "issue_number": 7619
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -785,13 +785,13 @@
   },
   {
     "request_id": "gh-050",
-    "content": "Show details and description for pull request #245 in psf/requests",
+    "content": "Show details and description for pull request #7586 in psf/requests",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "psf/requests",
-      "pull_number": 245
+      "pull_number": 7586
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -801,13 +801,13 @@
   },
   {
     "request_id": "gh-051",
-    "content": "What is the CI status and test checks for PR #245 in psf/requests?",
+    "content": "What is the CI status and test checks for PR #7586 in psf/requests?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "psf/requests",
-      "pull_number": 245
+      "pull_number": 7586
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -817,13 +817,13 @@
   },
   {
     "request_id": "gh-052",
-    "content": "Get details for issue #245 in repository psf/requests",
+    "content": "Get details for issue #7586 in repository psf/requests",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "psf/requests",
-      "issue_number": 245
+      "issue_number": 7586
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -833,13 +833,13 @@
   },
   {
     "request_id": "gh-053",
-    "content": "Show details and description for pull request #101 in encode/httpx",
+    "content": "Show details and description for pull request #3796 in encode/httpx",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "encode/httpx",
-      "pull_number": 101
+      "pull_number": 3796
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -849,13 +849,13 @@
   },
   {
     "request_id": "gh-054",
-    "content": "What is the CI status and test checks for PR #101 in encode/httpx?",
+    "content": "What is the CI status and test checks for PR #3796 in encode/httpx?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "encode/httpx",
-      "pull_number": 101
+      "pull_number": 3796
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -865,13 +865,13 @@
   },
   {
     "request_id": "gh-055",
-    "content": "Get details for issue #101 in repository encode/httpx",
+    "content": "Get details for issue #3796 in repository encode/httpx",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "encode/httpx",
-      "issue_number": 101
+      "issue_number": 3796
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -881,13 +881,13 @@
   },
   {
     "request_id": "gh-056",
-    "content": "Show details and description for pull request #245 in encode/httpx",
+    "content": "Show details and description for pull request #3785 in encode/httpx",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "encode/httpx",
-      "pull_number": 245
+      "pull_number": 3785
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -897,13 +897,13 @@
   },
   {
     "request_id": "gh-057",
-    "content": "What is the CI status and test checks for PR #245 in encode/httpx?",
+    "content": "What is the CI status and test checks for PR #3785 in encode/httpx?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "encode/httpx",
-      "pull_number": 245
+      "pull_number": 3785
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -913,13 +913,13 @@
   },
   {
     "request_id": "gh-058",
-    "content": "Get details for issue #245 in repository encode/httpx",
+    "content": "Get details for issue #3785 in repository encode/httpx",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "encode/httpx",
-      "issue_number": 245
+      "issue_number": 3785
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -929,13 +929,13 @@
   },
   {
     "request_id": "gh-059",
-    "content": "Show details and description for pull request #101 in tiangolo/fastapi",
+    "content": "Show details and description for pull request #16589 in tiangolo/fastapi",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "tiangolo/fastapi",
-      "pull_number": 101
+      "pull_number": 16589
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -945,13 +945,13 @@
   },
   {
     "request_id": "gh-060",
-    "content": "What is the CI status and test checks for PR #101 in tiangolo/fastapi?",
+    "content": "What is the CI status and test checks for PR #16589 in tiangolo/fastapi?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "tiangolo/fastapi",
-      "pull_number": 101
+      "pull_number": 16589
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -961,13 +961,13 @@
   },
   {
     "request_id": "gh-061",
-    "content": "Get details for issue #101 in repository tiangolo/fastapi",
+    "content": "Get details for issue #16589 in repository tiangolo/fastapi",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "tiangolo/fastapi",
-      "issue_number": 101
+      "issue_number": 16589
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -977,13 +977,13 @@
   },
   {
     "request_id": "gh-062",
-    "content": "Show details and description for pull request #245 in tiangolo/fastapi",
+    "content": "Show details and description for pull request #16572 in tiangolo/fastapi",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "tiangolo/fastapi",
-      "pull_number": 245
+      "pull_number": 16572
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -993,13 +993,13 @@
   },
   {
     "request_id": "gh-063",
-    "content": "What is the CI status and test checks for PR #245 in tiangolo/fastapi?",
+    "content": "What is the CI status and test checks for PR #16572 in tiangolo/fastapi?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "tiangolo/fastapi",
-      "pull_number": 245
+      "pull_number": 16572
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -1009,13 +1009,13 @@
   },
   {
     "request_id": "gh-064",
-    "content": "Get details for issue #245 in repository tiangolo/fastapi",
+    "content": "Get details for issue #16572 in repository tiangolo/fastapi",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "tiangolo/fastapi",
-      "issue_number": 245
+      "issue_number": 16572
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -1025,13 +1025,13 @@
   },
   {
     "request_id": "gh-065",
-    "content": "Show details and description for pull request #101 in octocat/Hello-World",
+    "content": "Show details and description for pull request #11600 in octocat/Hello-World",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "octocat/Hello-World",
-      "pull_number": 101
+      "pull_number": 11600
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -1041,13 +1041,13 @@
   },
   {
     "request_id": "gh-066",
-    "content": "What is the CI status and test checks for PR #101 in octocat/Hello-World?",
+    "content": "What is the CI status and test checks for PR #11600 in octocat/Hello-World?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "octocat/Hello-World",
-      "pull_number": 101
+      "pull_number": 11600
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -1057,13 +1057,13 @@
   },
   {
     "request_id": "gh-067",
-    "content": "Get details for issue #101 in repository octocat/Hello-World",
+    "content": "Get details for issue #11600 in repository octocat/Hello-World",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "octocat/Hello-World",
-      "issue_number": 101
+      "issue_number": 11600
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -1073,13 +1073,13 @@
   },
   {
     "request_id": "gh-068",
-    "content": "Show details and description for pull request #245 in octocat/Hello-World",
+    "content": "Show details and description for pull request #11599 in octocat/Hello-World",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "octocat/Hello-World",
-      "pull_number": 245
+      "pull_number": 11599
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -1089,13 +1089,13 @@
   },
   {
     "request_id": "gh-069",
-    "content": "What is the CI status and test checks for PR #245 in octocat/Hello-World?",
+    "content": "What is the CI status and test checks for PR #11599 in octocat/Hello-World?",
     "workflow": "github_pr_management",
     "expected_action": "get_pull_request_checks",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "octocat/Hello-World",
-      "pull_number": 245
+      "pull_number": 11599
     },
     "is_direct_execution": true,
     "requires_generation": false,
@@ -1105,13 +1105,13 @@
   },
   {
     "request_id": "gh-070",
-    "content": "Get details for issue #245 in repository octocat/Hello-World",
+    "content": "Get details for issue #11599 in repository octocat/Hello-World",
     "workflow": "github_pr_management",
     "expected_action": "get_issue_details",
     "expected_outcome": "EXECUTE_TOOL",
     "expected_parameters": {
       "repo": "octocat/Hello-World",
-      "issue_number": 245
+      "issue_number": 11599
     },
     "is_direct_execution": true,
     "requires_generation": false,

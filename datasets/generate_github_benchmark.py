@@ -109,8 +109,16 @@ def generate_github_dataset() -> list[dict]:
         )
 
     # 4. PR & Issue Details & CI Checks
+    repo_pr_numbers = {
+        "pallets/flask": [5918, 5665],
+        "psf/requests": [7619, 7586],
+        "encode/httpx": [3796, 3785],
+        "tiangolo/fastapi": [16589, 16572],
+        "octocat/Hello-World": [11600, 11599],
+    }
     for r, sp in repo_splits.items():
-        for num in [101, 245]:
+        nums = repo_pr_numbers.get(r, [101, 245])
+        for num in nums:
             add_item(
                 f"Show details and description for pull request #{num} in {r}",
                 "get_pull_request_details", "EXECUTE_TOOL", {"repo": r, "pull_number": num},

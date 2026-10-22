@@ -134,8 +134,14 @@ class WorkflowBenchmarkRunner:
             "total_samples": total,
             "is_real_inference": not isinstance(self.generative_adapter, MockGenerativeAdapter),
             "action_accuracy": round(action_correct_count / max(1, total), 4),
+            "action_accuracy_numerator": action_correct_count,
+            "action_accuracy_denominator": total,
             "outcome_accuracy": round(outcome_correct_count / max(1, total), 4),
+            "outcome_accuracy_numerator": outcome_correct_count,
+            "outcome_accuracy_denominator": total,
             "end_to_end_task_success_rate": round(task_success_count / max(1, total), 4),
+            "task_success_numerator": task_success_count,
+            "task_success_denominator": total,
             "gemma_calls": total,
             "direct_tools_selected": 0,
             "direct_tools_attempted": 0,
@@ -146,6 +152,10 @@ class WorkflowBenchmarkRunner:
             "total_generative_tokens": sum(gen_tokens_list),
             "median_total_latency_ms": round(statistics.median(latencies) if latencies else 0.0, 2),
             "p95_total_latency_ms": round(
+                statistics.quantiles(latencies, n=20)[18] if len(latencies) >= 20 else max(latencies or [0.0]), 2
+            ),
+            "median_generative_path_latency_ms": round(statistics.median(latencies) if latencies else 0.0, 2),
+            "p95_generative_path_latency_ms": round(
                 statistics.quantiles(latencies, n=20)[18] if len(latencies) >= 20 else max(latencies or [0.0]), 2
             ),
             "records": detailed_records,
@@ -292,24 +302,43 @@ class WorkflowBenchmarkRunner:
             })
 
         total = len(samples)
+        direct_lats = [r["latencies_ms"]["total_e2e"] for r in detailed_records if r["predicted_outcome"] != DecisionOutcome.USE_GENERATIVE_MODEL.value]
+        gen_lats = [r["latencies_ms"]["total_e2e"] for r in detailed_records if r["predicted_outcome"] == DecisionOutcome.USE_GENERATIVE_MODEL.value]
+        avoided_gemma = total - gemma_calls
         return {
             "baseline": "Baseline B (Deterministic Rules)",
             "total_samples": total,
             "is_real_inference": False,
             "action_accuracy": round(action_correct_count / max(1, total), 4),
+            "action_accuracy_numerator": action_correct_count,
+            "action_accuracy_denominator": total,
             "outcome_accuracy": round(outcome_correct_count / max(1, total), 4),
+            "outcome_accuracy_numerator": outcome_correct_count,
+            "outcome_accuracy_denominator": total,
             "end_to_end_task_success_rate": round(task_success_count / max(1, total), 4),
+            "task_success_numerator": task_success_count,
+            "task_success_denominator": total,
             "gemma_calls": gemma_calls,
             "direct_tools_selected": tools_selected,
             "direct_tools_attempted": tools_attempted,
             "direct_tools_succeeded": tools_succeeded,
             "direct_tools_failed": tools_failed,
-            "avoided_gemma_calls": total - gemma_calls,
-            "avoided_gemma_pct": round((total - gemma_calls) / max(1, total) * 100, 2),
+            "avoided_gemma_calls": avoided_gemma,
+            "avoided_gemma_calls_numerator": avoided_gemma,
+            "avoided_gemma_calls_denominator": total,
+            "avoided_gemma_pct": round(avoided_gemma / max(1, total) * 100, 2),
             "total_generative_tokens": sum(gen_tokens_list),
             "median_total_latency_ms": round(statistics.median(latencies) if latencies else 0.0, 2),
             "p95_total_latency_ms": round(
                 statistics.quantiles(latencies, n=20)[18] if len(latencies) >= 20 else max(latencies or [0.0]), 2
+            ),
+            "median_direct_path_latency_ms": round(statistics.median(direct_lats) if direct_lats else 0.0, 2),
+            "p95_direct_path_latency_ms": round(
+                statistics.quantiles(direct_lats, n=20)[18] if len(direct_lats) >= 20 else max(direct_lats or [0.0]), 2
+            ),
+            "median_generative_path_latency_ms": round(statistics.median(gen_lats) if gen_lats else 0.0, 2),
+            "p95_generative_path_latency_ms": round(
+                statistics.quantiles(gen_lats, n=20)[18] if len(gen_lats) >= 20 else max(gen_lats or [0.0]), 2
             ),
             "records": detailed_records,
         }
@@ -321,6 +350,8 @@ class WorkflowBenchmarkRunner:
         policy_latencies: list[float] = []
         tool_latencies: list[float] = []
         gen_latencies: list[float] = []
+        direct_path_latencies: list[float] = []
+        generative_path_latencies: list[float] = []
         gen_tokens_list: list[int] = []
         detailed_records: list[dict[str, Any]] = []
 
@@ -351,7 +382,10 @@ class WorkflowBenchmarkRunner:
             # 2. Workflow Policy Gate
             p_start = time.perf_counter()
             authorized = self.policy.evaluate_action(
-                decision, self.workflow, caller_permissions=["github:read", "github:write"]
+                decision,
+                self.workflow,
+                caller_permissions=["github:read", "github:write"],
+                params=item.get("expected_parameters", {}),
             )
             p_latency = (time.perf_counter() - p_start) * 1000
             policy_latencies.append(p_latency)
@@ -406,6 +440,10 @@ class WorkflowBenchmarkRunner:
 
             total_elapsed_ms = (time.perf_counter() - start_e2e) * 1000
             latencies.append(total_elapsed_ms)
+            if authorized.outcome == DecisionOutcome.USE_GENERATIVE_MODEL:
+                generative_path_latencies.append(total_elapsed_ms)
+            else:
+                direct_path_latencies.append(total_elapsed_ms)
 
             # Strict correctness metrics
             is_action_match = (authorized.action_id == expected_action)
@@ -459,8 +497,14 @@ class WorkflowBenchmarkRunner:
             "decision_model": self.decision_adapter.name,
             "generative_model": self.generative_adapter.name,
             "action_accuracy": round(action_correct_count / max(1, total), 4),
+            "action_accuracy_numerator": action_correct_count,
+            "action_accuracy_denominator": total,
             "outcome_accuracy": round(outcome_correct_count / max(1, total), 4),
+            "outcome_accuracy_numerator": outcome_correct_count,
+            "outcome_accuracy_denominator": total,
             "end_to_end_task_success_rate": round(task_success_count / max(1, total), 4),
+            "task_success_numerator": task_success_count,
+            "task_success_denominator": total,
             "gemma_calls": gemma_calls,
             "direct_tools_selected": tools_selected,
             "direct_tools_attempted": tools_attempted,
@@ -469,11 +513,21 @@ class WorkflowBenchmarkRunner:
             "policy_abstentions": policy_abstentions,
             "approval_pauses": approval_pauses,
             "avoided_gemma_calls": avoided_gemma,
+            "avoided_gemma_calls_numerator": avoided_gemma,
+            "avoided_gemma_calls_denominator": total,
             "avoided_gemma_pct": round(avoided_gemma / max(1, total) * 100, 2),
             "total_generative_tokens": sum(gen_tokens_list),
             "median_total_latency_ms": round(statistics.median(latencies) if latencies else 0.0, 2),
             "p95_total_latency_ms": round(
                 statistics.quantiles(latencies, n=20)[18] if len(latencies) >= 20 else max(latencies or [0.0]), 2
+            ),
+            "median_direct_path_latency_ms": round(statistics.median(direct_path_latencies) if direct_path_latencies else 0.0, 2),
+            "p95_direct_path_latency_ms": round(
+                statistics.quantiles(direct_path_latencies, n=20)[18] if len(direct_path_latencies) >= 20 else max(direct_path_latencies or [0.0]), 2
+            ),
+            "median_generative_path_latency_ms": round(statistics.median(generative_path_latencies) if generative_path_latencies else 0.0, 2),
+            "p95_generative_path_latency_ms": round(
+                statistics.quantiles(generative_path_latencies, n=20)[18] if len(generative_path_latencies) >= 20 else max(generative_path_latencies or [0.0]), 2
             ),
             "median_decision_latency_ms": round(statistics.median(decision_latencies) if decision_latencies else 0.0, 2),
             "median_policy_latency_ms": round(statistics.median(policy_latencies) if policy_latencies else 0.0, 3),

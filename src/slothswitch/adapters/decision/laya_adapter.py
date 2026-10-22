@@ -14,7 +14,9 @@ Guidance from the Laya model card (verified 2024-10):
 from __future__ import annotations
 
 import logging
+import os
 import time
+from pathlib import Path
 from typing import Any
 
 from slothswitch.adapters import DecisionAdapter
@@ -62,6 +64,15 @@ class LayaDecisionAdapter(DecisionAdapter):
         if self._loaded:
             return
         try:
+            # If checkpoint is already cached, avoid slow online HEAD checks
+            try:
+                from huggingface_hub.constants import HUGGINGFACE_HUB_CACHE
+                repo_dir = f"models--{self._checkpoint.replace('/', '--')}"
+                if (Path(HUGGINGFACE_HUB_CACHE) / repo_dir).exists():
+                    os.environ.setdefault("HF_HUB_OFFLINE", "1")
+            except Exception as e:
+                logger.debug("Could not verify local HF cache status: %s", e)
+
             from laya import Router  # type: ignore[import-untyped]
 
             kwargs: dict[str, Any] = {}
@@ -202,6 +213,9 @@ class LayaDecisionAdapter(DecisionAdapter):
             )
 
         criteria = {action.action_id: action.description for action in candidate_actions}
+        criteria["clarify"] = "The request is ambiguous, incomplete, or missing essential details needed to take action."
+        criteria["abstain"] = "The request asks for an unsupported, destructive, unauthorized, admin permission modification, security bypass, or external charge."
+
         state = {
             "request": request_content[:300],
             "workflow": workflow.name,
@@ -209,7 +223,7 @@ class LayaDecisionAdapter(DecisionAdapter):
         questions = {
             "action": {
                 "type": "choice",
-                "instructions": f"Which action in the {workflow.name} workflow best fulfills this request?",
+                "instructions": f"Which action in the {workflow.name} workflow best fulfills this request, or should it be clarified or abstained?",
                 "criteria": criteria,
             }
         }
@@ -224,6 +238,30 @@ class LayaDecisionAdapter(DecisionAdapter):
             confidence = ans.get("answer_confidence")
             if confidence is None:
                 confidence = probabilities.get(chosen_action_id, ans.get("confidence", 0.85))
+
+            if chosen_action_id == "abstain":
+                return ActionDecision(
+                    request_id=request_id,
+                    workflow_name=workflow.name,
+                    action_id="none",
+                    outcome=DecisionOutcome.ABSTAIN,
+                    confidence=float(confidence),
+                    reasoning=f"Laya determined request is out-of-scope/unauthorized (prob={confidence:.4f})",
+                    decision_model=self.name,
+                    decision_latency_ms=elapsed_ms,
+                )
+
+            if chosen_action_id == "clarify":
+                return ActionDecision(
+                    request_id=request_id,
+                    workflow_name=workflow.name,
+                    action_id="none",
+                    outcome=DecisionOutcome.CLARIFY,
+                    confidence=float(confidence),
+                    reasoning=f"Laya determined request requires clarification (prob={confidence:.4f})",
+                    decision_model=self.name,
+                    decision_latency_ms=elapsed_ms,
+                )
 
             chosen_action = workflow.get_action(chosen_action_id)
             if chosen_action is None:
