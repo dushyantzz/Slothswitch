@@ -373,4 +373,46 @@ This living log tracks technical decisions, trade-offs, architecture choices, im
   - Benchmark held-out test split (33 items): SlothSwitch achieved 81.8% accuracy and eliminated 84.85% of generative model calls compared to Always-Gemma.
 
 
+## Task: 08-Implementation-and-Benchmark-Audit-Verification
+- Status: Complete
+- What was done:
+  - Audited all 12 areas specified in the audit directive across implementation, benchmarks, model execution, latency, tokens, approval gates, and data leakage:
+    1. **Real Laya Verification**: Confirmed checkpoint `convaiinnovations/laya` runs live on CPU (ModernBERT choice questions, outputting choice and calibrated softmax probabilities). Measured live cold latency: ~15,221 ms (loading weights), warm latency: ~900–1,175 ms per action decision.
+    2. **Real Local Causal LM Verification**: Verified cached HuggingFace models. Identified `TinyLlama/TinyLlama-1.1B-Chat-v1.0` as available and measured real live inference: ~12.9s cold, real tokens (12 prompt, 60 completion), `latency_is_simulated: False`. Identified that `google/gemma-2-2b-it` requires Hugging Face Hub token authentication, so the previous benchmark ran `MockGenerativeAdapter`.
+    3. **Mocks, Synthetic Outputs, & Conflated Metrics Identification**:
+       - Uncovered that `WorkflowBenchmarkRunner` defaulted to `MockDecisionAdapter` and `MockGenerativeAdapter`.
+       - Identified that the previously reported `0.01 ms` median latency was measuring mock string lookups, not real inference.
+       - Identified that direct tool calls were only incremented as a counter, not executed live.
+       - Discovered that accuracy previously used `authorized.action_id == expected_action or authorized.outcome == expected_outcome`, conflating coarse outcome matching with strict action accuracy.
+    4. **Baseline Comparability**: Confirmed all 3 baselines evaluate identical request sets under consistent permission definitions.
+    5. **Dataset Leakage Elimination**: Audited `datasets/github_workflow_benchmark.json`. Found that modulo-10 interleaving previously caused repository leakage across train, val, and test. Rebuilt `datasets/generate_github_benchmark.py` with strict zero-leakage repository partitioning: train (`pallets/flask`, `psf/requests`), val (`encode/httpx`), and held-out test (`tiangolo/fastapi`, `octocat/Hello-World`).
+    6. **Metric Disaggregation**: Refactored `WorkflowBenchmarkRunner` to strictly separate `action_accuracy` (exact match), `outcome_accuracy`, and `end_to_end_task_success_rate`.
+    7. **Tool Execution Disaggregation**: Clarified and separated `direct_tools_selected`, `direct_tools_attempted`, `direct_tools_succeeded`, and `direct_tools_failed`.
+    8. **Latency Disaggregation**: Separated `decision_latency_ms`, `policy_latency_ms`, `tool_latency_ms`, `generative_latency_ms`, and `total_e2e_latency_ms`. Measured policy overhead at < 0.005 ms.
+    9. **Token Accounting**: Documented token extraction directly from tokenizer `token_usage` for generative generation, separating prompt tokens, completion tokens, and tool payload bytes.
+    10. **Approval Gates & Policy Denials**: Verified approval gating on mutating actions (`WAITING_FOR_APPROVAL` with single-use tokens) and policy denials on destructive/unauthorized queries (`ABSTAINED`).
+    11. **Machine-Readable Audit Report**: Generated `logs/audit_benchmark_detailed.json` capturing per-sample predictions, actual outcomes, execution state, latency breakdowns, tokens, and errors without exposing secrets.
+    12. **Rerun & Transparent Reporting**: Executed clean benchmark runner and reported unvarnished metrics.
+- Why:
+  - Enforce complete honesty and empirical rigor. Eradicate hidden mocks, fix dataset leakage, and report true disaggregated performance numbers.
+- Files changed:
+  - `datasets/generate_github_benchmark.py`
+  - `datasets/github_workflow_benchmark.json`
+  - `src/slothswitch/evaluation/workflow_benchmark.py`
+  - `scripts/run_github_benchmark.py`
+  - `tests/unit/test_workflow_benchmark.py`
+  - `logs/audit_benchmark_detailed.json`
+  - `logs/github_benchmark_results.json`
+  - `decision.md`
+- Evidence/metrics:
+  - Real Laya warm latency: ~900–1,175 ms per decision.
+  - Real Causal LM generation latency: ~12.9s cold, ~2-3s warm.
+  - Audited held-out test split (48 unseen repo samples):
+    - Baseline A: 0.0% strict action accuracy, 12.5% outcome accuracy, 48/48 generative calls, 3,360 tokens.
+    - Baseline B: 62.5% strict action accuracy, 81.2% outcome accuracy, 6/48 generative calls, 420 tokens.
+    - Baseline C: 62.5% strict action accuracy, 75.0% outcome accuracy, 6/48 generative calls (87.5% avoided), 420 tokens.
+  - Pytest: 84/84 tests passing in 10.39s.
+  - Ruff & Mypy: 100% clean.
+
+
 

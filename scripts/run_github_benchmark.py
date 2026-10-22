@@ -1,18 +1,35 @@
-"""Benchmark execution script for comparing the 3 baselines on the GitHub workflow dataset.
+"""Comprehensive benchmark execution script with verified metrics and machine-readable audit logs.
 
-Outputs both a structured JSON report and a formatted Markdown summary.
+Supports both:
+- Simulated / Mock mode (for fast CI testing)
+- Real Neural Mode: Real Laya ModernBERT decision adapter + Real local causal LM
 """
 
 from __future__ import annotations
 
+import argparse
 import json
+import logging
 from pathlib import Path
 
+from slothswitch.adapters.decision import MockDecisionAdapter
+from slothswitch.adapters.decision.laya_adapter import LayaDecisionAdapter
+from slothswitch.adapters.generative.gemma_local import LocalGemmaAdapter, MockGenerativeAdapter
+from slothswitch.adapters.tools.github import GitHubToolAdapter
 from slothswitch.evaluation.workflow_benchmark import WorkflowBenchmarkRunner
 from slothswitch.workflows.github_pr_management import create_github_workflow
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("benchmark")
+
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="SlothSwitch GitHub Workflow Benchmark Runner")
+    parser.add_argument("--real", action="store_true", help="Use real Laya and real local causal LM")
+    parser.add_argument("--execute-tools", action="store_true", help="Execute tools against live GitHub API")
+    parser.add_argument("--split", default="test", choices=["train", "val", "test", "all"], help="Dataset split to evaluate")
+    args = parser.parse_args()
+
     data_path = Path("datasets/github_workflow_benchmark.json")
     if not data_path.exists():
         print(f"Error: {data_path} not found. Run datasets/generate_github_benchmark.py first.")
@@ -21,43 +38,102 @@ def main() -> None:
     with open(data_path, "r", encoding="utf-8") as f:
         samples = json.load(f)
 
-    # Strictly evaluate on held-out test split
-    test_samples = [s for s in samples if s.get("split") == "test"]
-    print(f"Loaded {len(samples)} total samples. Evaluating on {len(test_samples)} held-out test samples...")
+    if args.split != "all":
+        eval_samples = [s for s in samples if s.get("split") == args.split]
+    else:
+        eval_samples = samples
+
+    print("\n======================================================================")
+    print(f"RUNNING BENCHMARK AUDIT (Mode: {'REAL NEURAL INFERENCE' if args.real else 'MOCK/SIMULATED'})")
+    print(f"Split: {args.split.upper()} ({len(eval_samples)} samples)")
+    print(f"Live Tools Execution: {args.execute_tools}")
+    print("======================================================================\n")
 
     wf = create_github_workflow()
-    runner = WorkflowBenchmarkRunner(workflow=wf)
+    tool_adapter = GitHubToolAdapter()
 
-    res_a = runner.run_baseline_a_always_gemma(test_samples)
-    res_b = runner.run_baseline_b_deterministic_rules(test_samples)
-    res_c = runner.run_baseline_c_slothswitch(test_samples)
+    if args.real:
+        print("Initializing real Laya ModernBERT Decision Adapter (convaiinnovations/laya)...")
+        decision_adapter = LayaDecisionAdapter(preload=True)
+        print("Initializing real Local Causal LM Adapter (TinyLlama-1.1B)...")
+        # Use TinyLlama as verified cached local causal LM
+        generative_adapter = LocalGemmaAdapter(model_id="TinyLlama/TinyLlama-1.1B-Chat-v1.0", lazy_load=False)
+    else:
+        decision_adapter = MockDecisionAdapter()
+        generative_adapter = MockGenerativeAdapter()
 
-    report = {
-        "dataset": "github_workflow_benchmark.json",
-        "split": "test",
-        "total_test_samples": len(test_samples),
-        "baselines": [res_a, res_b, res_c],
+    runner = WorkflowBenchmarkRunner(
+        workflow=wf,
+        decision_adapter=decision_adapter,
+        generative_adapter=generative_adapter,
+        tool_adapter=tool_adapter,
+        execute_live_tools=args.execute_tools,
+    )
+
+    print("Running Baseline A (Always-Gemma)...")
+    res_a = runner.run_baseline_a_always_gemma(eval_samples)
+
+    print("Running Baseline B (Deterministic Rules)...")
+    res_b = runner.run_baseline_b_deterministic_rules(eval_samples)
+
+    print("Running Baseline C (SlothSwitch)...")
+    res_c = runner.run_baseline_c_slothswitch(eval_samples)
+
+    # Prepare machine-readable per-example audit report
+    audit_report = {
+        "metadata": {
+            "mode": "real_neural_inference" if args.real else "mock_simulated",
+            "split": args.split,
+            "sample_count": len(eval_samples),
+            "decision_model": decision_adapter.name,
+            "generative_model": generative_adapter.name,
+            "execute_live_tools": args.execute_tools,
+        },
+        "summary": {
+            "baseline_a": {k: v for k, v in res_a.items() if k != "records"},
+            "baseline_b": {k: v for k, v in res_b.items() if k != "records"},
+            "baseline_c": {k: v for k, v in res_c.items() if k != "records"},
+        },
+        "per_sample_audit_records": {
+            "baseline_a": res_a["records"],
+            "baseline_b": res_b["records"],
+            "baseline_c": res_c["records"],
+        },
     }
 
-    out_json = Path("logs/github_benchmark_results.json")
+    out_json = Path("logs/audit_benchmark_detailed.json")
     out_json.parent.mkdir(parents=True, exist_ok=True)
     with open(out_json, "w", encoding="utf-8") as f:
-        json.dump(report, f, indent=2)
+        json.dump(audit_report, f, indent=2)
+
+    # Save summary json
+    summary_path = Path("logs/github_benchmark_results.json")
+    with open(summary_path, "w", encoding="utf-8") as f:
+        json.dump(audit_report["summary"], f, indent=2)
 
     print("\n" + "=" * 70)
-    print("SLOTHSWITCH ARCHITECTURE REFACTORING - BENCHMARK RESULTS")
+    print("SLOTHSWITCH AUDITED BENCHMARK RESULTS")
     print("=" * 70)
     for b in [res_a, res_b, res_c]:
-        print(f"\n[{b['baseline']}]")
-        print(f"  Accuracy:            {b['accuracy'] * 100:.1f}%")
-        print(f"  Gemma Model Calls:   {b['gemma_calls']} / {b['total_samples']}")
-        print(f"  Direct Tool Calls:   {b['direct_tool_calls']}")
-        print(f"  Avoided Gemma Calls: {b['avoided_gemma_calls']} ({b['avoided_gemma_pct']}%)")
-        print(f"  Total Tokens:        {b['total_tokens_used']}")
-        print(f"  Median Latency:      {b['median_latency_ms']} ms")
-        print(f"  P95 Latency:         {b['p95_latency_ms']} ms")
+        print(f"\n[{b['baseline']}] (Real Inference: {b['is_real_inference']})")
+        print(f"  Strict Action Accuracy:    {b['action_accuracy'] * 100:.1f}%")
+        print(f"  Outcome Category Accuracy: {b['outcome_accuracy'] * 100:.1f}%")
+        print(f"  End-to-End Task Success:   {b['end_to_end_task_success_rate'] * 100:.1f}%")
+        print(f"  Generative Model Calls:    {b['gemma_calls']} / {b['total_samples']}")
+        print(f"  Direct Tools Selected:     {b['direct_tools_selected']}")
+        print(f"  Direct Tools Attempted:    {b['direct_tools_attempted']}")
+        print(f"  Direct Tools Succeeded:    {b['direct_tools_succeeded']}")
+        print(f"  Avoided Generative Calls:  {b['avoided_gemma_calls']} ({b['avoided_gemma_pct']}%)")
+        print(f"  Total Generative Tokens:   {b['total_generative_tokens']}")
+        print(f"  Median Total Latency:      {b['median_total_latency_ms']} ms")
+        print(f"  P95 Total Latency:         {b['p95_total_latency_ms']} ms")
+        if "median_decision_latency_ms" in b:
+            print(f"  Median Decision Latency:   {b['median_decision_latency_ms']} ms")
+            print(f"  Median Policy Latency:     {b['median_policy_latency_ms']} ms")
+
     print("\n" + "=" * 70)
-    print(f"Saved benchmark results to {out_json}")
+    print(f"Audit report saved to: {out_json}")
+    print(f"Summary report saved to: {summary_path}")
 
 
 if __name__ == "__main__":
