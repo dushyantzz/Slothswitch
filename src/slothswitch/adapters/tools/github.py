@@ -91,6 +91,9 @@ class GitHubToolAdapter(ToolAdapter):
     def execute(self, action_id: str, params: dict[str, Any]) -> dict[str, Any]:
         """Dispatch and execute supported GitHub actions."""
         repo = params.get("repo", "").strip()
+        owner = params.get("owner", "").strip()
+        if owner and repo and "/" not in repo:
+            repo = f"{owner}/{repo}"
         if not repo or "/" not in repo:
             raise ValueError(f"Invalid or missing 'repo' parameter: '{repo}'. Must be 'owner/repo'.")
 

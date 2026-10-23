@@ -598,9 +598,29 @@ Evaluated on **48 held-out examples** strictly partitioned to unseen public repo
 - **External API Charges**: $0.00 (GitHub REST API authenticated quota: 5,000 req/hr free).
 - **Estimated Local Compute Cost**: ~$0.0001 (CPU forward pass electricity cost on AMD Ryzen/Intel Core).
 
+### Web Application & Dashboard
+
+SlothSwitch ships with a marketing website and interactive developer dashboard adhering strictly to the design system in [DESIGN.md](file:///c:/Users/Shubham/Desktop/SlothSwitch/DESIGN.md).
+
+```bash
+# Start the full-stack server (serves the SPA frontend and REST API)
+slothswitch serve --port 8080 --host 0.0.0.0
+
+# Or run directly via Python module
+python -m slothswitch.server --port 8080
+```
+Open **`http://localhost:8080/`** to view the landing page and **`http://localhost:8080/#dashboard`** for the developer dashboard (featuring the Request Playground, Execution Traces, Models & Usage, Policies, and Benchmark visualizer).
+
+To rebuild the web client bundle:
+```bash
+cd web
+npm install
+npm run build
+```
+
 ### Reproducible Commands
 ```bash
-# Run unit and integration tests (84 tests)
+# Run unit and integration tests (109 tests)
 pytest tests -v
 
 # Run held-out benchmark with real Laya and live tools

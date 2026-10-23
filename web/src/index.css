@@ -1,0 +1,395 @@
+/* SlothSwitch Design Tokens & Global Styles (from DESIGN.md) */
+
+:root {
+  /* Colors */
+  --color-obsidian-canvas: #303236;
+  --color-void: #090a0c;
+  --color-charcoal-card: #111111;
+  --color-slate-edge: #4a4b50;
+  --color-iron-veil: #6b6c6d;
+  --color-smoke: #95979e;
+  --color-ash: #a9a9aa;
+  --color-frost: #d1d1d1;
+  --color-linen: #e5e5e7;
+  --color-snow: #ffffff;
+  --color-electric-iris: #5683da;
+  --color-ember-pulse: #ff8964;
+  --color-molasses: #5a250a;
+
+  /* Typography */
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Typography Scale */
+  --text-caption: 11px;
+  --leading-caption: 1.38;
+  --tracking-caption: -0.1px;
+
+  --text-body: 14px;
+  --leading-body: 1.5;
+  --tracking-body: -0.14px;
+
+  --text-body-lg: 16px;
+  --leading-body-lg: 1.5;
+  --tracking-body-lg: -0.16px;
+
+  --text-subheading: 18px;
+  --leading-subheading: 1.5;
+  --tracking-subheading: -0.36px;
+
+  --text-heading-sm: 22px;
+  --leading-heading-sm: 1.25;
+
+  --text-heading: 24px;
+  --leading-heading: 1.25;
+  --tracking-heading: -0.48px;
+
+  --text-display-sm: 32px;
+  --leading-display-sm: 1.05;
+  --tracking-display-sm: -1.6px;
+
+  --text-display: clamp(42px, 6vw, 76px);
+  --leading-display: 0.95;
+  --tracking-display: -3.5px;
+
+  /* Weights */
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Spacing */
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-64: 64px;
+  --spacing-96: 96px;
+
+  /* Layout */
+  --page-max-width: 1240px;
+  --card-padding: 24px;
+
+  /* Border Radii */
+  --radius-tags: 9999px;
+  --radius-buttons: 9999px;
+  --radius-cards: 12px;
+  --radius-inputs: 6px;
+  --radius-panels: 24px;
+
+  /* Shadows */
+  --shadow-sm: rgba(0, 0, 0, 0.25) 0px 2px 6px;
+  --shadow-md: rgba(0, 0, 0, 0.45) 0px 4px 16px;
+  --shadow-xl: rgba(0, 0, 0, 0.6) 0px 6px 25px;
+  --shadow-subtle: rgba(255, 255, 255, 0.25) 0px 0px 0px 1px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-inter);
+  background-color: var(--color-void);
+  color: var(--color-snow);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-void);
+  color: var(--color-snow);
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-slate-edge);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-smoke);
+}
+
+/* Base Typography Classes */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.04em;
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Button System (DESIGN.md) */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--color-electric-iris);
+  color: #ffffff;
+  font-family: var(--font-inter);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding: 10px 22px;
+  border-radius: var(--radius-buttons);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 20px rgba(86, 131, 218, 0.35);
+}
+.btn-primary:hover {
+  background-color: #6893e6;
+  box-shadow: 0 0 28px rgba(86, 131, 218, 0.6);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: transparent;
+  color: #ffffff;
+  font-family: var(--font-inter);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding: 10px 20px;
+  border-radius: var(--radius-buttons);
+  border: 1px solid var(--color-slate-edge);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.btn-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-smoke);
+}
+.btn-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-white {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: var(--color-void);
+  font-family: var(--font-inter);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 11px 24px;
+  border-radius: var(--radius-buttons);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+.btn-white:hover {
+  background-color: #f0f0f2;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+/* Tag / Chip Pills */
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-tags);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.38;
+}
+.tag-iris {
+  background-color: rgba(86, 131, 218, 0.15);
+  color: #79a2f2;
+  border: 1px solid rgba(86, 131, 218, 0.3);
+}
+.tag-ember {
+  background-color: rgba(255, 137, 100, 0.15);
+  color: #ffa185;
+  border: 1px solid rgba(255, 137, 100, 0.3);
+}
+.tag-ash {
+  background-color: rgba(169, 169, 170, 0.12);
+  color: #d1d1d3;
+  border: 1px solid rgba(169, 169, 170, 0.25);
+}
+.tag-green {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+.tag-amber {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Feature Cards with DESIGN.md specifications */
+.card-charcoal {
+  background-color: var(--color-charcoal-card);
+  border: 1px solid var(--color-slate-edge);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.card-charcoal:hover {
+  border-color: var(--color-smoke);
+}
+
+/* Radial sunburst corner glow */
+.card-glow-amber::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 137, 100, 0.22) 0%, rgba(255, 170, 129, 0.08) 50%, transparent 75%);
+  pointer-events: none;
+  border-radius: 50%;
+}
+.card-glow-iris::before {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(86, 131, 218, 0.25) 0%, rgba(86, 131, 218, 0.06) 50%, transparent 75%);
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+/* Hero Aurora Beam (DESIGN.md section 251) */
+.aurora-beam {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(240px, 30vw, 420px);
+  height: 640px;
+  background: linear-gradient(180deg, 
+    rgba(86, 131, 218, 0.65) 0%, 
+    rgba(255, 137, 100, 0.45) 55%, 
+    rgba(255, 255, 255, 0.15) 85%,
+    transparent 100%);
+  filter: blur(72px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
+}
+
+.aurora-sunburst {
+  position: absolute;
+  top: 180px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 520px;
+  height: 280px;
+  background: radial-gradient(ellipse at center, rgba(255, 170, 129, 0.25) 0%, rgba(255, 137, 100, 0.08) 45%, transparent 70%);
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Alternating Light Section Band (DESIGN.md section 162) */
+.section-light-band {
+  background-color: #ffffff;
+  color: #050506;
+  padding: var(--spacing-96) 24px;
+}
+.section-light-band h2, .section-light-band h3 {
+  color: #050506;
+}
+.section-light-band p {
+  color: var(--color-obsidian-canvas);
+}
+.section-light-band .card-light {
+  background: #fbfbfb;
+  border: 1px solid #e2e2e4;
+  border-radius: var(--radius-cards);
+  padding: 24px;
+}
+
+/* Dark Obsidian Section */
+.section-dark-band {
+  background-color: var(--color-obsidian-canvas);
+  color: var(--color-snow);
+  padding: var(--spacing-96) 24px;
+}
+
+/* Product Screenshot / Interface Frame (DESIGN.md section 138) */
+.screenshot-frame {
+  background-color: var(--color-charcoal-card);
+  border: 1px solid var(--color-slate-edge);
+  border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Animations */
+@keyframes pulseSubtle {
+  0%, 100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.03); }
+}
+.aurora-animate {
+  animation: pulseSubtle 10s ease-in-out infinite;
+}
+
+@keyframes flowLine {
+  0% { stroke-dashoffset: 40; }
+  100% { stroke-dashoffset: 0; }
+}
+.flow-animate {
+  stroke-dasharray: 6 6;
+  animation: flowLine 1.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

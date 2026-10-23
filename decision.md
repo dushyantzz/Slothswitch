@@ -484,7 +484,98 @@ This living log tracks technical decisions, trade-offs, architecture choices, im
      - Full test suite: **106/106 tests passing**.
      - Linters: `ruff check src tests` (0 errors) and `mypy src` (0 issues across 27 files).
 
+---
 
+## Task: 11-Website-and-Dashboard-Implementation
 
+- Status: Complete
+- What was done:
+  1. **Visual Design System Implementation (DESIGN.md Compliance)**:
+     - Implemented design tokens in web/src/index.css:
+       - Obsidian Dark Canvas (#303236), Void Background (#090a0c), Charcoal Cards (#111111), Slate Edge Borders (#4a4b50).
+       - Electric Iris (#5683da) primary interactive accent and Ember Pulse (#ff8964) warm highlight.
+       - Pill buttons (
+ounded-full), subtle card radii (12px), thin borders, and radial corner sunburst glows.
+       - Restrained violet-blue-to-coral aurora beam in the hero section.
+       - Modern Google Fonts: Inter for UI/controls, Sora for hero/section display headings, JetBrains Mono for traces/code.
+  2. **Marketing Website (web/src/views/LandingPage.tsx)**:
+     - Built responsive navigation with branded SlothSwitch mark, section anchors, GitHub repository link, and 'Open Dashboard' toggle.
+     - Implemented dark hero with aurora glow, headline ('Make AI agents more efficient. Keep execution under control.'), and interactive execution preview card with 3 switchable presets (Direct tool execution, Gemma generation, Policy abstention).
+     - Built Problem & Solution section with 3 key problems (Unnecessary inference, Uncontrolled tool execution, Limited visibility) and SlothSwitch solutions.
+     - Built animated architecture diagram illustrating the request routing pipeline (User -> Laya -> Policy -> Direct Tool / Gemma / Human Approval / Clarify / Abstain).
+     - Built 6 product capability cards with radial corner glows: Intelligent Action Routing, Runtime Policy Enforcement, Tool Execution, Local Generative Inference, Human Approval Gates, Execution Observability.
+     - Built verified benchmark section displaying held-out test set (N=48) results with exact figures and limitations disclosure.
+     - Built security section with interactive policy decision matrix demonstrating ALLOW, REQUIRE_APPROVAL, and BLOCK behaviors.
+     - Built open-source community section with installation instructions, setup guide, and MIT license.
+     - Built responsive footer with restrained aurora accent and external links.
+  3. **Application Developer Dashboard (web/src/views/Dashboard.tsx & web/src/views/dashboard/)**:
+     - Built dark, information-dense developer dashboard shell with responsive sidebar navigation and live connection badge.
+     - Implemented 7 tabbed views:
+       - **Overview**: Real-time stats (Total Evaluated, Direct Tools Executed, LLM Calls Avoided, Policy Blocks, Security Rejections), model health cards, recent execution traces table.
+       - **Request Playground**: Interactive prompt input, preset request chips, JSON parameter editor, live routing execution, latency/token breakdown, and raw response inspection.
+       - **Execution Traces**: Searchable trace explorer with outcome filtering (All, Tool Executions, LLM Generations, Abstentions, Clarifications) and detailed pipeline timeline modal (Request -> Decision -> Policy -> Execution -> Final Result).
+       - **Models & Usage**: Detailed inspection of active decision model (convaiinnovations/laya ModernBERT) and generative model (google/gemma-2-2b-it bfloat16), initialization status, token counts, and latency metrics.
+       - **Policies**: Read-only explorer displaying all 18 registered actions across github_pr_management and system_ops, required/optional parameters, required permissions, and security rules.
+       - **Benchmarks**: Interactive comparative matrix of Always-Generative vs Deterministic vs SlothSwitch, with CSS bar visualizations of accuracy, task success, and token reduction.
+       - **Settings**: Runtime environment parameters, server-side secret protection verification (HF_TOKEN, GITHUB_TOKEN verified hidden from client), and policy engine thresholds.
+  4. **Backend Server & REST API (src/slothswitch/server.py & src/slothswitch/cli.py)**:
+     - Built zero-dependency ThreadingHTTPServer serving /api/v1/health, /overview, /workflows, /policies, /traces, /benchmarks, /models, and /route.
+     - Integrated SPA static file handler serving web/dist/ assets with client-side fallback to index.html.
+     - Added slothswitch serve --port 8080 --host 0.0.0.0 CLI command.
+     - Handled flexible request formats (content/
+equest, workflow/workflow_name, owner/
+epo parameter merging).
+  5. **Verification & Testing**:
+     - Production web bundle build succeeded cleanly (web/dist: 32.5 kB CSS, 283.4 kB JS).
+     - Full test suite: **109/109 tests passing** (	ests/unit/test_server.py added for all API routes).
+     - Verified live end-to-end routing in browser subagent: tested landing page sections, dashboard navigation, live tool execution (count_pull_requests -> 54 PRs on 	iangolo/fastapi), and security policy gate blocking sensitive operations.
 
+---
+
+## Task: 12-Proof-of-Efficiency-and-Performance-Benefits
+
+- Status: Complete
+- What was done:
+  1. **Dedicated 'Proof of Efficiency' Landing Page Section (web/src/components/ProofOfEfficiency.tsx)**:
+     - Codified six prominent empirical metric cards based on the audited held-out benchmark (=48$ samples from 	iangolo/fastapi and octocat/Hello-World):
+       - **87.5% Generative Calls Avoided** (42 / 48 requests bypassed LLM generation via deterministic tools).
+       - **-92.0% Generative Token Reduction** (588 tokens consumed vs 7,312 tokens for Always-Generative on identical prompts).
+       - **85.4% End-to-End Task Success** (41 / 48 tasks, +29.2 percentage points over rigid regex rules and 12.5% for unconstrained LLMs).
+       - **100% Live Tool Reliability** (29 of 29 direct tool executions succeeded against GitHub REST API v3).
+       - **0.023 ms Policy Gate Overhead** (Deterministic security boundary evaluation in under 25 microseconds).
+       - **~8.5x Latency Speedup on Direct Tool Paths** (2,838 ms direct tool execution vs 24,996 ms local LLM generation on CPU).
+  2. **Visual Architecture Flow Comparison ('Where the Savings Come From')**:
+     - Visual side-by-side execution trace demonstrating how Always-Generative forces 100% of requests through heavy LLM text generation (high latency, token costs, hallucination risks).
+     - Contrasted with SlothSwitch's disaggregated pipeline where 87.5% of queries bypass the LLM entirely, routing directly to deterministic tools with 0 generative tokens.
+  3. **Interactive Task Scenario Comparison**:
+     - Interactive task switcher covering 5 representative scenarios:
+       1. *Counting Open Pull Requests* (	iangolo/fastapi, gh-010)
+       2. *Listing Issues* (	iangolo/fastapi, gh-025)
+       3. *Retrieving CI Check Suite Status* (octocat/Hello-World, gh-040)
+       4. *Summarizing Pull-Request Activity* (pallets/click, gh-075)
+       5. *Handling a Prohibited Operation* (	iangolo/fastapi visibility change / branch deletion, gh-117)
+     - Renders 3 side-by-side comparative cards with exact audit metrics, model identifiers, token counts, latency breakdowns, and task outcomes, labeled with [MEASURED AUDIT DATA].
+  4. **Honest Performance & Latency Trade-Off Analysis**:
+     - Proved that SlothSwitch is ~8.5x faster than local LLMs on direct tool paths (2.8s vs 25.0s on CPU).
+     - Transparently disclosed that SlothSwitch is ~1.4s slower than pure rigid regex rules (2.8s vs 1.1s) due to Laya ModernBERT neural forward pass overhead (~1,410 ms on CPU).
+     - Explained the engineering rationale: regex fails on 37.5% of queries when phrasing varies, whereas SlothSwitch achieves 91.7% action accuracy and 85.4% task success (+29.2% improvement).
+     - Noted hardware acceleration: ModernBERT forward pass drops to < 15 ms on GPU/NPU.
+  5. **Transparent Cost Estimator**:
+     - Interactive monthly request volume slider (5,000 to 250,000 requests/month).
+     - Comparative tiers: Frontier Cloud LLMs (.50 / .00 per 1M tokens) vs Compact Cloud LLMs (.15 / .60 per 1M tokens) vs SlothSwitch hybrid/local compute.
+     - Transparent disclaimers stating pricing assumptions (October 2024), labeling estimates as mathematical projections, accounting for local CPU electricity compute, and noting that token reductions do not automatically equal identical infrastructure savings.
+  6. **Scientific Disclosure & Downloadable Benchmark Evidence**:
+     - Expandable 'How We Measured This' panel detailing test-set size (=48$), dataset provenance, model IDs, hardware, numerators/denominators, and known limitations.
+     - Built downloadable REST API endpoints:
+       - GET /api/v1/benchmarks/download?format=json (serves slothswitch_heldout_benchmark_audit.json, 127 kB).
+       - GET /api/v1/benchmarks/download?format=csv (serves slothswitch_heldout_benchmark_audit.csv, 36 kB).
+       - GET /api/v1/benchmarks/scenarios (serves structured scenario comparisons).
+  7. **Automated Testing & Verification**:
+     - Added unit tests in 	ests/unit/test_server.py verifying interactive scenarios structure and CSV generation.
+     - Full test suite: **111/111 tests passing**.
+     - Linters: 
+uff check src tests (0 errors) and mypy src (0 type issues across 28 files).
+     - Production build: 
+pm run build in web/ succeeded in 1.34s.
+     - Browser verification: Tested live UI in browser subagent, verified all 6 metric cards, scenario tabs, cost slider, and download triggers.
 

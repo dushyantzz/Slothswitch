@@ -52,6 +52,12 @@ def main() -> None:
     health_parser = subparsers.add_parser("health", help="Check system health")
     health_parser.add_argument("--config", default="config/routing.yaml", help="Config file path")
 
+    # --- serve command ---
+    serve_parser = subparsers.add_parser("serve", help="Start the SlothSwitch REST API and Web Dashboard server")
+    serve_parser.add_argument("--port", type=int, default=8080, help="Server port (default: 8080)")
+    serve_parser.add_argument("--host", default="0.0.0.0", help="Host address (default: 0.0.0.0)")
+    serve_parser.add_argument("--mock", action="store_true", help="Run with mock adapters instead of real models")
+
     args = parser.parse_args()
 
     if args.command is None:
@@ -71,6 +77,16 @@ def main() -> None:
         _cmd_demo(args)
     elif args.command == "health":
         _cmd_health(args)
+    elif args.command == "serve":
+        _cmd_serve(args)
+
+
+def _cmd_serve(args: argparse.Namespace) -> None:
+    """Start the SlothSwitch web and API server."""
+    from slothswitch.server import run_server
+
+    run_server(port=args.port, host=args.host, use_real_models=not args.mock)
+
 
 
 
