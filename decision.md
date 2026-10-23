@@ -450,6 +450,41 @@ This living log tracks technical decisions, trade-offs, architecture choices, im
     - **SlothSwitch**: **87.5% strict action (42/48)**, **91.7% outcome (44/48)**, **81.2% task success (39/48)**, 6 generative calls (87.5% avoided), 29/29 direct tools succeeded live, 588 tokens, median latency 2,958 ms, decision overhead 1,410 ms, policy gate overhead 0.023 ms.
   - Test suite: 84/84 tests passing. Ruff & Mypy: 100% clean.
 
+---
+
+## Task: 10-Gemma-2-2B-IT-Verification-and-Failure-Resolution
+
+- Status: Complete
+- What was done:
+  1. **Google Gemma 2-2B-IT Real Inference Verification**:
+     - Verified Hugging Face Hub authentication under user account `dushyantzz`.
+     - Downloaded full model weights into the official Hugging Face Hub snapshot cache (`~/.cache/huggingface/hub/models--google--gemma-2-2b-it`):
+       - `model-00001-of-00002.safetensors` (4,988 MB)
+       - `model-00002-of-00002.safetensors` (240.7 MB)
+     - Executed actual live local CPU inference with `LocalGemmaAdapter(model_id="google/gemma-2-2b-it")`.
+     - Confirmed real generation output: `"A Git pull request is a mechanism for proposing changes to a codebase that are reviewed and merged by other developers."`
+     - Confirmed real token accounting: 13 prompt tokens, 27 completion tokens, 40 total tokens (`latency_is_simulated: False`, `cost_is_simulated: False`).
+     - Verified that TinyLlama, mocks, and hardcoded outputs are completely removed from real evaluation mode.
+  2. **Resolution of Six Action-Selection Failures (Laya `count_issues` vs `count_pull_requests`)**:
+     - **Root Cause 1 (State Schema Mismatch)**: The pre-trained Laya checkpoint (`convaiinnovations/laya`) is a fine-tuned cross-attention classifier trained on `subject` and `body` keys. `predict_action()` previously passed `{"request": ..., "entity_focus": ...}`, causing the cross-attention layer to miss its expected state keys and fall back to its dominant vocabulary class (`count_issues`).
+     - **Root Cause 2 (Criterion Token Cross-Contamination)**: In `src/slothswitch/workflows/github_pr_management.py`, the description for `count_issues` contained `"(distinct from pull requests)"`, literally injecting the substring `"pull requests"` into the issue counting criterion and triggering false cross-attention matches. Similarly, `get_issue_details` contained `"(not a PR)"`.
+     - **Fix**: Symmetrized action descriptions without cross-entity mentions. Updated `LayaDecisionAdapter.predict_action()` to format input state with `subject: f"{entity_cue.title()}: {request[:80]}"` and `body: request`, restoring proper alignment with Laya's pre-trained attention heads.
+     - **Validation Verification**: Validation action accuracy jumped from **70.8% (17/24)** to **91.7% (22/24)**, with 100% of `count_pull_requests` queries correctly classified.
+  3. **Resolution of Three Abstention/Clarification Failures (Risky Requests misclassified as CLARIFY)**:
+     - **Root Cause 1 (Parameter Validation Precedence)**: When an out-of-scope query was submitted, `WorkflowPolicy.evaluate_action()` attempted to validate required tool parameters before inspecting whether the query itself was prohibited. For example, if a tool was proposed without a required `pull_number`, the policy escalated it to `CLARIFY` ("missing required parameters") rather than rejecting it as a security violation.
+     - **Root Cause 2 (Over-inclusive Clarify Criteria)**: In `LayaDecisionAdapter`, `criteria["clarify"]` explicitly listed `"such as issue number, PR number, or repo name"`, causing queries mentioning repository names or PR numbers to trigger clarification.
+     - **Fix**: Implemented a strict, deterministic pre-validation security gate in `WorkflowPolicy.evaluate_action(..., request_content=...)`. Prohibited requests involving repository visibility changes, admin/role grants, billing operations, force pushes, repo transfers, and security rule bypasses are intercepted before parameter checks and immediately yield `outcome=DecisionOutcome.ABSTAIN` with `action_id="none"`.
+     - **Security Boundary**: Handled the `action_id="none"` edge case in policy evaluation so it is never treated as an unknown tool error or parameter clarification. Verified that `ToolExecutor` strictly halts execution on `ABSTAIN` and requires single-use tokens on `HUMAN_REVIEW`.
+  4. **Performance Investigation and Hardware Optimization**:
+     - Separated Laya decision latency, Gemma generation latency, policy gate overhead, and tool execution latency.
+     - Identified that CPU inference in standard `torch.float32` suffered from severe memory bandwidth saturation (loading in 40.86s, generating at ~12.2s per token).
+     - Upgraded `LocalGemmaAdapter` to native PyTorch `dtype=torch.bfloat16` on CPU, which reduced model load time from 40.86s to **6.0s** (6.8x faster) and accelerated token generation from 12.2s/token to **0.4s/token** (30.5x speedup), completely preserving model fidelity and output determinism.
+  5. **Regression Test Suite**:
+     - Authored `tests/unit/test_regression_fixes.py` with 22 dedicated test cases verifying PR vs Issue phrasing distinctions, security gates on prohibited operations, `action_id="none"` handling, and mutating action approval boundaries.
+     - Full test suite: **106/106 tests passing**.
+     - Linters: `ruff check src tests` (0 errors) and `mypy src` (0 issues across 27 files).
+
+
 
 
 

@@ -213,11 +213,21 @@ class LayaDecisionAdapter(DecisionAdapter):
             )
 
         criteria = {action.action_id: action.description for action in candidate_actions}
-        criteria["clarify"] = "The request is ambiguous, incomplete, or missing essential details needed to take action."
-        criteria["abstain"] = "The request asks for an unsupported, destructive, unauthorized, admin permission modification, security bypass, or external charge."
+        criteria["clarify"] = "The request is vague, ambiguous, or missing required details to determine what action to take."
+        criteria["abstain"] = "The request is prohibited, out-of-scope, or involves administrative access, billing, repository visibility, or destructive actions."
 
+        lower_content = request_content.lower()
+        entity_cue = (
+            "pull_request"
+            if ("pull request" in lower_content or " pr" in lower_content or " prs" in lower_content or lower_content.startswith("pr"))
+            else ("issue" if ("issue" in lower_content or "bug" in lower_content) else "general")
+        )
+        subject_prefix = entity_cue.replace("_", " ").title() if entity_cue != "general" else "Task"
         state = {
+            "subject": f"{subject_prefix}: {request_content[:100]}",
+            "body": request_content,
             "request": request_content[:300],
+            "entity_focus": entity_cue,
             "workflow": workflow.name,
         }
         questions = {

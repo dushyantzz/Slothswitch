@@ -16,7 +16,6 @@ import time
 from pathlib import Path
 
 from slothswitch.adapters.decision.laya_adapter import LayaDecisionAdapter
-from slothswitch.schemas import DecisionOutcome
 from slothswitch.workflows.github_pr_management import create_github_workflow
 
 

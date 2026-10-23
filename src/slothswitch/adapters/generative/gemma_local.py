@@ -69,7 +69,7 @@ class LocalGemmaAdapter(GenerativeTaskAdapter):
             self._tokenizer = AutoTokenizer.from_pretrained(self.model_id)
             self._model = AutoModelForCausalLM.from_pretrained(
                 self.model_id,
-                torch_dtype=torch.float32 if self.device == "cpu" else torch.float16,
+                dtype=torch.bfloat16 if self.device == "cpu" else torch.float16,
             )
             self._model.to(self.device)
             self._is_loaded = True

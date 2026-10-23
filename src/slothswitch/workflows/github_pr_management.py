@@ -15,7 +15,7 @@ def create_github_workflow() -> WorkflowDefinition:
         # --- Read-only actions ---
         ActionDefinition(
             action_id="list_open_pull_requests",
-            description="List open pull requests for a repository with title, author, and URL",
+            description="List open pull requests or PRs for a repository with title and author",
             parameters_schema={
                 "properties": {
                     "repo": {"type": "string", "description": "Repository in 'owner/repo' format"},
@@ -32,7 +32,7 @@ def create_github_workflow() -> WorkflowDefinition:
         ),
         ActionDefinition(
             action_id="count_pull_requests",
-            description="Count pull requests in a repository filtered by state (open/closed/all)",
+            description="Count pull requests or PRs in a repository",
             parameters_schema={
                 "properties": {
                     "repo": {"type": "string", "description": "Repository in 'owner/repo' format"},
@@ -49,7 +49,7 @@ def create_github_workflow() -> WorkflowDefinition:
         ),
         ActionDefinition(
             action_id="get_pull_request_details",
-            description="Fetch comprehensive metadata, body, author, and status of a specific pull request",
+            description="Fetch pull request details, body, description, and status for a PR number",
             parameters_schema={
                 "properties": {
                     "repo": {"type": "string", "description": "Repository in 'owner/repo' format"},
@@ -66,7 +66,7 @@ def create_github_workflow() -> WorkflowDefinition:
         ),
         ActionDefinition(
             action_id="list_open_issues",
-            description="List open issues for a repository",
+            description="List open issues or bug reports for a repository",
             parameters_schema={
                 "properties": {
                     "repo": {"type": "string", "description": "Repository in 'owner/repo' format"},
@@ -83,7 +83,7 @@ def create_github_workflow() -> WorkflowDefinition:
         ),
         ActionDefinition(
             action_id="count_issues",
-            description="Count issues in a repository",
+            description="Count issues or bug reports in a repository",
             parameters_schema={
                 "properties": {
                     "repo": {"type": "string", "description": "Repository in 'owner/repo' format"},
@@ -100,7 +100,7 @@ def create_github_workflow() -> WorkflowDefinition:
         ),
         ActionDefinition(
             action_id="get_issue_details",
-            description="Fetch title, body, author, labels, and state of a specific issue",
+            description="Fetch issue details, body, description, and labels for an issue number",
             parameters_schema={
                 "properties": {
                     "repo": {"type": "string", "description": "Repository in 'owner/repo' format"},
@@ -117,7 +117,7 @@ def create_github_workflow() -> WorkflowDefinition:
         ),
         ActionDefinition(
             action_id="get_pull_request_checks",
-            description="Fetch CI/CD check runs, status, and conclusions for a pull request",
+            description="Fetch pull request CI/CD check runs, test results, and status for a PR number",
             parameters_schema={
                 "properties": {
                     "repo": {"type": "string", "description": "Repository in 'owner/repo' format"},

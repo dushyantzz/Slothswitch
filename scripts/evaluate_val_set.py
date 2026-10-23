@@ -1,6 +1,6 @@
 """Evaluate real Laya on validation set only."""
 import json
-from pathlib import Path
+
 from slothswitch.adapters.decision.laya_adapter import LayaDecisionAdapter
 from slothswitch.workflows.github_pr_management import create_github_workflow
 

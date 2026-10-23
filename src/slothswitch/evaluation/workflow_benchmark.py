@@ -386,6 +386,7 @@ class WorkflowBenchmarkRunner:
                 self.workflow,
                 caller_permissions=["github:read", "github:write"],
                 params=item.get("expected_parameters", {}),
+                request_content=req_content,
             )
             p_latency = (time.perf_counter() - p_start) * 1000
             policy_latencies.append(p_latency)

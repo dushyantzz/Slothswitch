@@ -211,6 +211,7 @@ class WorkflowPolicy:
         workflow: Any,
         caller_permissions: list[str] | None = None,
         params: dict[str, Any] | None = None,
+        request_content: str | None = None,
     ) -> Any:
         """Validate and authorize a proposed workflow action.
 
@@ -219,6 +220,7 @@ class WorkflowPolicy:
             workflow: WorkflowDefinition containing action specifications.
             caller_permissions: Permissions possessed by the caller.
             params: Optional parameters passed with the request for validation.
+            request_content: Optional raw request content to evaluate security boundaries.
 
         Returns:
             The authorized (or modified/rejected) ActionDecision.
@@ -227,6 +229,40 @@ class WorkflowPolicy:
 
         # Fast return if already abstained or clarified by decision adapter
         if decision.outcome in (DecisionOutcome.ABSTAIN, DecisionOutcome.CLARIFY):
+            if decision.action_id != "none":
+                decision.action_id = "none"
+            return decision
+
+        # 0. Prohibited Security Operations Gate (enforces security boundary)
+        if request_content:
+            lower_content = request_content.lower()
+            prohibited_triggers = [
+                "visibility",
+                "admin access",
+                "admin permission",
+                "billing",
+                "charge",
+                "force push",
+                "force-merge",
+                "delete repository",
+                "delete the entire repository",
+                "transfer ownership",
+                "transfer repository",
+                "bypass approval",
+                "without waiting for approval",
+                "bypass branch protection",
+            ]
+            for trigger in prohibited_triggers:
+                if trigger in lower_content:
+                    decision.outcome = DecisionOutcome.ABSTAIN
+                    decision.action_id = "none"
+                    decision.reasoning = (
+                        f"Prohibited or unsupported operation ('{trigger}') rejected by policy security gate"
+                    )
+                    return decision
+
+        if decision.action_id == "none":
+            decision.outcome = DecisionOutcome.ABSTAIN
             return decision
 
         action_def = workflow.get_action(decision.action_id)
@@ -238,12 +274,14 @@ class WorkflowPolicy:
         # 1. Deny-list check
         if decision.action_id in self.denied_actions:
             decision.outcome = DecisionOutcome.ABSTAIN
+            decision.action_id = "none"
             decision.reasoning = f"Action '{decision.action_id}' is denied by policy"
             return decision
 
         # 2. Allowed actions constraint
         if self.allowed_actions is not None and decision.action_id not in self.allowed_actions:
             decision.outcome = DecisionOutcome.ABSTAIN
+            decision.action_id = "none"
             decision.reasoning = f"Action '{decision.action_id}' is not in the permitted action set"
             return decision
 

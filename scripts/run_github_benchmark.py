@@ -10,7 +10,12 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from slothswitch.adapters.decision import MockDecisionAdapter
 from slothswitch.adapters.decision.laya_adapter import LayaDecisionAdapter
@@ -27,6 +32,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="SlothSwitch GitHub Workflow Benchmark Runner")
     parser.add_argument("--real", action="store_true", help="Use real Laya and real local causal LM")
     parser.add_argument("--execute-tools", action="store_true", help="Execute tools against live GitHub API")
+    parser.add_argument("--model-id", default=os.environ.get("SLOTHSWITCH_GEMMA_MODEL_ID", "google/gemma-2-2b-it"), help="Local causal LM model ID")
     parser.add_argument("--split", default="test", choices=["train", "val", "test", "all"], help="Dataset split to evaluate")
     args = parser.parse_args()
 
@@ -46,6 +52,7 @@ def main() -> None:
     print("\n======================================================================")
     print(f"RUNNING BENCHMARK AUDIT (Mode: {'REAL NEURAL INFERENCE' if args.real else 'MOCK/SIMULATED'})")
     print(f"Split: {args.split.upper()} ({len(eval_samples)} samples)")
+    print(f"Model ID: {args.model_id if args.real else 'MockGenerativeAdapter'}")
     print(f"Live Tools Execution: {args.execute_tools}")
     print("======================================================================\n")
 
@@ -55,9 +62,8 @@ def main() -> None:
     if args.real:
         print("Initializing real Laya ModernBERT Decision Adapter (convaiinnovations/laya)...")
         decision_adapter = LayaDecisionAdapter(preload=True)
-        print("Initializing real Local Causal LM Adapter (TinyLlama-1.1B)...")
-        # Use TinyLlama as verified cached local causal LM
-        generative_adapter = LocalGemmaAdapter(model_id="TinyLlama/TinyLlama-1.1B-Chat-v1.0", lazy_load=False)
+        print(f"Initializing real Local Causal LM Adapter ({args.model_id})...")
+        generative_adapter = LocalGemmaAdapter(model_id=args.model_id, lazy_load=False)
     else:
         decision_adapter = MockDecisionAdapter()
         generative_adapter = MockGenerativeAdapter()

@@ -1,5 +1,5 @@
 import json
-from pathlib import Path
+
 from slothswitch.adapters.decision.laya_adapter import LayaDecisionAdapter
 from slothswitch.adapters.generative.gemma_local import LocalGemmaAdapter
 from slothswitch.adapters.tools.github import GitHubToolAdapter
